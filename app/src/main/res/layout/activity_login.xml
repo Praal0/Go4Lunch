@@ -17,10 +17,10 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/google_btn"
-            android:layout_width="212dp"
-            android:layout_height="37dp"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="#ffff"
+            android:background="#E84C38"
             android:drawableStart="@drawable/fui_ic_googleg_color_24dp"
             android:drawableLeft="@drawable/fui_ic_googleg_color_24dp"
             android:hint="@string/continue_with_google"
@@ -32,8 +32,8 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/facebook_btn"
-            android:layout_width="212dp"
-            android:layout_height="37dp"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="150dp"
 
