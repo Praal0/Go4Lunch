@@ -1,18 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login_activity_constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:background="@drawable/go4lunch"
+    tools:context=".LoginActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:id="@+id/connection_btn"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        android:orientation="vertical">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/google_btn"
+            android:layout_width="212dp"
+            android:layout_height="37dp"
+            android:layout_gravity="center"
+            android:background="#ffff"
+            android:drawableStart="@drawable/fui_ic_googleg_color_24dp"
+            android:drawableLeft="@drawable/fui_ic_googleg_color_24dp"
+            android:hint="@string/continue_with_google"
+            android:paddingStart="6dp"
+            android:paddingLeft="6dp"
+            android:paddingEnd="28dp"
+            android:paddingRight="28dp"
+            android:textSize="13sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/facebook_btn"
+            android:layout_width="212dp"
+            android:layout_height="37dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="150dp"
+
+            android:drawableStart="@drawable/fui_ic_facebook_white_22dp"
+            android:drawableLeft="@drawable/fui_ic_facebook_white_22dp"
+            android:hint="@string/facebook_btn"
+            android:paddingStart="6dp"
+            android:paddingLeft="6dp"
+            android:paddingEnd="28dp"
+            android:paddingRight="28dp"
+            android:textSize="13sp" />
+
+
+    </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
