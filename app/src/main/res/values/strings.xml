@@ -10,8 +10,7 @@
     <string name="connection_succeed">Authentification réussie !</string>
     <string name="button_login_text_logged">Afficher le profil</string>
     <string name="button_login_text_not_logged">Connexion</string>
-    <string name="continue_with_google" />
-    <string name="facebook_btn" />
+
 
     <!-- FACEBOOK PURPOSE -->
     <string name="facebook_application_id" translatable="false">505960523779978</string>
