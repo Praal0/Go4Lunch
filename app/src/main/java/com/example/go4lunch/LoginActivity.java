@@ -41,9 +41,11 @@ public class LoginActivity extends BaseActivity {
                         .setTheme(R.style.LoginTheme)
                         .setLogo(R.drawable.meal_logo)
                         .setAvailableProviders(
-                                Arrays.asList(new AuthUI.IdpConfig.EmailBuilder().build(), // EMAIL
-                                        new AuthUI.IdpConfig.GoogleBuilder().build(),      // GOOGLE
-                                        new AuthUI.IdpConfig.FacebookBuilder().build()))         // FACEBOOK
+                                Arrays.asList(
+                                        new AuthUI.IdpConfig.EmailBuilder().build(), // EMAIL
+                                        new AuthUI.IdpConfig.FacebookBuilder().build(), // FACEBOOK
+                                        new AuthUI.IdpConfig.GoogleBuilder().build()   // GOOGLE
+                                        ))
                         .setIsSmartLockEnabled(false, true)
                         .build(),
                 RC_SIGN_IN);
