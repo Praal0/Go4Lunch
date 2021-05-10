@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Go4Lunch">
-        <activity android:name=".MapActivity" android:label="@string/toolbar_title_login_activity">
+        <activity android:name=".MainActivity" android:label="@string/toolbar_title_login_activity">
 
         </activity>
         <activity android:name=".LoginActivity">

@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MapActivity">
+    tools:context=".MainActivity">
 
     <!-- USER DATA CONTAINER -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:orientation="vertical"
-        android:layout_weight="1">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_margin="@dimen/default_large_margin">
+            android:layout_margin="@dimen/default_large_margin"
+            android:gravity="center">
 
             <!-- PROGRESS BAR -->
 
@@ -27,7 +26,7 @@
                 android:id="@+id/profile_activity_imageview_profile"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:srcCompat="@drawable/ic_anon_user_48dp"/>
+                app:srcCompat="@drawable/ic_anon_user_48dp" />
 
         </LinearLayout>
 
@@ -37,34 +36,33 @@
             android:id="@+id/profile_activity_edit_text_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/default_text_size"
+            android:layout_margin="@dimen/default_margin"
             android:text="@string/text_input_username"
-            android:layout_margin="@dimen/default_margin"/>
+            android:textSize="@dimen/default_text_size" />
 
         <!-- PROFILE EMAIL CONTAINER -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="@dimen/default_margin">
+            android:layout_margin="@dimen/default_margin"
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/text_view_email"
                 android:textSize="@dimen/default_text_size"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <!-- PROFILE EMAIL -->
             <TextView
                 android:id="@+id/profile_activity_text_view_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/default_text_size"
-                android:paddingLeft="@dimen/default_margin"/>
+                android:paddingLeft="@dimen/default_margin"
+                android:textSize="@dimen/default_text_size" />
 
         </LinearLayout>
-
 
 
     </LinearLayout>
@@ -74,36 +72,50 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="bottom"
-        android:orientation="vertical"
-        android:layout_weight="1">
+        android:orientation="vertical">
 
         <!-- BUTTON UPDATE USERNAME -->
         <Button
             android:id="@+id/profile_activity_button_update"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/default_margin"
+            android:padding="@dimen/default_margin"
             android:text="@string/button_update_account"
             android:textColor="#fff"
-            android:textSize="@dimen/default_text_size"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_margin="@dimen/default_margin"
-            android:padding="@dimen/default_margin"/>
+            android:textSize="@dimen/default_text_size" />
 
         <!-- BUTTON SIGN OUT -->
         <Button
             android:id="@+id/profile_activity_button_sign_out"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/default_margin"
+            android:padding="@dimen/default_margin"
             android:text="@string/button_sign_out_account"
             android:textColor="#fff"
-            android:textSize="@dimen/default_text_size"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_margin="@dimen/default_margin"
-            android:padding="@dimen/default_margin"/>
-
+            android:textSize="@dimen/default_text_size" />
 
 
     </LinearLayout>
 
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottom_navigation"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:menu="@menu/bottom_navigation"
+        android:background="?android:attr/windowBackground"/>
+
+
+
+
+</RelativeLayout>

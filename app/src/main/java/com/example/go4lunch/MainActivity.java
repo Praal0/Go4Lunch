@@ -1,21 +1,25 @@
 package com.example.go4lunch;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.media.Image;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
-import base.BaseActivity;
+import com.example.go4lunch.base.BaseActivity;
+import com.example.go4lunch.fragment.ListFragment;
+import com.example.go4lunch.fragment.MapFragment;
+import com.example.go4lunch.fragment.WorkmatesFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class MapActivity extends BaseActivity {
+public class MainActivity extends BaseActivity {
 
     // For design
     Button btnUpdate;
@@ -26,10 +30,13 @@ public class MapActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map);
+        setContentView(R.layout.activity_main);
+        init();
         clickBtnSignOut();
         clickBtnUpdate();
-        init();
+        updateUIWhenCreating();
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new MapFragment()).commit();
     }
 
     // --------------------
@@ -40,6 +47,8 @@ public class MapActivity extends BaseActivity {
         imageViewProfile = findViewById(R.id.profile_activity_imageview_profile);
         textInputEditTextUsername = findViewById(R.id.profile_activity_edit_text_username);
         textViewEmail = findViewById(R.id.profile_activity_text_view_email);
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setOnNavigationItemSelectedListener(navListener);
     }
 
     private void clickBtnSignOut() {
@@ -54,7 +63,29 @@ public class MapActivity extends BaseActivity {
     // UI
     // --------------------
 
-    // 1 - Update UI when activity is creating
+    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    Fragment selectedFragment = null;
+                    switch (item.getItemId()) {
+                        case R.id.nav_map:
+                            selectedFragment = new MapFragment();
+                            break;
+                        case R.id.nav_list:
+                            selectedFragment = new ListFragment();
+                            break;
+                        case R.id.nav_workmates:
+                            selectedFragment = new WorkmatesFragment();
+                            break;
+                    }
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                            selectedFragment).commit();
+                    return true;
+                }
+    };
+
+
     private void updateUIWhenCreating(){
 
         if (this.getCurrentUser() != null){
