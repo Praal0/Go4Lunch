@@ -13,7 +13,7 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
-
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -31,6 +31,16 @@ android {
 
 dependencies {
 
+    //GOOGLE PLAY SERVICES
+    implementation "com.google.android.gms:play-services-maps:17.0.1"
+    implementation "com.google.android.gms:play-services-places:17.0.0"
+    implementation "com.google.android.gms:play-services-location:18.0.0"
+    implementation 'com.google.maps.android:android-maps-utils:0.4.4'
+
+
+    // JODA TIME
+    implementation 'joda-time:joda-time:2.10.10'
+
     // FirebaseUI
     implementation 'com.firebaseui:firebase-ui-auth:5.0.0'
 
@@ -38,6 +48,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.google.android.gms:play-services-maps:17.0.1'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
@@ -50,4 +61,7 @@ dependencies {
 
     // FACEBOOK LOGIN SUPPORT
     implementation 'com.facebook.android:facebook-android-sdk:5.15.3'
+
+    implementation 'com.android.support:multidex:1.0.3' //enter the latest version
 }
+apply plugin: 'com.google.gms.google-services'

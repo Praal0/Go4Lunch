@@ -1,4 +1,4 @@
-package com.example.go4lunch;
+package com.example.go4lunch.Activities;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -13,10 +13,12 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
+import com.example.go4lunch.R;
 import com.example.go4lunch.base.BaseActivity;
 import com.example.go4lunch.fragment.ListFragment;
-import com.example.go4lunch.fragment.MapFragment;
+import com.example.go4lunch.fragment.MapsFragment;
 import com.example.go4lunch.fragment.WorkmatesFragment;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends BaseActivity {
@@ -36,7 +38,7 @@ public class MainActivity extends BaseActivity {
         clickBtnUpdate();
         updateUIWhenCreating();
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new MapFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new MapsFragment()).commit();
     }
 
     // --------------------
@@ -70,7 +72,8 @@ public class MainActivity extends BaseActivity {
                     Fragment selectedFragment = null;
                     switch (item.getItemId()) {
                         case R.id.nav_map:
-                            selectedFragment = new MapFragment();
+                            selectedFragment = new MapsFragment();
+
                             break;
                         case R.id.nav_list:
                             selectedFragment = new ListFragment();

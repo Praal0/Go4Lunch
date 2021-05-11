@@ -1,12 +1,11 @@
-package com.example.go4lunch;
+package com.example.go4lunch.Activities;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
+import com.example.go4lunch.R;
 import com.firebase.ui.auth.AuthUI;
 
 import java.util.Arrays;
