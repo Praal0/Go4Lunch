@@ -1,13 +1,20 @@
 package com.example.go4lunch.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
@@ -18,51 +25,105 @@ import com.example.go4lunch.base.BaseActivity;
 import com.example.go4lunch.fragment.ListFragment;
 import com.example.go4lunch.fragment.MapsFragment;
 import com.example.go4lunch.fragment.WorkmatesFragment;
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 
-public class MainActivity extends BaseActivity {
+import java.util.Map;
+
+import jp.wasabeef.glide.transformations.BlurTransformation;
+
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     // For design
-    Button btnUpdate;
-    TextView textInputEditTextUsername;
-    TextView textViewEmail;
-    ImageView imageViewProfile;
+    private Toolbar toolbar;
+    private DrawerLayout drawer;
+    private ImageView mImageView_bk,mImageView;
+    private TextView mNameText,mEmailText;
+    private NavigationView mNavigationView;
+    private static final int SIGN_OUT_TASK = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setSupportActionBar(toolbar);
         init();
-        clickBtnSignOut();
-        clickBtnUpdate();
+        initNavigationdrawer();
+        configureNavigationView();
         updateUIWhenCreating();
-
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new MapsFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_view,new MapsFragment()).commit();
+        toolbar.setTitle("I'm Hungry");
     }
+
+
 
     // --------------------
     // ACTIONS
     // --------------------
 
     private void init() {
-        imageViewProfile = findViewById(R.id.profile_activity_imageview_profile);
-        textInputEditTextUsername = findViewById(R.id.profile_activity_edit_text_username);
-        textViewEmail = findViewById(R.id.profile_activity_text_view_email);
+        toolbar = findViewById(R.id.simple_toolbar);
+        drawer = findViewById(R.id.drawer_layout);
+        mNavigationView = findViewById(R.id.activity_main_nav_view);
+
+        View headerContainer = mNavigationView.getHeaderView(0); // This returns the container layout in nav_drawer_header.xml (e.g., your RelativeLayout or LinearLayout)
+         mImageView = headerContainer.findViewById(R.id.drawer_image);
+         mImageView_bk = headerContainer.findViewById(R.id.drawer_image_bk);
+         mNameText = headerContainer.findViewById(R.id.drawer_name);
+         mEmailText = headerContainer.findViewById(R.id.drawer_email);
+
+
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
     }
 
-    private void clickBtnSignOut() {
-
+    private void initNavigationdrawer() {
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
     }
 
-    private void clickBtnUpdate() {
-
+    // Configure NavigationView
+    private void configureNavigationView(){
+        mNavigationView.setNavigationItemSelectedListener(this);
     }
+
+
 
     // --------------------
     // UI
     // --------------------
+
+    private OnSuccessListener<Void> updateUIAfterRESTRequestsCompleted(final int origin){
+        return new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                switch (origin){
+                    case SIGN_OUT_TASK:
+                        launchActivity(LoginActivity.class,null);
+                        finish();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        };
+    }
+
+    private void launchActivity(Class mClass, Map<String,Object> info){
+        Intent intent = new Intent(this, mClass);
+        if (info != null){
+            for (Object key : info.keySet()) {
+                String mKey = (String)key;
+                String value = (String) info.get(key);
+                intent.putExtra(mKey, value);
+            }
+        }
+        startActivity(intent);
+    }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -71,43 +132,95 @@ public class MainActivity extends BaseActivity {
                     Fragment selectedFragment = null;
                     switch (item.getItemId()) {
                         case R.id.nav_map:
+                            toolbar.setTitle("I'm Hungry");
                             selectedFragment = new MapsFragment();
 
                             break;
                         case R.id.nav_list:
+                            toolbar.setTitle("I'm Hungry");
                             selectedFragment = new ListFragment();
                             break;
                         case R.id.nav_workmates:
+                            toolbar.setTitle("Available Workmates");
                             selectedFragment = new WorkmatesFragment();
                             break;
                     }
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_view,
                             selectedFragment).commit();
                     return true;
                 }
     };
 
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
 
     private void updateUIWhenCreating(){
 
         if (this.getCurrentUser() != null){
+            Glide.with(this)
+                    .load(R.drawable.lunch)
+                    .apply(RequestOptions.bitmapTransform(new BlurTransformation(30)))
+                    .into(mImageView_bk);
+            //Get picture URL from Firebase
+
+            //Get email & username from Firebase
+            String email = TextUtils.isEmpty(this.getCurrentUser().getEmail()) ? getString(R.string.info_no_email_found) : this.getCurrentUser().getEmail();
+            String username = TextUtils.isEmpty(this.getCurrentUser().getDisplayName()) ? getString(R.string.info_no_username_found) : this.getCurrentUser().getDisplayName();
 
             //Get picture URL from Firebase
             if (this.getCurrentUser().getPhotoUrl() != null) {
                 Glide.with(this)
                         .load(this.getCurrentUser().getPhotoUrl())
                         .apply(RequestOptions.circleCropTransform())
-                        .into(imageViewProfile);
+                        .into(mImageView);
             }
-
-            //Get email & username from Firebase
-            String email = TextUtils.isEmpty(this.getCurrentUser().getEmail()) ? getString(R.string.info_no_email_found) : this.getCurrentUser().getEmail();
-            String username = TextUtils.isEmpty(this.getCurrentUser().getDisplayName()) ? getString(R.string.info_no_username_found) : this.getCurrentUser().getDisplayName();
-
             //Update views with data
-            this.textInputEditTextUsername.setText(username);
-            this.textViewEmail.setText(email);
+            mEmailText.setText(email);
+            mNameText.setText(username);
         }
     }
 
+    // ---------------------
+    // ACTIONS
+    // ---------------------
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle Navigation Item Click
+        int id = item.getItemId();
+
+        switch (id){
+            case R.id.nav_lunch :
+
+                break;
+            case R.id.nav_setting:
+
+                break;
+            case R.id.nav_logout:
+                this.signOutUserFromFirebase();
+                break;
+            default:
+                break;
+        }
+        this.drawer.closeDrawer(GravityCompat.START);
+        return true;
+
+    }
+
+
+
+
+    // --------------------
+    // REST REQUEST
+    // --------------------
+    private void signOutUserFromFirebase() {
+        AuthUI.getInstance()
+                .signOut(this)
+                .addOnSuccessListener(this, this.updateUIAfterRESTRequestsCompleted(SIGN_OUT_TASK));
+    }
 }

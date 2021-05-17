@@ -33,8 +33,10 @@
 
         <activity
             android:name=".Activities.MainActivity"
-            android:label="@string/toolbar_title_login_activity" />
-        <activity android:name=".Activities.LoginActivity">
+            android:label="@string/toolbar_title_login_activity"
+            android:theme="@style/Theme.Design.NoActionBar"/>
+        <activity android:name=".Activities.LoginActivity"
+            android:theme="@style/Theme.Design.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
