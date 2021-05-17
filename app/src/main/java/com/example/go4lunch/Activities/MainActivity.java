@@ -42,6 +42,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private ImageView mImageView_bk,mImageView;
     private TextView mNameText,mEmailText;
     private NavigationView mNavigationView;
+    private BottomNavigationView bottomNav;
     private static final int SIGN_OUT_TASK = 10;
 
     @Override
@@ -51,11 +52,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         setSupportActionBar(toolbar);
         init();
         initNavigationdrawer();
+        configureBottomNav();
         configureNavigationView();
         updateUIWhenCreating();
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_view,new MapsFragment()).commit();
         toolbar.setTitle("I'm Hungry");
     }
+
 
 
 
@@ -67,16 +70,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         toolbar = findViewById(R.id.simple_toolbar);
         drawer = findViewById(R.id.drawer_layout);
         mNavigationView = findViewById(R.id.activity_main_nav_view);
-
         View headerContainer = mNavigationView.getHeaderView(0); // This returns the container layout in nav_drawer_header.xml (e.g., your RelativeLayout or LinearLayout)
-         mImageView = headerContainer.findViewById(R.id.drawer_image);
-         mImageView_bk = headerContainer.findViewById(R.id.drawer_image_bk);
-         mNameText = headerContainer.findViewById(R.id.drawer_name);
-         mEmailText = headerContainer.findViewById(R.id.drawer_email);
+        mImageView = headerContainer.findViewById(R.id.drawer_image);
+        mImageView_bk = headerContainer.findViewById(R.id.drawer_image_bk);
+        mNameText = headerContainer.findViewById(R.id.drawer_name);
+        mEmailText = headerContainer.findViewById(R.id.drawer_email);
+        bottomNav = findViewById(R.id.bottom_navigation);
 
-
-        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
-        bottomNav.setOnNavigationItemSelectedListener(navListener);
     }
 
     private void initNavigationdrawer() {
@@ -89,6 +89,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     // Configure NavigationView
     private void configureNavigationView(){
         mNavigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private void configureBottomNav() {
+        bottomNav.setOnNavigationItemSelectedListener(navListener);
     }
 
 
@@ -143,6 +147,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         case R.id.nav_workmates:
                             toolbar.setTitle("Available Workmates");
                             selectedFragment = new WorkmatesFragment();
+                            break;
+
+                        case R.id.nav_tchat:
+                            selectedFragment = new WorkmatesFragment();
+                            toolbar.setTitle("Tchat");
                             break;
                     }
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_view,

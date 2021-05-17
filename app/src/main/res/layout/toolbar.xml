@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:elevation="@dimen/elevation_size"
     app:layout_constraintTop_toTopOf="parent"
-    android:background="@color/colorPrimaryDark"
+    android:background="@color/colorOrange"
     app:theme="@style/Widget.AppCompat.Toolbar"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:targetApi="lollipop">
