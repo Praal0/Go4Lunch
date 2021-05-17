@@ -18,7 +18,6 @@ import com.example.go4lunch.base.BaseActivity;
 import com.example.go4lunch.fragment.ListFragment;
 import com.example.go4lunch.fragment.MapsFragment;
 import com.example.go4lunch.fragment.WorkmatesFragment;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends BaseActivity {
