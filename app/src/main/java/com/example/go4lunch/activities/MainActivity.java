@@ -1,12 +1,10 @@
-package com.example.go4lunch.Activities;
+ package com.example.go4lunch.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -45,6 +43,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private BottomNavigationView bottomNav;
     private static final int SIGN_OUT_TASK = 10;
 
+    //Default data to create user
+    public static final int DEFAULT_ZOOM = 13;
+    public static final int DEFAULT_SEARCH_RADIUS = 1000;
+    public static final boolean DEFAULT_NOTIFICATION = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +61,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_view,new MapsFragment()).commit();
         toolbar.setTitle("I'm Hungry");
     }
-
 
 
 
