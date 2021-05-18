@@ -51,13 +51,9 @@ public class LoginActivity extends BaseActivity {
         this.handleResponseAfterSignIn(requestCode, resultCode, data);
     }
 
-
-
     // --------------------
     // UTILS
     // --------------------
-
-
     private void handleResponseAfterSignIn(int requestCode, int resultCode, Intent data){
 
         IdpResponse response = IdpResponse.fromResultIntent(data);
@@ -120,7 +116,7 @@ public class LoginActivity extends BaseActivity {
             this.mViewModel.updateCurrentUserUID(uid);
             this.mViewModel.updateCurrentUserZoom(DEFAULT_ZOOM);
             this.mViewModel.updateCurrentUserRadius(DEFAULT_SEARCH_RADIUS);
-            UserHelper.createUser(uid, username, urlPicture, DEFAULT_SEARCH_RADIUS, DEFAULT_ZOOM, DEFAULT_NOTIFICATION).addOnFailureListener(this.onFailureListener());
+            UserHelper.createUser(uid, username, urlPicture).addOnFailureListener(this.onFailureListener());
         }else{
             Log.e("LOGIN_ACTIVITY", "createUserInFirestore: NOT LOGGED" );
         }

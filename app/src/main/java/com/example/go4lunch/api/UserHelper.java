@@ -18,8 +18,8 @@ public class UserHelper {
 
     // --- CREATE ---
 
-    public static Task<Void> createUser(String uid, String username, String urlPicture, int searchRadius, int defaultZoom, boolean isNotificationOn) {
-        User userToCreate = new User(uid, username, urlPicture, searchRadius, defaultZoom, isNotificationOn);
+    public static Task<Void> createUser(String uid, String username, String urlPicture) {
+        User userToCreate = new User(uid, username, urlPicture);
         return UserHelper.getUsersCollection().document(uid).set(userToCreate);
     }
 
