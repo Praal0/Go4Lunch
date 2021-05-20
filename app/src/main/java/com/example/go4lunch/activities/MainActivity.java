@@ -21,7 +21,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.go4lunch.R;
 import com.example.go4lunch.base.BaseActivity;
 import com.example.go4lunch.fragment.ListFragment;
-import com.example.go4lunch.fragment.MapsFragment;
+import com.example.go4lunch.fragment.MapFragment;
 import com.example.go4lunch.fragment.WorkmatesFragment;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -43,11 +43,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private BottomNavigationView bottomNav;
     private static final int SIGN_OUT_TASK = 10;
 
-    //Default data to create user
-    public static final int DEFAULT_ZOOM = 13;
-    public static final int DEFAULT_SEARCH_RADIUS = 1000;
-    public static final boolean DEFAULT_NOTIFICATION = false;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,11 +53,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         configureBottomNav();
         configureNavigationView();
         updateUIWhenCreating();
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_view,new MapsFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_view,new MapFragment()).commit();
         toolbar.setTitle("I'm Hungry");
     }
-
-
 
     // --------------------
     // ACTIONS
@@ -139,13 +132,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     switch (item.getItemId()) {
                         case R.id.nav_map:
                             toolbar.setTitle("I'm Hungry");
-                            selectedFragment = new MapsFragment();
-
+                            selectedFragment = new MapFragment();
                             break;
+
                         case R.id.nav_list:
                             toolbar.setTitle("I'm Hungry");
                             selectedFragment = new ListFragment();
                             break;
+
                         case R.id.nav_workmates:
                             toolbar.setTitle("Available Workmates");
                             selectedFragment = new WorkmatesFragment();
@@ -174,11 +168,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private void updateUIWhenCreating(){
 
         if (this.getCurrentUser() != null){
+            //Get picture URL from Firebase
             Glide.with(this)
                     .load(R.drawable.lunch)
                     .apply(RequestOptions.bitmapTransform(new BlurTransformation(30)))
                     .into(mImageView_bk);
-            //Get picture URL from Firebase
 
             //Get email & username from Firebase
             String email = TextUtils.isEmpty(this.getCurrentUser().getEmail()) ? getString(R.string.info_no_email_found) : this.getCurrentUser().getEmail();
@@ -204,17 +198,17 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle Navigation Item Click
         int id = item.getItemId();
-
         switch (id){
             case R.id.nav_lunch :
-
                 break;
+
             case R.id.nav_setting:
-
                 break;
+
             case R.id.nav_logout:
                 this.signOutUserFromFirebase();
                 break;
+
             default:
                 break;
         }
@@ -222,9 +216,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         return true;
 
     }
-
-
-
 
     // --------------------
     // REST REQUEST

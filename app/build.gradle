@@ -15,7 +15,10 @@ android {
         versionName "1.0"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "API_KEY", API_KEY)
     }
+
+
 
     buildTypes {
         release {
@@ -37,7 +40,6 @@ dependencies {
     implementation "com.google.android.gms:play-services-location:18.0.0"
     implementation 'com.google.maps.android:android-maps-utils:2.2.0'
 
-
     // JODA TIME
     implementation 'joda-time:joda-time:2.10.10'
 
@@ -49,6 +51,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:21.0.1' // Authentication
     implementation 'com.google.firebase:firebase-firestore:23.0.0' // Firestore
     implementation 'com.google.firebase:firebase-storage:20.0.0'  // FirebaseUI Storage
+    implementation 'com.google.android.libraries.places:places:2.4.0'
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.3.0'

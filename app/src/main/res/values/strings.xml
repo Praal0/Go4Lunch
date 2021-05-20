@@ -1,7 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Go4Lunch</string>
 
-
     <!-- MAIN ACTIVITY -->
     <string name="error_not_connected">Vous devez vous connecter !</string>
     <string name="error_authentication_canceled">Authentification annulée&#8230;</string>
@@ -21,17 +20,36 @@
     <string name="info_no_email_found">Auncune adresse email</string>
     <string name="info_no_username_found">User Name Not Found</string>
 
+    <!-- ERROR TEXT -->
+    <string name="http_error_message">HttpException, Error code : %1$i</string>
+    <string name="timeout_error_message">Request timeout, please check your internet connection</string>
+    <string name="exception_error_message">An error occurred, please check your internet connection</string>
+    <string name="generic_error_message">An error occurred, please try again</string>
+    <string name="no_restaurant_error_message">No restaurants found, try to change your search radius settings</string>
+
+    <!-- BOTTOM MENU -->
+    <string name="bottom_menu_map">Map view</string>
+    <string name="bottom_menu_list">List view</string>
+    <string name="bottom_menu_mates">Workmates</string>
+    <string name="bottom_menu_chat">Chat</string>
+
+
+    <!-- POPUP TITLE PERM -->
+    <string name="popup_title_perm_access">This application need permissions to work correctly.</string>
+    <string name="popup_title_permission_files_access">This application needs permissions to access your images</string>
+
 
     <!-- FACEBOOK PURPOSE -->
-    <string name="facebook_application_id" translatable="false">505960523779978</string>
-    <string name="fb_login_protocol_scheme" translatable="false" tools:ignore="UnusedResources">fb505960523779978</string>
+    <string name="facebook_application_id">323231805859099</string>
+    <string name="fb_login_protocol_scheme">fb323231805859099</string>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- NAVIGATION DRAWER -->
     <string name="lunch">YOUR LUNCH</string>
     <string name="settings">SETTINGS</string>
     <string name="logout">LOGOUT</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="go4lunch">Go4Lunch</string>
+
 
 </resources>

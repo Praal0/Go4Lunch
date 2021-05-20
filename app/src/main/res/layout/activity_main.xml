@@ -64,8 +64,8 @@
                 <ImageView
                     android:layout_width="279dp"
                     android:layout_height="487dp"
-                    android:layout_marginTop="350dp"
-                    android:contentDescription="@string/go4lunch"
+                    android:layout_marginTop="600dp"
+                    android:contentDescription="@string/app_name"
                     android:src="@drawable/meal_logo"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

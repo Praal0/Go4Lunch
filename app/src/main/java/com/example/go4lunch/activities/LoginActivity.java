@@ -5,9 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.example.go4lunch.R;
 import com.example.go4lunch.activities.ViewModels.CommunicationViewModel;
@@ -19,11 +17,6 @@ import java.util.Arrays;
 import com.example.go4lunch.base.BaseActivity;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
-import com.google.android.material.snackbar.Snackbar;
-
-import static com.example.go4lunch.activities.MainActivity.DEFAULT_ZOOM;
-import static com.example.go4lunch.activities.MainActivity.DEFAULT_NOTIFICATION;
-import static com.example.go4lunch.activities.MainActivity.DEFAULT_SEARCH_RADIUS;
 
 public class LoginActivity extends BaseActivity {
 
@@ -60,7 +53,7 @@ public class LoginActivity extends BaseActivity {
 
         if (requestCode == RC_SIGN_IN) {
             if (resultCode == RESULT_OK) { // SUCCESS
-                this.createUserInFirestore();
+                this.createUserInFirestone();
                 launchMainActivity();
             } else { // ERRORS
                 if (response == null) {
@@ -106,16 +99,12 @@ public class LoginActivity extends BaseActivity {
     // --------------------
 
     // Http request that create user in firestore
-    private void createUserInFirestore(){
-
+    private void createUserInFirestone(){
         if (this.getCurrentUser() != null){
             Log.e("LOGIN_ACTIVITY", "createUserInFirestore: LOGGED" );
             String urlPicture = (this.getCurrentUser().getPhotoUrl() != null) ? this.getCurrentUser().getPhotoUrl().toString() : null;
             String username = this.getCurrentUser().getDisplayName();
             String uid = this.getCurrentUser().getUid();
-            this.mViewModel.updateCurrentUserUID(uid);
-            this.mViewModel.updateCurrentUserZoom(DEFAULT_ZOOM);
-            this.mViewModel.updateCurrentUserRadius(DEFAULT_SEARCH_RADIUS);
             UserHelper.createUser(uid, username, urlPicture).addOnFailureListener(this.onFailureListener());
         }else{
             Log.e("LOGIN_ACTIVITY", "createUserInFirestore: NOT LOGGED" );
