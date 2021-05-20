@@ -43,6 +43,18 @@
     <string name="facebook_application_id">323231805859099</string>
     <string name="fb_login_protocol_scheme">fb323231805859099</string>
 
+    <!-- SETTINGS ACTIVITY -->
+    <string name="settings_zoom_title">Default zoom on map</string>
+    <string name="settings_search_radius_title">Restaurants search radius</string>
+    <string name="settings_notification_title">Notifications</string>
+    <string name="settings_notification_text">Each day you will have a reminder for your restaurant\'s choice, if you have selected one</string>
+
+    <string name="settings_save_error_zoom">Minimum is %1$s, Maximum is %2$s</string>
+    <string name="settings_save_error_radius">Minimum is %1$s, Maximum is %2$s</string>
+
+    <string name="settings_save_text">Save</string>
+    <string name="settings_save_ok">Settings saved!</string>
+
 
     <!-- NAVIGATION DRAWER -->
     <string name="lunch">YOUR LUNCH</string>

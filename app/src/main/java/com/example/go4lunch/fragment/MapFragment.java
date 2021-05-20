@@ -1,6 +1,7 @@
 package com.example.go4lunch.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 
 import com.example.go4lunch.BuildConfig;
 import com.example.go4lunch.R;
+import com.example.go4lunch.activities.PlaceDetailActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -202,6 +204,23 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback {
             ActivityCompat.requestPermissions(Objects.requireNonNull(getActivity()),
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                     PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+        }
+    }
+
+    // -----------------
+    // ACTION
+    // -----------------
+
+    private boolean onClickMarker(Marker marker){
+        if (marker.getTag() != null){
+            Log.e(TAG, "onClickMarker: " + marker.getTag() );
+            Intent intent = new Intent(getActivity(), PlaceDetailActivity.class);
+            intent.putExtra("PlaceDetailResult", marker.getTag().toString());
+            startActivity(intent);
+            return true;
+        }else{
+            Log.e(TAG, "onClickMarker: ERROR NO TAG" );
+            return false;
         }
     }
 }
