@@ -59,6 +59,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.android.gms:play-services-maps:17.0.1'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation 'androidx.room:room-runtime:2.3.0'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
@@ -79,7 +80,18 @@ dependencies {
     //EASY PERMISSIONS
     implementation 'pub.devrel:easypermissions:1.1.1'
 
+    // RXJAVA
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.14'
+
+    // RETROFIT
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
+
     // MULTIDEX
-    implementation 'com.android.support:multidex:1.0.3' //enter the latest version
+    implementation 'com.android.support:multidex:1.0.3'
+    annotationProcessor 'androidx.room:room-compiler:2.3.0'//enter the latest version
 }
 apply plugin: 'com.google.gms.google-services'
