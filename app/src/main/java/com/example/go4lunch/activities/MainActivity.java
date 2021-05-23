@@ -146,9 +146,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                             break;
 
                         case R.id.nav_tchat:
-                            selectedFragment = new WorkmatesFragment();
+                            launchActivity(ChatActivity.class,null);
                             toolbar.setTitle("Tchat");
-                            break;
+                            return true;
                     }
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_view,
                             selectedFragment).commit();
