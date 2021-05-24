@@ -58,6 +58,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Loc
     private LocationRequest mLocationRequest;
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationCallback mLocationCallback;
+    private Disposable disposable;
 
 
 
@@ -84,8 +85,6 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Loc
         mViewModel.currentUserPosition.observe(getViewLifecycleOwner(), latLng -> {
             executeHttpRequestWithRetrofit();
         });
-
-
 
         this.configureLocationRequest();
         this.configureLocationCallBack();
@@ -191,7 +190,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Loc
         double currentLongitude = location.getLongitude();
         this.mViewModel.updateCurrentUserPosition(new LatLng(currentLatitude, currentLongitude));
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(this.mViewModel.getCurrentUserPosition()));
-        googleMap.animateCamera(CameraUpdateFactory.zoomTo(14), 2000, null);
+        googleMap.animateCamera(CameraUpdateFactory.zoomTo(13), 2000, null);
         stopLocationUpdates();
     }
 
@@ -209,7 +208,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Loc
     private void executeHttpRequestWithRetrofit(){
         String location = mViewModel.getCurrentUserPositionFormatted();
         Log.e(TAG, "Location : "+location );
-        Disposable disposable = PlacesStreams.streamFetchNearbyPlaces(location, 1000, SEARCH_TYPE, API_KEY).subscribeWith(createObserver());
+        disposable = PlacesStreams.streamFetchNearbyPlaces(location, 1000, SEARCH_TYPE, API_KEY).subscribeWith(createObserver());
     }
 
     private <T> DisposableObserver<T> createObserver(){
