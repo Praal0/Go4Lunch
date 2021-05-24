@@ -2,7 +2,6 @@ package com.example.go4lunch.fragment;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,18 +14,15 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.go4lunch.BuildConfig;
 import com.example.go4lunch.R;
 import com.example.go4lunch.Utils.PlacesStreams;
 import com.example.go4lunch.activities.PlaceDetailActivity;
 import com.example.go4lunch.activities.ViewModels.CommunicationViewModel;
-import com.example.go4lunch.api.RestaurantsHelper;
 import com.example.go4lunch.models.PlacesInfo.MapPlacesInfo;
-import com.example.go4lunch.models.PlacesInfo.PlacesDetails.PlaceDetailsResults;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationListener;
@@ -36,7 +32,6 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -44,15 +39,12 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-import java.util.ArrayList;
-import java.util.Objects;
-
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 import pub.devrel.easypermissions.EasyPermissions;
 
 
-public class MapFragment extends BaseFragment implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, LocationListener {
+public class MapFragment extends BaseFragment implements OnMapReadyCallback, LocationListener {
 
     private static final int PERMS_FINE_COARSE_LOCATION = 100;
     private static final String TAG = MapFragment.class.getSimpleName();
@@ -63,18 +55,13 @@ public class MapFragment extends BaseFragment implements GoogleApiClient.OnConne
 
     private GoogleMap googleMap;
     private MapView mMapView;
-    private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationCallback mLocationCallback;
-    private Disposable disposable;
 
 
 
     private CommunicationViewModel mViewModel;
-    private int requestCode;
-    private String[] permissions;
-    private int[] grantResults;
 
     public static MapFragment newInstance() {
         return new MapFragment();
@@ -83,75 +70,56 @@ public class MapFragment extends BaseFragment implements GoogleApiClient.OnConne
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mViewModel = ViewModelProviders.of(getActivity()).get(CommunicationViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(CommunicationViewModel.class);
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_map, container, false);
-        mMapView = rootView.findViewById(R.id.mapView);
-
-
+        View view = inflater.inflate(R.layout.fragment_map, container, false);
+        mMapView = view.findViewById(R.id.mapView);
+        mMapView.getMapAsync(this);
+        mMapView.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
         mViewModel.currentUserPosition.observe(getViewLifecycleOwner(), latLng -> {
             executeHttpRequestWithRetrofit();
         });
 
 
-        mMapView.onCreate(savedInstanceState);
-        mMapView.onResume();
-        this.configureMapView();
-        this.configureGoogleApiClient();
+
         this.configureLocationRequest();
         this.configureLocationCallBack();
-        return rootView;
+        startLocationUpdates();
+        createDriveFile();
+        return view;
     }
 
-
-
+    @SuppressLint("PotentialBehaviorOverride")
     @Override
-    public void onResume() {
-        super.onResume();
-        mMapView.onResume();
-        if (mGoogleApiClient != null) {
-            mGoogleApiClient.connect(); }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mMapView.onPause();
-        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
-            stopLocationUpdates();
-            mGoogleApiClient.stopAutoManage(getActivity());
-            mGoogleApiClient.disconnect();
+    public void onMapReady(@NonNull GoogleMap mMap) {
+        googleMap = mMap;
+        if (checkLocationPermission()) {
+            //Request location updates:
+            googleMap.setMyLocationEnabled(true);
         }
-    }
+        googleMap.getUiSettings().setCompassEnabled(true);
+        googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+        View locationButton = ((View) mMapView.findViewById(Integer.parseInt("1")).
+                getParent()).findViewById(Integer.parseInt("2"));
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        mViewModel.currentUserPosition.removeObservers(this);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mMapView.onDestroy();
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        mMapView.onLowMemory();
+        // and next place it, for example, on bottom right (as Google Maps app)
+        RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
+        // position on right bottom
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+        rlp.setMargins(0, 0, 30, 30);
+        googleMap.getUiSettings().setRotateGesturesEnabled(true);
+        googleMap.setOnMarkerClickListener(MapFragment.this::onClickMarker);
 
     }
 
     @SuppressLint("MissingPermission")
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
+    private void createDriveFile() {
         if (EasyPermissions.hasPermissions(getContext(), perms)) {
             mFusedLocationClient.getLastLocation()
                     .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
@@ -175,23 +143,59 @@ public class MapFragment extends BaseFragment implements GoogleApiClient.OnConne
         }
     }
 
+    @Override
+    public void onStart(){
+        super.onStart();
+        mMapView.onStart();
+    }
+
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mMapView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mMapView.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mViewModel.currentUserPosition.removeObservers(this);
+    }
+
+
+    @Override
+    public void onDestroyView(){
+        super.onDestroyView();
+        mMapView.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mMapView.onLowMemory();
+
+    }
+
+
+
     private void handleNewLocation(Location location) {
         Log.e(TAG, "handleNewLocation: " );
         double currentLatitude = location.getLatitude();
         double currentLongitude = location.getLongitude();
-
         this.mViewModel.updateCurrentUserPosition(new LatLng(currentLatitude, currentLongitude));
-
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(this.mViewModel.getCurrentUserPosition()));
         googleMap.animateCamera(CameraUpdateFactory.zoomTo(14), 2000, null);
         stopLocationUpdates();
     }
 
-    @Override
-    public void onConnectionSuspended(int i) {}
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {}
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
@@ -205,7 +209,7 @@ public class MapFragment extends BaseFragment implements GoogleApiClient.OnConne
     private void executeHttpRequestWithRetrofit(){
         String location = mViewModel.getCurrentUserPositionFormatted();
         Log.e(TAG, "Location : "+location );
-        this.disposable = PlacesStreams.streamFetchNearbyPlaces(location,1000,SEARCH_TYPE,API_KEY).subscribeWith(createObserver());
+        Disposable disposable = PlacesStreams.streamFetchNearbyPlaces(location, 1000, SEARCH_TYPE, API_KEY).subscribeWith(createObserver());
     }
 
     private <T> DisposableObserver<T> createObserver(){
@@ -221,9 +225,6 @@ public class MapFragment extends BaseFragment implements GoogleApiClient.OnConne
         };
     }
 
-    private void disposeWhenDestroy(){
-        if (this.disposable != null && !this.disposable.isDisposed()) this.disposable.dispose();
-    }
 
     // -------------------
     // UPDATE UI
@@ -256,39 +257,6 @@ public class MapFragment extends BaseFragment implements GoogleApiClient.OnConne
     // -----------------
     // CONFIGURATION
     // -----------------
-
-    private void configureMapView() {
-        try {
-            MapsInitializer.initialize(Objects.requireNonNull(getActivity()).getBaseContext());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        mMapView.getMapAsync(new OnMapReadyCallback() {
-            @SuppressLint("PotentialBehaviorOverride")
-            @Override
-            public void onMapReady(GoogleMap mMap) {
-                googleMap = mMap;
-                if (checkLocationPermission()) {
-                    //Request location updates:
-                    googleMap.setMyLocationEnabled(true);
-                }
-                googleMap.getUiSettings().setCompassEnabled(true);
-                googleMap.getUiSettings().setMyLocationButtonEnabled(true);
-                View locationButton = ((View) mMapView.findViewById(Integer.parseInt("1")).
-                        getParent()).findViewById(Integer.parseInt("2"));
-
-                // and next place it, for example, on bottom right (as Google Maps app)
-                RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
-                // position on right bottom
-                rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
-                rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-                rlp.setMargins(0, 0, 30, 30);
-                googleMap.getUiSettings().setRotateGesturesEnabled(true);
-                googleMap.setOnMarkerClickListener(MapFragment.this::onClickMarker);
-            }
-        });
-    }
-
     private void configureLocationCallBack() {
         mLocationCallback = new LocationCallback() {
             @Override
@@ -314,7 +282,7 @@ public class MapFragment extends BaseFragment implements GoogleApiClient.OnConne
     }
 
     private void configureLocationRequest(){
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(Objects.requireNonNull(getActivity()));
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
         // Create the LocationRequest object
         mLocationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
@@ -322,35 +290,15 @@ public class MapFragment extends BaseFragment implements GoogleApiClient.OnConne
                 .setFastestInterval(1000); // 1 second, in milliseconds
     }
 
-    private void configureGoogleApiClient(){
-        mGoogleApiClient = new GoogleApiClient
-                .Builder(Objects.requireNonNull(getContext()))
-                .addConnectionCallbacks(this)
-                .addApi(LocationServices.API)
-                .enableAutoManage(Objects.requireNonNull(getActivity()), this)
-                .build();
-    }
+
 
     public boolean checkLocationPermission() {
-        if (EasyPermissions.hasPermissions(Objects.requireNonNull(getContext()), perms)) {
+        if (EasyPermissions.hasPermissions(requireContext(), perms)) {
             return true;
         } else {
             return false;
         }
     }
-
-    @SuppressLint("MissingPermission")
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        this.requestCode = requestCode;
-        this.permissions = permissions;
-        this.grantResults = grantResults;
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        // Forward results to EasyPermissions
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
-        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {googleMap.setMyLocationEnabled(true);}
-    }
-
     // -----------------
     // ACTION
     // -----------------
@@ -367,5 +315,6 @@ public class MapFragment extends BaseFragment implements GoogleApiClient.OnConne
             return false;
         }
     }
+
 
 }
