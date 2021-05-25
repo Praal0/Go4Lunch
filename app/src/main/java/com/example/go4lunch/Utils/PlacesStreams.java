@@ -2,7 +2,6 @@ package com.example.go4lunch.Utils;
 
 
 
-import com.example.go4lunch.models.AutoComplete.AutoCompleteResult;
 import com.example.go4lunch.models.PlacesInfo.MapPlacesInfo;
 import com.example.go4lunch.models.PlacesInfo.PlacesDetails.PlaceDetailsInfo;
 import com.example.go4lunch.models.PlacesInfo.PlacesDetails.PlaceDetailsResults;
@@ -44,22 +43,5 @@ public class PlacesStreams {
               .timeout(10, TimeUnit.SECONDS);
     }
 
-    public static Observable<AutoCompleteResult> streamFetchAutoComplete(String query, String location, int radius, String apiKey){
-        return mapPlacesInfo.getPlaceAutoComplete(query, location, radius, apiKey)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .timeout(10,TimeUnit.SECONDS);
-    }
 
-    public static  Observable<List<PlaceDetailsResults>> streamFetchAutoCompleteInfo(String query, String location, int radius, String apiKey){
-        return mapPlacesInfo.getPlaceAutoComplete(query, location, radius, apiKey)
-                .flatMapIterable(AutoCompleteResult::getPredictions)
-                .flatMap(info -> mapPlacesInfo.getPlacesInfo(info.getPlaceId(), apiKey))
-                .map(PlaceDetailsInfo::getResult)
-                .toList()
-                .toObservable()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .timeout(10, TimeUnit.SECONDS);
-    }
 }
