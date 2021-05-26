@@ -25,9 +25,9 @@ public class BaseActivity extends AppCompatActivity {
     // --------------------
 
     @Nullable
-    protected FirebaseUser getCurrentUser(){ return FirebaseAuth.getInstance().getCurrentUser(); }
+    public FirebaseUser getCurrentUser(){ return FirebaseAuth.getInstance().getCurrentUser(); }
 
-    protected Boolean isCurrentUserLogged(){ return (this.getCurrentUser() != null); }
+    public Boolean isCurrentUserLogged(){ return (this.getCurrentUser() != null); }
 
 
 
@@ -35,7 +35,7 @@ public class BaseActivity extends AppCompatActivity {
     // ERROR HANDLER
     // --------------------
 
-    protected OnFailureListener onFailureListener(){
+    public OnFailureListener onFailureListener(){
         return new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {

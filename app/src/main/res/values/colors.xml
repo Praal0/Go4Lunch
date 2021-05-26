@@ -10,4 +10,6 @@
     <color name="colorWhite">#ffffff</color>
     <color name="colorGray">#9e9e9e</color>
     <color name="colorOrange">#FF5A31</color>
+    <color name="colorStar">#ffd600</color>
+    <color name="colorDivider">#bdbdbd</color>
 </resources>

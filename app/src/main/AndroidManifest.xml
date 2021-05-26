@@ -26,7 +26,10 @@
 
 
         <activity android:name=".activities.SettingsActivity" />
-        <activity android:name=".activities.PlaceDetailActivity" />
+
+        <activity
+            android:name=".activities.PlaceDetailActivity"
+            android:theme="@style/Theme.Design.NoActionBar"/>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
