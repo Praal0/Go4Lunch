@@ -84,17 +84,6 @@ public class ChatActivity extends BaseActivity implements  ChatAdapter.Listener{
         activity_chat_send_button = findViewById(R.id.activity_chat_send_button);
     }
 
-    public boolean onOptionsItemSelected(MenuItem item){
-        Intent myIntent = new Intent(getApplicationContext(), ChatActivity.class);
-        startActivityForResult(myIntent, 0);
-        int id = item.getItemId();
-
-        if (id==android.R.id.home) {
-            finish();
-        }
-        return true;
-    }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -130,7 +119,19 @@ public class ChatActivity extends BaseActivity implements  ChatAdapter.Listener{
     private void configureToolbar(){
         setSupportActionBar(mToolbar);
         ActionBar ab = getSupportActionBar();
+        ab.setHomeButtonEnabled(true);
         ab.setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case android.R.id.home:
+                Intent homeIntent = new Intent(this, MainActivity.class);
+                startActivity(homeIntent);
+                finish();
+        }
+        return (super.onOptionsItemSelected(menuItem));
     }
 
     @Override

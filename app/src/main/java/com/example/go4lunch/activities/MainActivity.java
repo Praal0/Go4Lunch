@@ -148,7 +148,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         case R.id.nav_tchat:
                             launchActivity(ChatActivity.class,null);
                             toolbar.setTitle("Tchat");
-                            return true;
+                            break;
                     }
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_view,
                             selectedFragment).commit();

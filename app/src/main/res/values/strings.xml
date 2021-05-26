@@ -64,6 +64,9 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="chat_input_text_hint">chat</string>
     <string name="chat_no_image_chosen">No image selected</string>
+    <string name="restaurant_item_website">website</string>
+    <string name="restaurant_item_like">like</string>
+    <string name="restaurant_item_call">call</string>
 
 
 </resources>

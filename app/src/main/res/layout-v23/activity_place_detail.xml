@@ -23,7 +23,8 @@
         android:clickable="true"
         app:layout_constraintTop_toBottomOf="@id/slider"
         app:layout_constraintBottom_toBottomOf="@id/slider"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:focusable="true" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/restaurant_info"
