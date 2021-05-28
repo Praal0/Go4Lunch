@@ -24,18 +24,6 @@ public class PlacesStreams {
                 .timeout(10, TimeUnit.SECONDS);
     }
 
-    public static  Observable<List<PlaceDetailsResults>> streamFetchPlaceInfo(String location, int radius, String type, String key){
-        return mapPlacesInfo.getNearbyPlaces(location,radius,type,key)
-                .flatMapIterable(MapPlacesInfo::getResults)
-                .flatMap(info -> mapPlacesInfo.getPlacesInfo(info.getPlaceId(), key))
-                .map(PlaceDetailsInfo::getResult)
-                .toList()
-                .toObservable()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .timeout(10, TimeUnit.SECONDS);
-    }
-
     public static Observable<PlaceDetailsInfo> streamSimpleFetchPlaceInfo(String placeId, String key){
       return  mapPlacesInfo.getPlacesInfo(placeId, key)
               .subscribeOn(Schedulers.io())

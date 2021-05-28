@@ -2,6 +2,7 @@ package com.example.go4lunch.fragment;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,6 +36,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -112,6 +114,22 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Loc
         rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
         rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
         rlp.setMargins(0, 0, 30, 30);
+
+        try {
+            // Customise the styling of the base map using a JSON object defined
+            // in a raw resource file.
+            boolean success = googleMap.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(
+                            getContext(), R.raw.mapstyle));
+
+            if (!success) {
+                Log.e(TAG, "Style parsing failed.");
+            }
+
+        }catch (Resources.NotFoundException e){
+            Log.e(TAG, "Can't find style. Error: ", e);
+        }
+
         googleMap.getUiSettings().setRotateGesturesEnabled(true);
         googleMap.setOnMarkerClickListener(MapFragment.this::onClickMarker);
 
@@ -148,8 +166,6 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Loc
         mMapView.onStart();
     }
 
-
-
     @Override
     public void onResume() {
         super.onResume();
@@ -166,6 +182,9 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Loc
     public void onStop() {
         super.onStop();
         mViewModel.currentUserPosition.removeObservers(this);
+        if (!disposable.isDisposed()){
+            disposable.dispose();
+        }
     }
 
 
@@ -305,7 +324,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Loc
     private boolean onClickMarker(Marker marker){
         if (marker.getTag() != null){
             Log.e(TAG, "onClickMarker: " + marker.getTag() );
-            Intent intent = new Intent(getActivity(), PlaceDetailActivity.class);
+            Intent intent = new Intent(getActivity(),PlaceDetailActivity.class);
             intent.putExtra("PlaceDetailResult", marker.getTag().toString());
             startActivity(intent);
             return true;

@@ -1,5 +1,6 @@
 package com.example.go4lunch.Views;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.example.go4lunch.models.Message;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -118,8 +120,6 @@ public class ChatViewHolder extends RecyclerView.ViewHolder {
         RelativeLayout.LayoutParams paramsImageView = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         paramsImageView.addRule(isSender ? RelativeLayout.ALIGN_LEFT : RelativeLayout.ALIGN_RIGHT, R.id.activity_chat_item_message_container_text_message_container);
         this.cardViewImageSent.setLayoutParams(paramsImageView);
-
-        this.rootView.requestLayout();
     }
 
     // ---
@@ -132,5 +132,11 @@ public class ChatViewHolder extends RecyclerView.ViewHolder {
             SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yy h.mm a", Locale.getDefault());
             return dateFormat.format(date);
         }
+    }
+
+    private String getTodayDate(){
+        Calendar c = Calendar.getInstance();
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        return df.format(c.getTime());
     }
 }
