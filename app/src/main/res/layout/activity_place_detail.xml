@@ -6,39 +6,33 @@
     android:layout_height="match_parent"
     tools:context=".activities.PlaceDetailActivity">
 
-    <com.glide.slider.library.SliderLayout
-        android:id="@+id/slider"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        tools:ignore="MissingConstraints">
 
-    </com.glide.slider.library.SliderLayout>
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        app:backgroundTint="@color/colorWhite"
         android:clickable="true"
-        app:layout_constraintTop_toBottomOf="@id/slider"
-        app:layout_constraintBottom_toBottomOf="@id/slider"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:backgroundTint="@color/colorWhite"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteY="222dp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/restaurant_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryDark"
-        app:layout_constraintTop_toBottomOf="@+id/slider">
+        tools:layout_editor_absoluteY="250dp">
 
         <TextView
             android:id="@+id/restaurant_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxWidth="200dp"
-            android:ellipsize="end"
             android:layout_margin="@dimen/margin_to_parent"
+            android:ellipsize="end"
+            android:maxWidth="200dp"
             android:textColor="@color/colorWhite"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -58,9 +52,9 @@
             android:id="@+id/restaurant_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxWidth="200dp"
-            android:ellipsize="end"
             android:layout_margin="@dimen/margin_to_parent"
+            android:ellipsize="end"
+            android:maxWidth="200dp"
             android:textColor="@color/colorWhite"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -1,12 +1,16 @@
 package com.example.go4lunch.activities;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +21,9 @@ import android.widget.Toast;
 
 import com.example.go4lunch.R;
 import com.example.go4lunch.Utils.PlacesStreams;
+import com.example.go4lunch.Views.DetailAdapter;
+import com.example.go4lunch.api.RestaurantsHelper;
+import com.example.go4lunch.api.UserHelper;
 import com.example.go4lunch.base.BaseActivity;
 import com.example.go4lunch.fragment.MapFragment;
 import com.example.go4lunch.models.PlacesInfo.PlacesDetails.PlaceDetailsInfo;
@@ -24,59 +31,137 @@ import com.example.go4lunch.models.PlacesInfo.PlacesDetails.PlaceDetailsResults;
 import com.example.go4lunch.models.User;
 import com.glide.slider.library.SliderLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-
+import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 
 public class PlaceDetailActivity extends BaseActivity implements View.OnClickListener {
+    @BindView(R.id.restaurant_name)TextView mRestaurantName;
+    @BindView(R.id.restaurant_address)TextView mRestaurantAddress;
+    @BindView(R.id.restaurant_recyclerView)RecyclerView mRestaurantRecyclerView;
+    @BindView(R.id.floatingActionButton) FloatingActionButton mFloatingActionButton;
+    @BindView(R.id.restaurant_item_call) Button mButtonCall;
+    @BindView(R.id.restaurant_item_like) Button mButtonLike;
+    @BindView(R.id.restaurant_item_website) Button mButtonWebsite;
+    @BindView(R.id.item_ratingBar) RatingBar mRatingBar;
 
-    TextView mRestaurantName;
-    TextView mRestaurantAddress;
-    RecyclerView mRestaurantRecyclerView;
-    SliderLayout mDemoSlider;
-    FloatingActionButton mFloatingActionButton;
-    Button mButtonCall;
-    Button mButtonLike;
-    Button mButtonWebsite;
-    RatingBar mRatingBar;
-
-    private static final double MAX_RATING = 5;
-    private static final double MAX_STAR = 3;
+    public static final double MAX_RATING = 5;
+    public static final double MAX_STAR = 3;
 
     private Disposable mDisposable;
     private PlaceDetailsResults requestResult;
 
     private List<User> mDetailUsers;
-
+    private DetailAdapter mDetailAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_detail);
-        initItem();
+        ButterKnife.bind(this);
+
+        this.retrieveObject();
+        this.setFloatingActionButtonOnClickListener();
+        this.configureButtonClickListener();
+        this.configureRecyclerView();
     }
 
-    private void initItem() {
-        mRestaurantName = findViewById(R.id.restaurant_name);
-        mRestaurantAddress = findViewById(R.id.restaurant_address);
-        mRestaurantRecyclerView = findViewById(R.id.restaurant_recyclerView);
-        mDemoSlider = findViewById(R.id.slider);
-        mFloatingActionButton = findViewById(R.id.floatingActionButton);
-        mButtonCall = findViewById(R.id.restaurant_item_call);
-        mButtonLike = findViewById(R.id.restaurant_item_like);
-        mButtonWebsite = findViewById(R.id.restaurant_item_website);
-        mRatingBar = findViewById(R.id.item_ratingBar);
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        disposeWhenDestroy();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+    }
+
+    // -----------------
+    // CONFIGURATION
+    // -----------------
+
+    private void disposeWhenDestroy(){
+        if (this.mDisposable != null && !this.mDisposable.isDisposed()) this.mDisposable.dispose();
+    }
+
+    private void checkIfUserLikeThisRestaurant(){
+        RestaurantsHelper.getAllLikeByUserId(getCurrentUser().getUid()).addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                Log.e("TAG", "checkIfUserLikeThisRestaurant: " + task.getResult().getDocuments());
+                if (task.getResult().isEmpty()){ // User don't like any restaurant
+                    mButtonLike.setText(getResources().getString(R.string.restaurant_item_like));
+                }else{
+                    for (DocumentSnapshot restaurant : task.getResult()){
+                        if (restaurant.getId().equals(requestResult.getPlaceId())){
+                            mButtonLike.setText(getResources().getString(R.string.restaurant_item_dislike));
+                            break;
+                        } else{
+                            mButtonLike.setText(getResources().getString(R.string.restaurant_item_like));
+                        }
+                    }
+                }
+            }
+        });
+
+    }
+
+    // Configure RecyclerView, Adapter, LayoutManager & glue it together
+    private void configureRecyclerView(){
+        this.mDetailUsers = new ArrayList<>();
+        this.mDetailAdapter = new DetailAdapter(this.mDetailUsers);
+        this.mRestaurantRecyclerView.setAdapter(this.mDetailAdapter);
+        this.mRestaurantRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private void retrieveObject(){
+        String result = getIntent().getStringExtra("PlaceDetailResult");
+        Log.e("TAG", "retrieveObject: " + result );
+        this.executeHttpRequestWithRetrofit(result);
+    }
+
+    private void setFloatingActionButtonOnClickListener(){
+        mFloatingActionButton.setOnClickListener(view -> bookThisRestaurant());
+    }
+
+    private void configureButtonClickListener(){
+        mButtonCall.setOnClickListener(this);
+        mButtonLike.setOnClickListener(this);
+        mButtonWebsite.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
+            case R.id.restaurant_item_call:
+                if (requestResult.getFormattedPhoneNumber() != null){
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.parse("tel:"+requestResult.getFormattedPhoneNumber()));
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(this, getResources().getString(R.string.restaurant_detail_no_phone), Toast.LENGTH_SHORT).show();
+                }
+                break;
 
+            case R.id.restaurant_item_like:
+                if (mButtonLike.getText().equals(getResources().getString(R.string.restaurant_item_like))){
+                    this.likeThisRestaurant();
+                }else{
+                    this.dislikeThisRestaurant();
+                }
+                break;
+
+            case R.id.restaurant_item_website:
+                break;
         }
-
     }
 
     // -------------------
@@ -84,7 +169,7 @@ public class PlaceDetailActivity extends BaseActivity implements View.OnClickLis
     // -------------------
 
     private void executeHttpRequestWithRetrofit(String placeId){
-        this.mDisposable = PlacesStreams.streamSimpleFetchPlaceInfo(placeId, MapFragment.API_KEY).subscribeWith(createObserver());
+        this.mDisposable = PlacesStreams.streamSimpleFetchPlaceInfo(placeId,MapFragment.API_KEY).subscribeWith(createObserver());
     }
 
     private <T> DisposableObserver<T> createObserver(){
@@ -99,7 +184,7 @@ public class PlaceDetailActivity extends BaseActivity implements View.OnClickLis
                 }
             }
             @Override
-            public void onError(Throwable e) {onError(e);}
+            public void onError(Throwable e) {handleError(e);}
             @Override
             public void onComplete() {}
         };
@@ -112,13 +197,100 @@ public class PlaceDetailActivity extends BaseActivity implements View.OnClickLis
     private void updateUI(PlaceDetailsInfo results){
         if (results != null){
             if (getCurrentUser() != null){
+                this.checkIfUserAlreadyBookedRestaurant(getCurrentUser().getUid(),requestResult.getPlaceId(),requestResult.getName(),false);
+                this.checkIfUserLikeThisRestaurant();
             }else{
-
+                mButtonLike.setText(R.string.restaurant_item_like);
+                this.displayFAB((R.drawable.baseline_check_circle),getResources().getColor(R.color.colorGreen));
+                Toast.makeText(this, getResources().getString(R.string.restaurant_error_retrieving_info), Toast.LENGTH_SHORT).show();
             }
+            this.displaySlider(results);
             mRestaurantName.setText(results.getResult().getName());
             mRestaurantAddress.setText(results.getResult().getVicinity());
             this.displayRating(results);
+            this.updateUIWithRecyclerView(results.getResult().getPlaceId());
         }
+    }
+
+    private void updateUIWithRecyclerView(String placeId){
+        mDetailUsers.clear();
+        RestaurantsHelper.getTodayBooking(placeId, getTodayDate()).addOnCompleteListener(restaurantTask -> {
+            if (restaurantTask.isSuccessful()){
+                if (restaurantTask.getResult().isEmpty()){
+                    mDetailAdapter.notifyDataSetChanged();
+                }else{
+                    for (QueryDocumentSnapshot restaurant : restaurantTask.getResult()){
+                        Log.e("TAG", "DETAIL_ACTIVITY | Restaurant : " + restaurant.getData() );
+                        UserHelper.getUser(restaurant.getData().get("userId").toString()).addOnCompleteListener(userTask -> {
+                            if (userTask.isSuccessful()){
+                                Log.e("TAG", "DETAIL_ACTIVITY | User : " + userTask.getResult() );
+                                String uid = userTask.getResult().getData().get("uid").toString();
+                                String username = userTask.getResult().getData().get("username").toString();
+                                String urlPicture = userTask.getResult().getData().get("urlPicture").toString();
+                                User userToAdd = new User(uid,username,urlPicture);
+                                mDetailUsers.add(userToAdd);
+                            }
+                            mDetailAdapter.notifyDataSetChanged();
+                        });
+                    }
+                }
+            }
+        });
+    }
+
+
+
+    private void displaySlider(PlaceDetailsInfo results){
+    }
+
+    // --------------------
+    // REST REQUEST
+    // --------------------
+
+    private void likeThisRestaurant(){
+        if (requestResult != null && getCurrentUser() != null){
+            RestaurantsHelper.createLike(requestResult.getPlaceId(),getCurrentUser().getUid()).addOnCompleteListener(likeTask -> {
+                if (likeTask.isSuccessful()) {
+                    Toast.makeText(this, getResources().getString(R.string.restaurant_like_ok), Toast.LENGTH_SHORT).show();
+                    mButtonLike.setText(getResources().getString(R.string.restaurant_item_dislike));
+                }
+            });
+        }else{
+            Toast.makeText(this, getResources().getString(R.string.restaurant_like_ko), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void dislikeThisRestaurant(){
+        if (requestResult != null && getCurrentUser() != null){
+            RestaurantsHelper.deleteLike(requestResult.getPlaceId(), getCurrentUser().getUid());
+            mButtonLike.setText(getResources().getString(R.string.restaurant_item_like));
+            Toast.makeText(this, getResources().getString(R.string.restaurant_dislike_ok), Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(this, getResources().getString(R.string.restaurant_like_ko), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void bookThisRestaurant(){
+        if (this.getCurrentUser() != null){
+            String userId = getCurrentUser().getUid();
+            String restaurantId = requestResult.getPlaceId();
+            String restaurantName = requestResult.getName();
+            this.checkIfUserAlreadyBookedRestaurant(userId,restaurantId, restaurantName, true);
+        }else{
+            Log.e("TAG", "USER : DISCONNECTED" );
+        }
+    }
+
+    // ---------------------------------
+    // PROCESS TO BOOK A RESTAURANT
+    // ---------------------------------
+
+    private void checkIfUserAlreadyBookedRestaurant(String userId, String restaurantId, String restaurantName, Boolean tryingToBook){
+
+    }
+
+    private void manageBooking(String userId, String restaurantId, String restaurantName, @Nullable String bookingId, boolean toCreate, boolean toUpdate, boolean toDelete){
+
     }
 
     private void displayFAB(int icon, int color){
@@ -137,4 +309,5 @@ public class PlaceDetailActivity extends BaseActivity implements View.OnClickLis
             this.mRatingBar.setVisibility(View.GONE);
         }
     }
+
 }

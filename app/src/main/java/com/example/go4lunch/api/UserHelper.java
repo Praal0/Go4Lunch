@@ -32,12 +32,11 @@ public class UserHelper {
 
     // --- UPDATE ---
 
-    public static Task<Void> updateUserSettings(String userId, int zoom, boolean notification, int radius){
+    public static Task<Void> updateUserSettings(String userId, int zoom, boolean notification){
         return  UserHelper.getUsersCollection().document(userId)
                 .update(
                         "defaultZoom", zoom,
-                        "notificationOn",notification,
-                        "searchRadius",radius
+                        "notificationOn",notification
                 );
     }
 }
