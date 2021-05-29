@@ -73,7 +73,7 @@ public class LoginActivity extends BaseActivity {
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
                         .setTheme(R.style.LoginTheme)
-                        .setLogo(R.drawable.meal_logo)
+                        .setLogo(R.drawable.meal_logo_login)
                         .setAvailableProviders(
                                 Arrays.asList(
                                         new AuthUI.IdpConfig.EmailBuilder().build(), // EMAIL

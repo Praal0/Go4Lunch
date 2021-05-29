@@ -289,9 +289,7 @@ public class PlaceDetailActivity extends BaseActivity implements View.OnClickLis
 
     }
 
-    private void manageBooking(String userId, String restaurantId, String restaurantName, @Nullable String bookingId, boolean toCreate, boolean toUpdate, boolean toDelete){
 
-    }
 
     private void displayFAB(int icon, int color){
         Drawable mDrawable = ContextCompat.getDrawable(getBaseContext(), icon).mutate();

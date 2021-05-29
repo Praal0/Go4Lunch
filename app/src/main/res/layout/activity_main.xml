@@ -62,14 +62,15 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
-                    android:layout_width="279dp"
-                    android:layout_height="487dp"
-                    android:layout_marginTop="600dp"
+                    android:layout_width="280dp"
+                    android:layout_height="220dp"
+                    android:layout_marginTop="550dp"
                     android:contentDescription="@string/app_name"
                     android:src="@drawable/meal_logo"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="1.0" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.navigation.NavigationView>
