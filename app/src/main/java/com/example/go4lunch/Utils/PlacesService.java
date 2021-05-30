@@ -1,6 +1,7 @@
 package com.example.go4lunch.Utils;
 
 
+import com.example.go4lunch.models.AutoComplete.AutoCompleteResult;
 import com.example.go4lunch.models.PlacesInfo.MapPlacesInfo;
 import com.example.go4lunch.models.PlacesInfo.PlacesDetails.PlaceDetailsInfo;
 
@@ -20,6 +21,9 @@ public interface PlacesService {
 
     @GET("details/json")
     Observable<PlaceDetailsInfo> getPlacesInfo(@Query("placeid") String placeId, @Query("key") String key);
+
+    @GET("autocomplete/json?strictbounds&types=establishment")
+    Observable<AutoCompleteResult> getPlaceAutoComplete(@Query("input") String query, @Query("location") String location, @Query("radius") int radius, @Query("key") String apiKey );
 
 
     Retrofit retrofit = new Retrofit.Builder()

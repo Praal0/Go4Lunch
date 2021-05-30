@@ -3,6 +3,7 @@
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -34,6 +35,7 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener{
 
+    private static final int TITLE_HUNGRY = R.string.hungry;
     // For design
     private Toolbar toolbar;
     private DrawerLayout drawer;
@@ -49,6 +51,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         setContentView(R.layout.activity_main);
         setSupportActionBar(toolbar);
         init();
+        configureToolBar();
         initNavigationdrawer();
         configureBottomNav();
         configureNavigationView();
@@ -73,24 +76,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         bottomNav = findViewById(R.id.bottom_navigation);
 
     }
-
-    private void initNavigationdrawer() {
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-    }
-
-    // Configure NavigationView
-    private void configureNavigationView(){
-        mNavigationView.setNavigationItemSelectedListener(this);
-    }
-
-    private void configureBottomNav() {
-        bottomNav.setOnNavigationItemSelectedListener(navListener);
-    }
-
-
 
     // --------------------
     // UI
@@ -123,6 +108,42 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
         startActivity(intent);
     }
+
+    // ---------------------
+    // CONFIGURATION
+    // ---------------------
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+
+        return true;
+    }
+
+
+    private void initNavigationdrawer() {
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+    }
+
+    // Configure NavigationView
+    private void configureNavigationView(){
+        mNavigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private void configureBottomNav() {
+        bottomNav.setOnNavigationItemSelectedListener(navListener);
+    }
+
+    private void configureToolBar(){
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(TITLE_HUNGRY);
+    }
+
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {

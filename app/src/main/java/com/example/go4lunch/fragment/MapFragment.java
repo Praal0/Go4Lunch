@@ -1,25 +1,34 @@
 package com.example.go4lunch.fragment;
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.go4lunch.BuildConfig;
 import com.example.go4lunch.R;
 import com.example.go4lunch.Utils.PlacesStreams;
+import com.example.go4lunch.activities.MainActivity;
 import com.example.go4lunch.activities.PlaceDetailActivity;
 import com.example.go4lunch.activities.ViewModels.CommunicationViewModel;
 import com.example.go4lunch.models.PlacesInfo.MapPlacesInfo;
@@ -159,6 +168,45 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Loc
                     PERMS_FINE_COARSE_LOCATION, perms);
         }
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+        inflater.inflate(R.menu.toolbar_menu, menu);
+
+        SearchManager searchManager = (SearchManager) getContext().getSystemService(Context.SEARCH_SERVICE);
+
+        MenuItem item = menu.findItem(R.id.menu_search);
+        SearchView searchView = new SearchView(((MainActivity) getContext()).getSupportActionBar().getThemedContext());
+        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        item.setActionView(searchView);
+        searchView.setQueryHint(getResources().getString(R.string.toolbar_search_hint));
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(((MainActivity) getContext()).getComponentName()));
+
+        searchView.setIconifiedByDefault(false);// Do not iconify the widget; expand it by default
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if (query.length() > 2 ){
+                    disposable = PlacesStreams.streamFetchAutoCompleteInfo(query,mViewModel.getCurrentUserPositionFormatted(),mViewModel.getCurrentUserRadius(),API_KEY).subscribeWith(createObserver());
+                }else{
+                    Toast.makeText(getContext(), getResources().getString(R.string.search_too_short), Toast.LENGTH_LONG).show();
+                }
+                return true;
+
+            }
+            @Override
+            public boolean onQueryTextChange(String query) {
+                if (query.length() > 2){
+                    disposable = PlacesStreams.streamFetchAutoCompleteInfo(query,mViewModel.getCurrentUserPositionFormatted(),mViewModel.getCurrentUserRadius(),API_KEY).subscribeWith(createObserver());
+                }
+                return false;
+            }
+        });
+    }
+
 
     @Override
     public void onStart(){

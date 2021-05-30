@@ -17,6 +17,10 @@ import com.example.go4lunch.R;
  */
 public class ListFragment extends Fragment {
 
+    public static ListFragment newInstance() {
+        return new ListFragment();
+    }
+
 
     public ListFragment() {
         // Required empty public constructor

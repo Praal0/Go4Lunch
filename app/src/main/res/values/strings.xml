@@ -75,6 +75,10 @@
     <string name="restaurant_dislike_ok">This restaurant is now dislike</string>
     <string name="restaurant_error_retrieving_info">error_retriving_info</string>
     <string name="restaurant_detail_recyclerview">recycler view restaurant</string>
+    <string name="toolbar_search_hint">search</string>
+    <string name="search_too_short">too short</string>
+    <string name="hungry">I hungry !</string>
+    <string name="findPlace">Search</string>
 
 
 </resources>
