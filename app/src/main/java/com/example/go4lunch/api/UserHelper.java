@@ -18,8 +18,8 @@ public class UserHelper {
 
     // --- CREATE ---
 
-    public static Task<Void> createUser(String uid, String username, String urlPicture) {
-        User userToCreate = new User(uid, username, urlPicture);
+    public static Task<Void> createUser(String uid, String username, String urlPicture,Boolean notification) {
+        User userToCreate = new User(uid, username, urlPicture,notification);
         return UserHelper.getUsersCollection().document(uid).set(userToCreate);
     }
 
@@ -32,11 +32,8 @@ public class UserHelper {
 
     // --- UPDATE ---
 
-    public static Task<Void> updateUserSettings(String userId, int zoom, boolean notification){
+    public static Task<Void> updateUserSettings(String userId, boolean notification){
         return  UserHelper.getUsersCollection().document(userId)
-                .update(
-                        "defaultZoom", zoom,
-                        "notificationOn",notification
-                );
+                .update("notification",notification);
     }
 }

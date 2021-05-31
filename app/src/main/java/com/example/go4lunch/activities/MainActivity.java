@@ -2,6 +2,7 @@
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -224,6 +225,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 break;
 
             case R.id.nav_setting:
+                launchActivity(SettingActivity.class,null);
                 break;
 
             case R.id.nav_logout:

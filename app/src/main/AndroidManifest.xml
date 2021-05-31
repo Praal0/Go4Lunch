@@ -21,15 +21,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Go4Lunch">
         <activity
-            android:name=".activities.ChatActivity"
-            android:theme="@style/Theme.Design.NoActionBar" />
-
-
-        <activity android:name=".activities.SettingsActivity" />
+            android:name=".activities.SettingActivity"
+            android:theme="@style/Theme.Design.Light.NoActionBar"/>
 
         <activity
+            android:name=".activities.ChatActivity"
+            android:theme="@style/Theme.Design.Light.NoActionBar" />
+        <activity
             android:name=".activities.PlaceDetailActivity"
-            android:theme="@style/Theme.Design.NoActionBar"/>
+            android:theme="@style/Theme.Design.NoActionBar" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -40,7 +40,7 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCR5NSAxN40xzMd2fmX7-3Gx8cAUXsKSCs" />
+            android:value="@string/google_api_key"/>
 
         <activity
             android:name="com.facebook.FacebookActivity"
@@ -64,8 +64,8 @@
             android:theme="@style/Theme.Design.NoActionBar" />
         <activity
             android:name=".activities.LoginActivity"
-            android:theme="@style/Theme.Design.NoActionBar"
-            android:parentActivityName=".activities.MainActivity">
+            android:parentActivityName=".activities.MainActivity"
+            android:theme="@style/Theme.Design.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

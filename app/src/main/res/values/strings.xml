@@ -79,6 +79,7 @@
     <string name="search_too_short">too short</string>
     <string name="hungry">I hungry !</string>
     <string name="findPlace">Search</string>
+    <string name="setting_update">"Settings is now updated ! "</string>
 
 
 </resources>

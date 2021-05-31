@@ -1,20 +1,24 @@
 package com.example.go4lunch.activities;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +34,8 @@ import com.example.go4lunch.models.PlacesInfo.PlacesDetails.PlaceDetailsInfo;
 import com.example.go4lunch.models.PlacesInfo.PlacesDetails.PlaceDetailsResults;
 import com.example.go4lunch.models.User;
 import com.glide.slider.library.SliderLayout;
+import com.glide.slider.library.animations.DescriptionAnimation;
+import com.glide.slider.library.slidertypes.DefaultSliderView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -45,15 +51,20 @@ import io.reactivex.observers.DisposableObserver;
 public class PlaceDetailActivity extends BaseActivity implements View.OnClickListener {
     @BindView(R.id.restaurant_name)TextView mRestaurantName;
     @BindView(R.id.restaurant_address)TextView mRestaurantAddress;
-    @BindView(R.id.restaurant_recyclerView)RecyclerView mRestaurantRecyclerView;
+    @BindView(R.id.restaurant_recycler_view)RecyclerView mRestaurantRecyclerView;
     @BindView(R.id.floatingActionButton) FloatingActionButton mFloatingActionButton;
     @BindView(R.id.restaurant_item_call) Button mButtonCall;
     @BindView(R.id.restaurant_item_like) Button mButtonLike;
     @BindView(R.id.restaurant_item_website) Button mButtonWebsite;
     @BindView(R.id.item_ratingBar) RatingBar mRatingBar;
+    @BindView(R.id.slider)SliderLayout mDemoSlider;
 
-    public static final double MAX_RATING = 5;
-    public static final double MAX_STAR = 3;
+
+    private static final double MAX_RATING = 5;
+    private static final double MAX_STAR = 3;
+    private static final String BASE_URL = "https://maps.googleapis.com/maps/api/place/photo";
+    private static final int MAX_HEIGHT_LARGE = 250;
+
 
     private Disposable mDisposable;
     private PlaceDetailsResults requestResult;
@@ -81,6 +92,7 @@ public class PlaceDetailActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected void onStop() {
+        mDemoSlider.stopAutoCycle();
         super.onStop();
 
     }
@@ -174,6 +186,7 @@ public class PlaceDetailActivity extends BaseActivity implements View.OnClickLis
 
     private <T> DisposableObserver<T> createObserver(){
         return new DisposableObserver<T>() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onNext(T t) {
                 if (t instanceof PlaceDetailsInfo) {
@@ -194,6 +207,7 @@ public class PlaceDetailActivity extends BaseActivity implements View.OnClickLis
     // UPDATE UI
     // -------------------
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     private void updateUI(PlaceDetailsInfo results){
         if (results != null){
             if (getCurrentUser() != null){
@@ -204,7 +218,7 @@ public class PlaceDetailActivity extends BaseActivity implements View.OnClickLis
                 this.displayFAB((R.drawable.baseline_check_circle),getResources().getColor(R.color.colorGreen));
                 Toast.makeText(this, getResources().getString(R.string.restaurant_error_retrieving_info), Toast.LENGTH_SHORT).show();
             }
-            this.displaySlider(results);
+            displaySlider(results);
             mRestaurantName.setText(results.getResult().getName());
             mRestaurantAddress.setText(results.getResult().getVicinity());
             this.displayRating(results);
@@ -227,7 +241,7 @@ public class PlaceDetailActivity extends BaseActivity implements View.OnClickLis
                                 String uid = userTask.getResult().getData().get("uid").toString();
                                 String username = userTask.getResult().getData().get("username").toString();
                                 String urlPicture = userTask.getResult().getData().get("urlPicture").toString();
-                                User userToAdd = new User(uid,username,urlPicture);
+                                User userToAdd = new User(uid,username,urlPicture,false);
                                 mDetailUsers.add(userToAdd);
                             }
                             mDetailAdapter.notifyDataSetChanged();
@@ -241,6 +255,37 @@ public class PlaceDetailActivity extends BaseActivity implements View.OnClickLis
 
 
     private void displaySlider(PlaceDetailsInfo results){
+        if (results.getResult().getPhotos() != null){
+            ArrayList<String> listUrl = new ArrayList<>();
+            for (int i =0; i < results.getResult().getPhotos().size();i++){
+                String url = BASE_URL+"?maxheight="+MAX_HEIGHT_LARGE+"&photoreference="+results.getResult().getPhotos().get(i).getPhotoReference()+"&key="+ MapFragment.API_KEY;
+                listUrl.add(url);
+            }
+            if (listUrl.size() == 1){
+                mDemoSlider.stopAutoCycle();
+            }else{
+                mDemoSlider.setPresetTransformer(SliderLayout.Transformer.Default);
+                mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+                mDemoSlider.setCustomAnimation(new DescriptionAnimation());
+                mDemoSlider.setDuration(4000);
+            }
+
+            for (int i = 0; i < listUrl.size();i++){
+                DefaultSliderView defaultSliderView = new DefaultSliderView(this);
+                defaultSliderView
+                        .image(listUrl.get(i))
+                        .setProgressBarVisible(true);
+                mDemoSlider.addSlider(defaultSliderView);
+            }
+        }else{
+            DefaultSliderView defaultSliderView = new DefaultSliderView(this);
+            defaultSliderView
+                    .image(R.drawable.ic_no_image_available)
+                    .setProgressBarVisible(true);
+            mDemoSlider.addSlider(defaultSliderView);
+            mDemoSlider.stopAutoCycle();
+
+        }
     }
 
     // --------------------

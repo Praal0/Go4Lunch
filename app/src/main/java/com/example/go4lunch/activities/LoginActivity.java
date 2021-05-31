@@ -105,7 +105,7 @@ public class LoginActivity extends BaseActivity {
             String urlPicture = (this.getCurrentUser().getPhotoUrl() != null) ? this.getCurrentUser().getPhotoUrl().toString() : null;
             String username = this.getCurrentUser().getDisplayName();
             String uid = this.getCurrentUser().getUid();
-            UserHelper.createUser(uid, username, urlPicture).addOnFailureListener(this.onFailureListener());
+            UserHelper.createUser(uid, username, urlPicture,false).addOnFailureListener(this.onFailureListener());
         }else{
             Log.e("LOGIN_ACTIVITY", "createUserInFirestore: NOT LOGGED" );
         }
