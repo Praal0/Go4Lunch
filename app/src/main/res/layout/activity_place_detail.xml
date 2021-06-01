@@ -19,12 +19,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        app:backgroundTint="@color/colorWhite"
-        android:clickable="true"
         app:layout_constraintTop_toBottomOf="@id/slider"
         app:layout_constraintBottom_toBottomOf="@id/slider"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/restaurant_info"
@@ -111,6 +108,7 @@
             android:paddingRight="16dp"
             android:paddingTop="8dp"
             android:textColor="@color/colorPrimaryDark"
+            android:text="@string/restaurant_item_like"
             tools:ignore="MissingConstraints" />
 
         <Button

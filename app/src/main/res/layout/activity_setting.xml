@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     tools:context=".activities.SettingActivity">
 
     <include
@@ -18,6 +19,7 @@
         android:layout_marginTop="104dp"
         android:switchPadding="@dimen/margin_to_parent"
         android:text="@string/settings_notification_title"
+        android:textColor="#000000"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

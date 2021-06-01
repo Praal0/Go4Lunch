@@ -64,6 +64,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="chat_input_text_hint">chat</string>
     <string name="chat_no_image_chosen">No image selected</string>
+
     <string name="restaurant_item_website">website</string>
     <string name="restaurant_item_like">like</string>
     <string name="restaurant_item_call">call</string>
@@ -74,12 +75,29 @@
     <string name="restaurant_like_ko">We cannot like this Restaurant</string>
     <string name="restaurant_dislike_ok">This restaurant is now dislike</string>
     <string name="restaurant_error_retrieving_info">error_retriving_info</string>
-    <string name="restaurant_detail_recyclerview">recycler view restaurant</string>
+    <string name="restaurant_detail_recyclerview">%1$s is joining!</string>
+
     <string name="toolbar_search_hint">search</string>
     <string name="search_too_short">too short</string>
+
     <string name="hungry">I hungry !</string>
     <string name="findPlace">Search</string>
     <string name="setting_update">"Settings is now updated ! "</string>
+
+    <string name="setting">Settings</string>
+    <string name="chatTitle">Chat</string>
+
+    <string name="restaurant_cancel_booking">Cancel Booking</string>
+    <string name="restaurant_change_booking">Change Booking</string>
+    <string name="restaurant_new_booking">New Booking</string>
+
+    <!-- RESTAURANT LIST -->
+    <string name="restaurant_closed">Closed</string>
+    <string name="restaurant_opening_not_know">Opening hours are not known</string>
+    <string name="list_unit_distance">%1$sm</string>
+    <string name="restaurant_open_until">Open until %1$s</string>
+    <string name="restaurant_closing_soon">Closing soon (%1$s)</string>
+    <string name="restaurant_mates_number">(%1$d)</string>
 
 
 </resources>

@@ -17,23 +17,22 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class DetailViewHolder extends RecyclerView.ViewHolder {
-    @BindView(R.id.detail_main_picture)
     ImageView mImageView;
-    @BindView(R.id.detail_textview_username)
     TextView mTextView;
 
     public DetailViewHolder(View itemView) {
         super(itemView);
-        ButterKnife.bind(this,itemView);
+        mImageView = itemView.findViewById(R.id.detail_main_picture);
+        mTextView = itemView.findViewById(R.id.detail_textview_username);
     }
 
-    @SuppressLint("StringFormatInvalid")
+
     public void updateWithData(User results){
         RequestManager glide = Glide.with(itemView);
         if (!(results.getUrlPicture() == null)){
             glide.load(results.getUrlPicture()).apply(RequestOptions.circleCropTransform()).into(mImageView);
         }else{
-
+            glide.load(R.drawable.ic_anon_user_48dp).apply(RequestOptions.circleCropTransform()).into(mImageView);
         }
 
         this.mTextView.setText(itemView.getResources().getString(R.string.restaurant_detail_recyclerview, results.getUsername()));

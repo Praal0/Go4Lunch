@@ -49,15 +49,15 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 
 public class PlaceDetailActivity extends BaseActivity implements View.OnClickListener {
-    @BindView(R.id.restaurant_name)TextView mRestaurantName;
-    @BindView(R.id.restaurant_address)TextView mRestaurantAddress;
-    @BindView(R.id.restaurant_recycler_view)RecyclerView mRestaurantRecyclerView;
-    @BindView(R.id.floatingActionButton) FloatingActionButton mFloatingActionButton;
-    @BindView(R.id.restaurant_item_call) Button mButtonCall;
-    @BindView(R.id.restaurant_item_like) Button mButtonLike;
-    @BindView(R.id.restaurant_item_website) Button mButtonWebsite;
-    @BindView(R.id.item_ratingBar) RatingBar mRatingBar;
-    @BindView(R.id.slider)SliderLayout mDemoSlider;
+    TextView mRestaurantName;
+    TextView mRestaurantAddress;
+    RecyclerView mRestaurantRecyclerView;
+    FloatingActionButton mFloatingActionButton;
+    Button mButtonCall;
+    Button mButtonLike;
+    Button mButtonWebsite;
+    RatingBar mRatingBar;
+    SliderLayout mDemoSlider;
 
 
     private static final double MAX_RATING = 5;
@@ -76,12 +76,22 @@ public class PlaceDetailActivity extends BaseActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_detail);
-        ButterKnife.bind(this);
-
+        initView();
         this.retrieveObject();
-        this.setFloatingActionButtonOnClickListener();
         this.configureButtonClickListener();
         this.configureRecyclerView();
+    }
+
+    private void initView() {
+        mRestaurantName = findViewById(R.id.restaurant_name);
+        mRestaurantAddress = findViewById(R.id.restaurant_address);
+        mRestaurantRecyclerView = findViewById(R.id.restaurant_recycler_view);
+        mFloatingActionButton = findViewById(R.id.floatingActionButton);
+        mButtonCall = findViewById(R.id.restaurant_item_call);
+        mButtonLike = findViewById(R.id.restaurant_item_like);
+        mButtonWebsite = findViewById(R.id.restaurant_item_website);
+        mRatingBar = findViewById(R.id.item_ratingBar);
+        mDemoSlider = findViewById(R.id.slider);
     }
 
     @Override
@@ -132,16 +142,18 @@ public class PlaceDetailActivity extends BaseActivity implements View.OnClickLis
         this.mDetailAdapter = new DetailAdapter(this.mDetailUsers);
         this.mRestaurantRecyclerView.setAdapter(this.mDetailAdapter);
         this.mRestaurantRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        this.mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bookThisRestaurant();
+            }
+        });
     }
 
     private void retrieveObject(){
         String result = getIntent().getStringExtra("PlaceDetailResult");
         Log.e("TAG", "retrieveObject: " + result );
         this.executeHttpRequestWithRetrofit(result);
-    }
-
-    private void setFloatingActionButtonOnClickListener(){
-        mFloatingActionButton.setOnClickListener(view -> bookThisRestaurant());
     }
 
     private void configureButtonClickListener(){
@@ -331,7 +343,53 @@ public class PlaceDetailActivity extends BaseActivity implements View.OnClickLis
     // ---------------------------------
 
     private void checkIfUserAlreadyBookedRestaurant(String userId, String restaurantId, String restaurantName, Boolean tryingToBook){
+        RestaurantsHelper.getBooking(userId, getTodayDate()).addOnCompleteListener(restaurantTask -> {
+            if (restaurantTask.isSuccessful()){
+                if (restaurantTask.getResult().size() == 1){ // User already booked a restaurant today
 
+                    for (QueryDocumentSnapshot restaurant : restaurantTask.getResult()) {
+                        if (restaurant.getData().get("restaurantName").equals(restaurantName)){ // If booked restaurant is the same as restaurant we are trying to book
+                            this.displayFAB((R.drawable.baseline_clear_black_24),getResources().getColor(R.color.quantum_googred));
+                            if (tryingToBook){
+                                this.manageBooking(userId, restaurantId, restaurantName,restaurant.getId(),false,false,true);
+                                Toast.makeText(this, getResources().getString(R.string.restaurant_cancel_booking), Toast.LENGTH_SHORT).show();
+                            }
+
+                        }else{ // If user is trying to book an other restaurant for today
+                            this.displayFAB((R.drawable.baseline_check_circle_black_24),getResources().getColor(R.color.colorGreen));
+                            if (tryingToBook){
+                                this.manageBooking(userId, restaurantId, restaurantName,restaurant.getId(),false,true,false);
+                                Toast.makeText(this, getResources().getString(R.string.restaurant_change_booking), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+
+                }else{ // No restaurant booked for this user today
+                    this.displayFAB((R.drawable.baseline_check_circle_black_24),getResources().getColor(R.color.colorGreen));
+                    if (tryingToBook){
+                        this.manageBooking(userId, restaurantId, restaurantName,null,true,false,false);
+                        Toast.makeText(this, getResources().getString(R.string.restaurant_new_booking), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+
+    }
+
+    private void manageBooking(String userId, String restaurantId,String restaurantName,@Nullable String bookingId, boolean toCreate, boolean toUpdate, boolean toDelete){
+        if(toUpdate){
+            RestaurantsHelper.deleteBooking(bookingId);
+            RestaurantsHelper.createBooking(this.getTodayDate(),userId,restaurantId, restaurantName).addOnFailureListener(this.onFailureListener());
+            this.displayFAB((R.drawable.baseline_clear_black_24),getResources().getColor(R.color.quantum_googred));
+        }else if(toCreate){
+            RestaurantsHelper.createBooking(this.getTodayDate(),userId,restaurantId, restaurantName).addOnFailureListener(this.onFailureListener());
+            this.displayFAB((R.drawable.baseline_clear_black_24),getResources().getColor(R.color.quantum_googred));
+        }else if(toDelete){
+            RestaurantsHelper.deleteBooking(bookingId);
+            this.displayFAB((R.drawable.baseline_check_circle_black_24),getResources().getColor(R.color.colorGreen));
+        }
+
+        updateUIWithRecyclerView(requestResult.getPlaceId());
     }
 
 

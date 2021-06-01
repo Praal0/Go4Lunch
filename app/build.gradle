@@ -6,6 +6,9 @@ plugins {
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
+    buildFeatures {
+        viewBinding = true
+    }
 
     defaultConfig {
         applicationId "com.example.go4lunch"
@@ -25,7 +28,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

@@ -13,4 +13,7 @@
     <color name="colorStar">#ffd600</color>
     <color name="colorDivider">#bdbdbd</color>
     <color name="colorGreen">#008000</color>
+    <color name="colorError">#FF5252</color>
+    <color name="colorWarning">#ff8a65</color>
+    <color name="colorOk">#2e7d32</color>
 </resources>

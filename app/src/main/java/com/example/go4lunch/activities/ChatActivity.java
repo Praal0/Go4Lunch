@@ -56,7 +56,6 @@ public class ChatActivity extends BaseActivity implements  ChatAdapter.Listener{
     ImageButton activity_chat_send_button, activity_chat_file_button;
     private Uri uriImageSelected;
 
-    private String currentChatName;
 
     // FOR DATA
     private static final String PERMS = Manifest.permission.READ_EXTERNAL_STORAGE;
@@ -82,9 +81,10 @@ public class ChatActivity extends BaseActivity implements  ChatAdapter.Listener{
         recyclerView = findViewById(R.id.activity_chat_recycler_view);
         editTextMessage = findViewById(R.id.activity_chat_message_edit_text);
         imageViewPreview = findViewById(R.id.activity_chat_image_chosen_preview);
-        mToolbar = findViewById(R.id.simple_toolbar);
         activity_chat_send_button = findViewById(R.id.activity_chat_send_button);
         activity_chat_file_button = findViewById(R.id.activity_chat_add_file_button);
+        mToolbar = findViewById(R.id.simple_toolbar);
+        mToolbar.setTitle(R.string.chatTitle);
     }
 
 
@@ -140,6 +140,7 @@ public class ChatActivity extends BaseActivity implements  ChatAdapter.Listener{
         ActionBar ab = getSupportActionBar();
         ab.setHomeButtonEnabled(true);
         ab.setDisplayHomeAsUpEnabled(true);
+
     }
 
     @Override
