@@ -25,7 +25,7 @@
     <string name="timeout_error_message">Request timeout, please check your internet connection</string>
     <string name="exception_error_message">An error occurred, please check your internet connection</string>
     <string name="generic_error_message">An error occurred, please try again</string>
-    <string name="no_restaurant_error_message">No restaurants found, try to change your search radius settings</string>
+    <string name="no_restaurant_error_message">No restaurants found</string>
 
     <!-- BOTTOM MENU -->
     <string name="bottom_menu_map">Map view</string>
@@ -101,6 +101,8 @@
     <!-- NOTIFICATION SERVICE -->
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
     <string name="notification_title">"You have received a notification"</string>
+    <string name="mates_is_eating_at">is eating</string>
+    <string name="mates_hasnt_decided">hasn\'t decided yet</string>
 
 
 </resources>

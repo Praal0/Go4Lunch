@@ -402,7 +402,9 @@ public class PlaceDetailActivity extends BaseActivity implements View.OnClickLis
 
     private void displayRating(PlaceDetailsInfo results){
         if (results.getResult().getRating() != null){
+            // If Rating not null we get Rating
             double googleRating = results.getResult().getRating();
+            // Use calcul : googleRating/Rating in Google * Rating want
             double rating = googleRating / MAX_RATING * MAX_STAR;
             this.mRatingBar.setRating((float)rating);
             this.mRatingBar.setVisibility(View.VISIBLE);
