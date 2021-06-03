@@ -19,16 +19,8 @@ import java.util.Calendar;
 
 public class BaseFragment extends Fragment {
 
-    public BaseFragment() {
-        // Required empty public constructor
-    }
-
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return getView();
-    }
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) { return getView(); }
 
     // -----------------
     // UTILS

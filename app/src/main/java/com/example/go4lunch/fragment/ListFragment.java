@@ -51,12 +51,6 @@ public class ListFragment extends BaseFragment {
 
     private CommunicationViewModel mViewModel;
 
-    public static ListFragment newInstance() {
-        return new ListFragment();
-    }
-
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +71,9 @@ public class ListFragment extends BaseFragment {
     public void onStop() {
         super.onStop();
         mViewModel.currentUserPosition.removeObservers(this);
+        if (!disposable.isDisposed()){
+            disposable.dispose();
+        }
     }
 
     @Override

@@ -14,10 +14,6 @@ import com.example.go4lunch.R;
  */
 public class WorkmatesFragment extends Fragment {
 
-    public static WorkmatesFragment newInstance() {
-        return new WorkmatesFragment();
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -75,10 +75,6 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Loc
 
     private CommunicationViewModel mViewModel;
 
-    public static MapFragment newInstance() {
-        return new MapFragment();
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
