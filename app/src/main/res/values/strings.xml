@@ -86,7 +86,6 @@
 
     <string name="setting">Settings</string>
     <string name="chatTitle">Chat</string>
-
     <string name="restaurant_cancel_booking">Cancel Booking</string>
     <string name="restaurant_change_booking">Change Booking</string>
     <string name="restaurant_new_booking">New Booking</string>
@@ -98,6 +97,10 @@
     <string name="restaurant_open_until">Open until %1$s</string>
     <string name="restaurant_closing_soon">Closing soon (%1$s)</string>
     <string name="restaurant_mates_number">(%1$d)</string>
+
+    <!-- NOTIFICATION SERVICE -->
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+    <string name="notification_title">"You have received a notification"</string>
 
 
 </resources>
