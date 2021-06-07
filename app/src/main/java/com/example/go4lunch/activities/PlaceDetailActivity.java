@@ -1,27 +1,22 @@
 package com.example.go4lunch.activities;
 
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.go4lunch.R;
 import com.example.go4lunch.Utils.PlacesStreams;
@@ -43,8 +38,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 
@@ -198,7 +191,6 @@ public class PlaceDetailActivity extends BaseActivity implements View.OnClickLis
 
     private <T> DisposableObserver<T> createObserver(){
         return new DisposableObserver<T>() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onNext(T t) {
                 if (t instanceof PlaceDetailsInfo) {
@@ -209,9 +201,9 @@ public class PlaceDetailActivity extends BaseActivity implements View.OnClickLis
                 }
             }
             @Override
-            public void onError(Throwable e) {handleError(e);}
+            public void onError(Throwable e) {Log.d("Test","Erreur",e);}
             @Override
-            public void onComplete() {}
+            public void onComplete() {Log.d("Test","Erreur");}
         };
     }
 
@@ -219,7 +211,7 @@ public class PlaceDetailActivity extends BaseActivity implements View.OnClickLis
     // UPDATE UI
     // -------------------
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+
     private void updateUI(PlaceDetailsInfo results){
         if (results != null){
             if (getCurrentUser() != null){
@@ -264,40 +256,44 @@ public class PlaceDetailActivity extends BaseActivity implements View.OnClickLis
         });
     }
 
-
-
     private void displaySlider(PlaceDetailsInfo results){
         if (results.getResult().getPhotos() != null){
-            ArrayList<String> listUrl = new ArrayList<>();
-            for (int i =0; i < results.getResult().getPhotos().size();i++){
-                String url = BASE_URL+"?maxheight="+MAX_HEIGHT_LARGE+"&photoreference="+results.getResult().getPhotos().get(i).getPhotoReference()+"&key="+ MapFragment.API_KEY;
-                listUrl.add(url);
-            }
-            if (listUrl.size() == 1){
-                mDemoSlider.stopAutoCycle();
-            }else{
-                mDemoSlider.setPresetTransformer(SliderLayout.Transformer.Default);
-                mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
-                mDemoSlider.setCustomAnimation(new DescriptionAnimation());
-                mDemoSlider.setDuration(4000);
-            }
-
-            for (int i = 0; i < listUrl.size();i++){
-                DefaultSliderView defaultSliderView = new DefaultSliderView(this);
-                defaultSliderView
-                        .image(listUrl.get(i))
-                        .setProgressBarVisible(true);
-                mDemoSlider.addSlider(defaultSliderView);
-            }
+            showDisplaySlider(results);
         }else{
+            showDefaultDisplay();
+        }
+    }
+    private void showDisplaySlider(PlaceDetailsInfo results) {
+        ArrayList<String> listUrl = new ArrayList<>();
+        for (int i =0; i < results.getResult().getPhotos().size();i++){
+            String url = BASE_URL+"?maxheight="+MAX_HEIGHT_LARGE+"&photoreference="+results.getResult().getPhotos().get(i).getPhotoReference()+"&key="+ MapFragment.API_KEY;
+            listUrl.add(url);
+        }
+        if (listUrl.size() == 1){
+            mDemoSlider.stopAutoCycle();
+        }else{
+            mDemoSlider.setPresetTransformer(SliderLayout.Transformer.Default);
+            mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+            mDemoSlider.setCustomAnimation(new DescriptionAnimation());
+            mDemoSlider.setDuration(4000);
+        }
+
+        for (int i = 0; i < listUrl.size();i++){
             DefaultSliderView defaultSliderView = new DefaultSliderView(this);
             defaultSliderView
-                    .image(R.drawable.ic_no_image_available)
+                    .image(listUrl.get(i))
                     .setProgressBarVisible(true);
             mDemoSlider.addSlider(defaultSliderView);
-            mDemoSlider.stopAutoCycle();
-
         }
+    }
+
+    private void showDefaultDisplay() {
+        DefaultSliderView defaultSliderView = new DefaultSliderView(this);
+        defaultSliderView
+                .image(R.drawable.ic_no_image_available)
+                .setProgressBarVisible(true);
+        mDemoSlider.addSlider(defaultSliderView);
+        mDemoSlider.stopAutoCycle();
     }
 
     // --------------------

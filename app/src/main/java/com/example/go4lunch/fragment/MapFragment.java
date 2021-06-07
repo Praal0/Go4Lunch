@@ -369,7 +369,8 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Loc
         if (marker.getTag() != null){
             Log.e(TAG, "onClickMarker: " + marker.getTag() );
             Intent intent = new Intent(getActivity(),PlaceDetailActivity.class);
-            intent.putExtra("PlaceDetailResult", marker.getTag().toString());
+            String tag = marker.getTag().toString();
+            intent.putExtra("PlaceDetailResult", tag);
             startActivity(intent);
             return true;
         }else{

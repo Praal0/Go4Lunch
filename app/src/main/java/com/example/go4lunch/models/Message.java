@@ -1,5 +1,7 @@
 package com.example.go4lunch.models;
 
+import org.joda.time.DateTime;
+
 import java.util.Date;
 
 public class Message {
@@ -10,15 +12,17 @@ public class Message {
 
     public Message() { }
 
-    public Message(String message, User userSender) {
+    public Message(String message, User userSender, Date dateCreated) {
         this.message = message;
         this.userSender = userSender;
+        this.dateCreated = dateCreated;
     }
 
-    public Message(String message, String urlImage, User userSender) {
+    public Message(String message, String urlImage, User userSender, Date dateCreated) {
         this.message = message;
         this.urlImage = urlImage;
         this.userSender = userSender;
+        this.dateCreated = dateCreated;
     }
 
     // --- GETTERS ---

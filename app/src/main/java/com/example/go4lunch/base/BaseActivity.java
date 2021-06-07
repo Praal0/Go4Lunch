@@ -58,23 +58,8 @@ public class BaseActivity extends AppCompatActivity {
         };
     }
 
-    protected void handleError(Throwable throwable) {
-        if (throwable instanceof HttpException) {
-            HttpException httpException = (HttpException) throwable;
-            int statusCode = httpException.code();
-            Log.e("HttpException", "Error code : " + statusCode);
-            Toast.makeText(this, getResources().getString(R.string.http_error_message,statusCode), Toast.LENGTH_SHORT).show();
-        } else if (throwable instanceof SocketTimeoutException) {
-            Log.e("SocketTimeoutException", "Timeout from retrofit");
-            Toast.makeText(this, getResources().getString(R.string.timeout_error_message), Toast.LENGTH_SHORT).show();
-        } else if (throwable instanceof IOException) {
-            Log.e("IOException", "Error");
-            Toast.makeText(this, getResources().getString(R.string.exception_error_message), Toast.LENGTH_SHORT).show();
-        } else {
-            Log.e("Generic handleError", "Error");
-            Toast.makeText(this, getResources().getString(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
-        }
-    }
+
+
 
 
 

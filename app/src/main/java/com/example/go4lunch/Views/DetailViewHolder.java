@@ -13,8 +13,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.go4lunch.R;
 import com.example.go4lunch.models.User;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+
 
 public class DetailViewHolder extends RecyclerView.ViewHolder {
     ImageView mImageView;

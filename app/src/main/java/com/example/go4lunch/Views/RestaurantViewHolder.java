@@ -47,7 +47,6 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
     public static final String BASE_URL = "https://maps.googleapis.com/maps/api/place/photo";
     public static final int MAX_WIDTH = 75;
     public static final int MAX_HEIGHT = 75;
-    public static final int MAX_HEIGHT_LARGE = 250;
 
     public static final double MAX_RATING = 5;
     public static final double MAX_STAR = 3;
@@ -106,7 +105,6 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
             }
         });
 
-
         // Display Opening Hours
         if (results.getOpeningHours() != null){
             if (results.getOpeningHours().toString().equals("false")){
@@ -117,8 +115,6 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
         }else{
             displayOpeningHour(OPENING_HOURS_NOT_KNOW,null);
         }
-
-
 
         // Display Photos
         if (!(results.getPhotos() == null)){
@@ -133,8 +129,8 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
     private void displayRating(PlaceDetailsResults results){
         if (results.getRating() != null){
             double googleRating = results.getRating();
-            double rating = googleRating / MAX_RATING * MAX_STAR;
-            this.mRatingBar.setRating((float)rating);
+            float rating = (float) (googleRating / MAX_RATING * MAX_STAR);
+            this.mRatingBar.setRating(rating);
             this.mRatingBar.setVisibility(View.VISIBLE);
         }else{
             this.mRatingBar.setVisibility(View.GONE);
@@ -184,7 +180,6 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
         int currentHour = Integer.parseInt(currentHourString);
 
         for (int i=0;i < results.getOpeningHours().getPeriods().size();i++){
-
         }
     }
 

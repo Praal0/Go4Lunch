@@ -81,8 +81,8 @@ public class ListFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
 
-        mRecyclerView = getView().findViewById(R.id.list_recycler_view);
-        mSwipeRefreshLayout = getView().findViewById(R.id.list_swipe_refresh);
+        mRecyclerView = view.findViewById(R.id.list_recycler_view);
+        mSwipeRefreshLayout = view.findViewById(R.id.list_swipe_refresh);
 
         setHasOptionsMenu(true);
 
