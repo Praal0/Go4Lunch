@@ -133,47 +133,39 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void configureBottomNav() {
-        bottomNav.setOnNavigationItemSelectedListener(navListener);
+        bottomNav.setOnItemSelectedListener(item -> {
+            Fragment selectedFragment = null;
+            switch (item.getItemId()) {
+                case R.id.nav_map:
+                    toolbar.setTitle(R.string.hungry);
+                    selectedFragment = new MapFragment();
+                    break;
+
+                case R.id.nav_list:
+                    toolbar.setTitle(R.string.hungry);
+                    selectedFragment = new ListFragment();
+                    break;
+
+                case R.id.nav_workmates:
+                    toolbar.setTitle(R.string.workmates);
+                    selectedFragment = new MatesFragment();
+                    break;
+
+                case R.id.nav_tchat:
+                    launchActivity(ChatActivity.class,null);
+                    toolbar.setTitle(R.string.chatTitle);
+                    break;
+            }
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_view,
+                    selectedFragment).commit();
+            return true;
+        });
     }
 
     private void configureToolBar(){
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.hungry);
     }
-
-
-
-    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
-            new BottomNavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    Fragment selectedFragment = null;
-                    switch (item.getItemId()) {
-                        case R.id.nav_map:
-                            toolbar.setTitle(R.string.hungry);
-                            selectedFragment = new MapFragment();
-                            break;
-
-                        case R.id.nav_list:
-                            toolbar.setTitle(R.string.hungry);
-                            selectedFragment = new ListFragment();
-                            break;
-
-                        case R.id.nav_workmates:
-                            toolbar.setTitle(R.string.workmates);
-                            selectedFragment = new MatesFragment();
-                            break;
-
-                        case R.id.nav_tchat:
-                            launchActivity(ChatActivity.class,null);
-                            toolbar.setTitle(R.string.chatTitle);
-                            break;
-                    }
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_view,
-                            selectedFragment).commit();
-                    return true;
-                }
-    };
 
     @Override
     public void onBackPressed() {

@@ -127,7 +127,6 @@ public class PlaceDetailActivity extends BaseActivity implements View.OnClickLis
                 }
             }
         });
-
     }
 
     // Configure RecyclerView, Adapter, LayoutManager & glue it together

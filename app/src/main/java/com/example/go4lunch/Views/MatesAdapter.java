@@ -12,25 +12,25 @@ import com.example.go4lunch.models.User;
 
 import java.util.List;
 
-public class WorkMatesAdapter extends RecyclerView.Adapter<WorkMatesViewHolder> {
+public class MatesAdapter extends RecyclerView.Adapter<MatesViewHolder> {
     // FOR DATA
     private List<User> mResults;
 
     // CONSTRUCTOR
-    public WorkMatesAdapter(List<User> result) {
+    public MatesAdapter(List<User> result) {
         this.mResults = result;
     }
 
     @Override
-    public WorkMatesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MatesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.fragment_mates_item, parent,false);
-        return new WorkMatesViewHolder(view);
+        return new MatesViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(WorkMatesViewHolder viewHolder, int position) {
+    public void onBindViewHolder(MatesViewHolder viewHolder, int position) {
         viewHolder.updateWithData(this.mResults.get(position));
     }
 

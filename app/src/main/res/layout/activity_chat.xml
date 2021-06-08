@@ -4,12 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorGray"
     tools:context=".activities.ChatActivity">
 
     <include
         layout="@layout/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/activity_chat_recycler_view_container"
@@ -23,7 +24,9 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/activity_chat_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
@@ -31,9 +34,9 @@
         android:layout_width="50dip"
         android:layout_height="50dip"
         android:layout_margin="@dimen/margin_to_parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:contentDescription="Image chosen"
         app:layout_constraintBottom_toBottomOf="@id/activity_chat_recycler_view_container"
-        android:contentDescription="Image chosen" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/activity_chat_add_message_container"
@@ -41,32 +44,40 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_margin="@dimen/margin_to_parent"
-        android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <!-- ADD FILE BUTTON -->
         <ImageButton
             android:id="@+id/activity_chat_add_file_button"
+            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:src="@drawable/baseline_add_circle_black_24"
-            style="@style/Widget.AppCompat.Button.Borderless"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:tint="@color/colorOrange" />
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/activity_chat_message_edit_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="1dp"
             android:layout_weight="1"
             android:hint="@string/chat_input_text_hint"
             android:imeOptions="actionDone"
             android:inputType="textMultiLine"
+            android:textColor="@color/colorOrange"
+            android:textColorHighlight="@color/colorOrange"
+            android:textColorHint="@color/colorOrange"
             android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/activity_chat_send_button"
             app:layout_constraintStart_toEndOf="@+id/activity_chat_add_file_button"
             tools:ignore="MissingConstraints" />
@@ -77,10 +88,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:tint="@color/colorPrimaryDark"
             android:src="@drawable/ic_baseline_send"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:ignore="MissingConstraints" />
+            tools:ignore="MissingConstraints"
+            app:tint="@color/colorOrange" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

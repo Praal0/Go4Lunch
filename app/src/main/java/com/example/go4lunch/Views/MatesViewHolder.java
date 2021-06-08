@@ -19,12 +19,12 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class WorkMatesViewHolder extends RecyclerView.ViewHolder {
+public class MatesViewHolder extends RecyclerView.ViewHolder {
 
     ImageView mImageView;
     TextView mTextView;
 
-    public WorkMatesViewHolder(@NonNull View itemView) {
+    public MatesViewHolder(@NonNull View itemView) {
         super(itemView);
 
 
