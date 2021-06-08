@@ -1,42 +1,40 @@
  package com.example.go4lunch.activities;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.provider.Settings;
-import android.text.TextUtils;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
+ import android.content.Intent;
+ import android.os.Bundle;
+ import android.text.TextUtils;
+ import android.view.Menu;
+ import android.view.MenuItem;
+ import android.view.View;
+ import android.widget.ImageView;
+ import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
+ import androidx.annotation.NonNull;
+ import androidx.appcompat.app.ActionBarDrawerToggle;
+ import androidx.appcompat.widget.Toolbar;
+ import androidx.core.view.GravityCompat;
+ import androidx.drawerlayout.widget.DrawerLayout;
+ import androidx.fragment.app.Fragment;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
+ import com.bumptech.glide.Glide;
+ import com.bumptech.glide.request.RequestOptions;
+ import com.example.go4lunch.R;
+ import com.example.go4lunch.base.BaseActivity;
+ import com.example.go4lunch.fragment.ListFragment;
+ import com.example.go4lunch.fragment.MapFragment;
+ import com.example.go4lunch.fragment.MatesFragment;
+ import com.firebase.ui.auth.AuthUI;
+ import com.google.android.gms.tasks.OnSuccessListener;
+ import com.google.android.material.bottomnavigation.BottomNavigationView;
+ import com.google.android.material.navigation.NavigationView;
 
-import com.example.go4lunch.R;
-import com.example.go4lunch.base.BaseActivity;
-import com.example.go4lunch.fragment.ListFragment;
-import com.example.go4lunch.fragment.MapFragment;
-import com.example.go4lunch.fragment.WorkmatesFragment;
-import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationView;
+ import java.util.Map;
 
-import java.util.Map;
-
-import jp.wasabeef.glide.transformations.BlurTransformation;
+ import jp.wasabeef.glide.transformations.BlurTransformation;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener{
 
-    private static final int TITLE_HUNGRY = R.string.hungry;
+
     // For design
     private Toolbar toolbar;
     private DrawerLayout drawer;
@@ -58,7 +56,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         configureNavigationView();
         updateUIWhenCreating();
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_view,new MapFragment()).commit();
-        toolbar.setTitle("I'm Hungry");
     }
 
     // --------------------
@@ -141,7 +138,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     private void configureToolBar(){
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(TITLE_HUNGRY);
+        getSupportActionBar().setTitle(R.string.hungry);
     }
 
 
@@ -153,23 +150,23 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     Fragment selectedFragment = null;
                     switch (item.getItemId()) {
                         case R.id.nav_map:
-                            toolbar.setTitle("I'm Hungry");
+                            toolbar.setTitle(R.string.hungry);
                             selectedFragment = new MapFragment();
                             break;
 
                         case R.id.nav_list:
-                            toolbar.setTitle("I'm Hungry");
+                            toolbar.setTitle(R.string.hungry);
                             selectedFragment = new ListFragment();
                             break;
 
                         case R.id.nav_workmates:
-                            toolbar.setTitle("Available Workmates");
-                            selectedFragment = new WorkmatesFragment();
+                            toolbar.setTitle(R.string.workmates);
+                            selectedFragment = new MatesFragment();
                             break;
 
                         case R.id.nav_tchat:
                             launchActivity(ChatActivity.class,null);
-                            toolbar.setTitle("Tchat");
+                            toolbar.setTitle(R.string.chatTitle);
                             break;
                     }
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_view,

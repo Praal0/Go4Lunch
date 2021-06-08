@@ -15,10 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.go4lunch.BuildConfig;
 import com.example.go4lunch.R;
 import com.example.go4lunch.api.RestaurantsHelper;
 import com.example.go4lunch.fragment.MapFragment;
-import com.example.go4lunch.models.PlacesInfo.PlacesDetails.PlaceDetailsInfo;
 import com.example.go4lunch.models.PlacesInfo.PlacesDetails.PlaceDetailsResults;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -30,6 +30,7 @@ import java.util.Locale;
 
 public class RestaurantViewHolder extends RecyclerView.ViewHolder {
 
+    private static final String API_KEY = BuildConfig.API_KEY;
     ImageView mMainPicture;
     ImageView mMatesPicture;
     TextView mNameText;
@@ -78,7 +79,6 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
         this.mNameText.setText(results.getName());
 
         // Display Distance
-        getDistance(userLocation,results.getGeometry().getLocation().toString());
         String distance = Integer.toString(Math.round(distanceResults[0]));
         this.mDistanceText.setText(itemView.getResources().getString(R.string.list_unit_distance, distance));
 
@@ -105,9 +105,10 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
             }
         });
 
+
         // Display Opening Hours
         if (results.getOpeningHours() != null){
-            if (results.getOpeningHours().toString().equals("false")){
+            if (results.getOpeningHours().getPeriods().toString().equals("false")){
                 displayOpeningHour(CLOSED,null);
             }else{
                 getOpeningHoursInfo(results);
@@ -115,6 +116,8 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
         }else{
             displayOpeningHour(OPENING_HOURS_NOT_KNOW,null);
         }
+
+
 
         // Display Photos
         if (!(results.getPhotos() == null)){
@@ -129,8 +132,8 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
     private void displayRating(PlaceDetailsResults results){
         if (results.getRating() != null){
             double googleRating = results.getRating();
-            float rating = (float) (googleRating / MAX_RATING * MAX_STAR);
-            this.mRatingBar.setRating(rating);
+            double rating = googleRating / MAX_RATING * MAX_STAR;
+            this.mRatingBar.setRating((float)rating);
             this.mRatingBar.setVisibility(View.VISIBLE);
         }else{
             this.mRatingBar.setVisibility(View.GONE);
@@ -158,14 +161,13 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    private void getDistance(String startLocation, String endLocation){
+    private void getDistance(String startLocation, Location endLocation){
         String[] separatedStart = startLocation.split(",");
-        String[] separatedEnd = startLocation.split(",");
         double startLatitude = Double.parseDouble(separatedStart[0]);
         double startLongitude = Double.parseDouble(separatedStart[1]);
-        double endLatitude = Double.parseDouble(separatedEnd[0]);
-        double endLongitude = Double.parseDouble(separatedEnd[1]);
-        Location.distanceBetween(startLatitude, startLongitude, endLatitude, endLongitude,distanceResults);
+        double endLatitude = endLocation.getLatitude();
+        double endLongitude = endLocation.getLongitude();
+        android.location.Location.distanceBetween(startLatitude, startLongitude, endLatitude, endLongitude,distanceResults);
     }
 
     private void getOpeningHoursInfo(PlaceDetailsResults results){
@@ -178,9 +180,6 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
         if (minOfDay < 10){minOfDay = '0'+minOfDay;}
         String currentHourString = Integer.toString(hourOfDay)+Integer.toString(minOfDay);
         int currentHour = Integer.parseInt(currentHourString);
-
-        for (int i=0;i < results.getOpeningHours().getPeriods().size();i++){
-        }
     }
 
     private void displayOpeningHour(String type, String hour){

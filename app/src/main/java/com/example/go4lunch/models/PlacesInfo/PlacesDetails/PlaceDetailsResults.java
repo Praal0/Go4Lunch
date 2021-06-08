@@ -2,9 +2,9 @@ package com.example.go4lunch.models.PlacesInfo.PlacesDetails;
 
 
 import com.example.go4lunch.models.PlacesInfo.Geometry;
+import com.example.go4lunch.models.PlacesInfo.OpeningHours;
 import com.example.go4lunch.models.PlacesInfo.Photo;
 import com.example.go4lunch.models.PlacesInfo.PlusCode;
-import com.google.android.libraries.places.api.model.OpeningHours;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

@@ -80,7 +80,8 @@
     <string name="toolbar_search_hint">search</string>
     <string name="search_too_short">too short</string>
 
-    <string name="hungry">I hungry !</string>
+    <string name="hungry">I\'m hungry!</string>
+    <string name="workmates">Available workmates</string>
     <string name="findPlace">Search</string>
     <string name="setting_update">"Settings is now updated ! "</string>
 
@@ -103,6 +104,7 @@
     <string name="notification_title">"You have received a notification"</string>
     <string name="mates_is_eating_at">is eating</string>
     <string name="mates_hasnt_decided">hasn\'t decided yet</string>
+
 
 
 </resources>

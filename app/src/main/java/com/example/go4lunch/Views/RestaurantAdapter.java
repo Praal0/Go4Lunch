@@ -13,6 +13,7 @@ import com.example.go4lunch.models.PlacesInfo.PlacesDetails.PlaceDetailsResults;
 import java.util.List;
 
 public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantViewHolder>{
+
     // FOR DATA
     private List<PlaceDetailsResults> mResults;
     private String mLocation;

@@ -32,6 +32,7 @@ import com.glide.slider.library.SliderLayout;
 import com.glide.slider.library.animations.DescriptionAnimation;
 import com.glide.slider.library.slidertypes.DefaultSliderView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -135,12 +136,6 @@ public class PlaceDetailActivity extends BaseActivity implements View.OnClickLis
         this.mDetailAdapter = new DetailAdapter(this.mDetailUsers);
         this.mRestaurantRecyclerView.setAdapter(this.mDetailAdapter);
         this.mRestaurantRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        this.mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bookThisRestaurant();
-            }
-        });
     }
 
     private void retrieveObject(){
@@ -153,6 +148,7 @@ public class PlaceDetailActivity extends BaseActivity implements View.OnClickLis
         mButtonCall.setOnClickListener(this);
         mButtonLike.setOnClickListener(this);
         mButtonWebsite.setOnClickListener(this);
+        mFloatingActionButton.setOnClickListener(this);
     }
 
     @Override
@@ -177,7 +173,19 @@ public class PlaceDetailActivity extends BaseActivity implements View.OnClickLis
                 break;
 
             case R.id.restaurant_item_website:
+                if (requestResult.getWebsite() != null){
+                    Intent intent = new Intent(this,WebActivity.class);
+                    intent.putExtra("Website", requestResult.getWebsite());
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(this, getResources().getString(R.string.restaurant_detail_no_website), Toast.LENGTH_SHORT).show();
+                }
                 break;
+
+            case R.id.floatingActionButton :
+                bookThisRestaurant();
+                break;
+
         }
     }
 

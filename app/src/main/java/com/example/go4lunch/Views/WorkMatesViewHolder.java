@@ -26,8 +26,7 @@ public class WorkMatesViewHolder extends RecyclerView.ViewHolder {
 
     public WorkMatesViewHolder(@NonNull View itemView) {
         super(itemView);
-        mTextView = itemView.findViewById(R.id.item_list_restaurant);
-        mImageView = itemView.findViewById(R.id.item_list_avatar);
+
 
     }
 

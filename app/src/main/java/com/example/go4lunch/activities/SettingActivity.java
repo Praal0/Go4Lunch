@@ -24,11 +24,10 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 public class SettingActivity extends BaseActivity {
 
-    Toolbar mToolbar;
-    Switch mSwitch;
-    Button btnSave;
+    private Toolbar mToolbar;
+    private Switch mSwitch;
+    private Button btnSave;
 
-    protected CommunicationViewModel mViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +35,6 @@ public class SettingActivity extends BaseActivity {
         setContentView(R.layout.activity_setting);
         initialize();
 
-        mViewModel = new ViewModelProvider(this).get(CommunicationViewModel.class);
 
         configureToolbar();
         retrieveUserSettings();

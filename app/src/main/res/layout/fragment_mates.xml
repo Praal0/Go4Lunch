@@ -3,15 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.WorkmatesFragment">
+    tools:context=".fragment.MatesFragment">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/list_mates_swipe_refresh"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/list_mates_recycler_view"
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

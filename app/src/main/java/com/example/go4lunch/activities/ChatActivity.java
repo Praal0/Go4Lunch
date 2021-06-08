@@ -49,11 +49,11 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 public class ChatActivity extends BaseActivity implements  ChatAdapter.Listener{
 
-    RecyclerView recyclerView;
-    TextInputEditText editTextMessage;
-    ImageView imageViewPreview;
-    Toolbar mToolbar;
-    ImageButton activity_chat_send_button, activity_chat_file_button;
+    private RecyclerView recyclerView;
+    private TextInputEditText editTextMessage;
+    private ImageView imageViewPreview;
+    private Toolbar mToolbar;
+    private ImageButton activity_chat_send_button, activity_chat_file_button;
     private Uri uriImageSelected;
 
 
