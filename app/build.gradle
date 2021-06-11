@@ -71,7 +71,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-    implementation 'com.google.android.material:material:1.4.0-beta01'
+    implementation 'com.google.android.material:material:1.4.0-rc01'
 
     //GLIDE
     implementation 'com.github.bumptech.glide:glide:4.12.0'
@@ -98,6 +98,9 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
+
+    // WorkManager
+    implementation "androidx.work:work-runtime:2.5.0"
 
     // MULTIDEX
     implementation 'com.android.support:multidex:1.0.3'

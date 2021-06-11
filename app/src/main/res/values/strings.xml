@@ -2,23 +2,20 @@
     <string name="app_name">Go4Lunch</string>
 
     <!-- MAIN ACTIVITY -->
-    <string name="error_not_connected">Vous devez vous connecter !</string>
-    <string name="error_authentication_canceled">Authentification annulée&#8230;</string>
-    <string name="error_no_internet">Aucune connexion internet !</string>
-    <string name="error_unknown_error">Une erreur inconnue s\'est produite&#8230;</string>
-    <string name="connection_succeed">Authentification réussie !</string>
-    <string name="button_login_text_logged">Afficher le profil</string>
+    <string name="error_not_connected">You must log in!</string>
+    <string name="error_authentication_canceled">Authentification cancel&#8230;</string>
+    <string name="error_no_internet">No internet connection!</string>
+    <string name="error_unknown_error">An unknown error has occurred&#8230;</string>
+    <string name="connection_succeed">Authentification sucess !</string>
+    <string name="button_login_text_logged">Show profil</string>
     <string name="button_login_text_not_logged">Connexion</string>
 
     <!-- LOGIN ACTIVITY -->
-    <string name="toolbar_title_login_activity">Votre Profil</string>
-    <string name="text_input_username">Nom d\'utilisateur</string>
-    <string name="text_view_email">Adresse email :</string>
-    <string name="button_update_account">Mettre à jour le nom d\'utilisateur</string>
-    <string name="button_delete_account">Supprimer mon compte</string>
-    <string name="button_sign_out_account">Déconnexion</string>
-    <string name="info_no_email_found">Auncune adresse email</string>
-    <string name="info_no_username_found">User Name Not Found</string>
+    <string name="toolbar_title_login_activity">Your Profil</string>
+    <string name="text_input_username">User</string>
+    <string name="text_view_email">E-mail :</string>
+    <string name="info_no_email_found">email not found</string>
+    <string name="info_no_username_found">Username no found</string>
 
     <!-- ERROR TEXT -->
     <string name="http_error_message">HttpException, Error code : %1$i</string>

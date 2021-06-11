@@ -1,6 +1,7 @@
 package com.example.go4lunch.activities;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -9,12 +10,14 @@ import android.widget.Button;
 import android.widget.Switch;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.go4lunch.R;
 import com.example.go4lunch.activities.ViewModels.CommunicationViewModel;
+import com.example.go4lunch.api.NotificationHelper;
 import com.example.go4lunch.api.UserHelper;
 import com.example.go4lunch.base.BaseActivity;
 import com.google.android.material.snackbar.Snackbar;
@@ -27,6 +30,8 @@ public class SettingActivity extends BaseActivity {
     private Toolbar mToolbar;
     private Switch mSwitch;
     private Button btnSave;
+    private NotificationHelper mNotificationHelper;
+    protected CommunicationViewModel mViewModel;
 
 
     @Override
@@ -34,12 +39,29 @@ public class SettingActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
         initialize();
-
-
         configureToolbar();
         retrieveUserSettings();
+        createNotificationHelper();
         clickBtnSave();
     }
+
+    private void initialize() {
+        btnSave = findViewById(R.id.settings_save);
+        mSwitch = findViewById(R.id.settings_switch);
+        mToolbar = findViewById(R.id.simple_toolbar);
+        mToolbar.setTitle(R.string.setting);
+    }
+
+    private void configureToolbar(){
+        setSupportActionBar(mToolbar);
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void createNotificationHelper(){
+        mNotificationHelper = new NotificationHelper(getBaseContext());
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
@@ -52,38 +74,28 @@ public class SettingActivity extends BaseActivity {
         return (super.onOptionsItemSelected(menuItem));
     }
 
-
-
-    private void configureToolbar(){
-        setSupportActionBar(mToolbar);
-        ActionBar ab = getSupportActionBar();
-        ab.setDisplayHomeAsUpEnabled(true);
-    }
-
-
-
-    private void initialize() {
-        btnSave = findViewById(R.id.settings_save);
-        mSwitch = findViewById(R.id.settings_switch);
-        mToolbar = findViewById(R.id.simple_toolbar);
-        mToolbar.setTitle(R.string.setting);
-
-    }
-
     private void retrieveUserSettings(){
         UserHelper.getUsersCollection().document(getCurrentUser().getUid()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
                     Log.e("TAG", "Listen failed.", e);
                     return;
                 }
-                if (documentSnapshot.getData().get("notification").equals(true)){
-                    mSwitch.setChecked(true);
-                }else{
-                    mSwitch.setChecked(false);
-                }
 
+                if (documentSnapshot != null && documentSnapshot.exists()) {
+                    Log.e("TAG", "Current data: " + documentSnapshot.getData());
+                    if (documentSnapshot.getData().get("notificationOn").equals(true)){
+                        mSwitch.setChecked(true);
+                        mNotificationHelper.scheduleRepeatingNotification();
+                    }else{
+                        mSwitch.setChecked(false);
+                        mNotificationHelper.cancelAlarmRTC();
+                    }
+                } else {
+                    Log.e("TAG", "Current data: null");
+                }
             }
         });
     }

@@ -9,7 +9,6 @@
  import android.widget.ImageView;
  import android.widget.TextView;
 
- import androidx.annotation.NonNull;
  import androidx.appcompat.app.ActionBarDrawerToggle;
  import androidx.appcompat.widget.Toolbar;
  import androidx.core.view.GravityCompat;
@@ -38,8 +37,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     // For design
     private Toolbar toolbar;
     private DrawerLayout drawer;
-    private ImageView mImageView_bk,mImageView;
-    private TextView mNameText,mEmailText;
     private NavigationView mNavigationView;
     private BottomNavigationView bottomNav;
     private static final int SIGN_OUT_TASK = 10;
@@ -55,7 +52,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         configureBottomNav();
         configureNavigationView();
         updateUIWhenCreating();
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_view,new MapFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_view,new ListFragment()).commit();
     }
 
     // --------------------
@@ -66,11 +63,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         toolbar = findViewById(R.id.simple_toolbar);
         drawer = findViewById(R.id.drawer_layout);
         mNavigationView = findViewById(R.id.activity_main_nav_view);
-        View headerContainer = mNavigationView.getHeaderView(0); // This returns the container layout in nav_drawer_header.xml (e.g., your RelativeLayout or LinearLayout)
-        mImageView = headerContainer.findViewById(R.id.drawer_image);
-        mImageView_bk = headerContainer.findViewById(R.id.drawer_image_bk);
-        mNameText = headerContainer.findViewById(R.id.drawer_name);
-        mEmailText = headerContainer.findViewById(R.id.drawer_email);
         bottomNav = findViewById(R.id.bottom_navigation);
 
     }
@@ -179,15 +171,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private void updateUIWhenCreating(){
 
         if (this.getCurrentUser() != null){
-            //Get picture URL from Firebase
+            View headerContainer = mNavigationView.getHeaderView(0); // This returns the container layout in nav_drawer_header.xml (e.g., your RelativeLayout or LinearLayout)
+            ImageView mImageView = headerContainer.findViewById(R.id.drawer_image);
+            ImageView mImageView_bk = headerContainer.findViewById(R.id.drawer_image_bk);
+            TextView mNameText = headerContainer.findViewById(R.id.drawer_name);
+            TextView mEmailText = headerContainer.findViewById(R.id.drawer_email);
+
             Glide.with(this)
                     .load(R.drawable.lunch)
                     .apply(RequestOptions.bitmapTransform(new BlurTransformation(30)))
                     .into(mImageView_bk);
-
-            //Get email & username from Firebase
-            String email = TextUtils.isEmpty(this.getCurrentUser().getEmail()) ? getString(R.string.info_no_email_found) : this.getCurrentUser().getEmail();
-            String username = TextUtils.isEmpty(this.getCurrentUser().getDisplayName()) ? getString(R.string.info_no_username_found) : this.getCurrentUser().getDisplayName();
 
             //Get picture URL from Firebase
             if (this.getCurrentUser().getPhotoUrl() != null) {
@@ -196,9 +189,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         .apply(RequestOptions.circleCropTransform())
                         .into(mImageView);
             }
+
+            //Get email from Firebase
+            String email = TextUtils.isEmpty(this.getCurrentUser().getEmail()) ? getString(R.string.info_no_email_found) : this.getCurrentUser().getEmail();
+            String name = TextUtils.isEmpty(this.getCurrentUser().getDisplayName()) ? getString(R.string.info_no_username_found) : this.getCurrentUser().getDisplayName();
+
             //Update views with data
             mEmailText.setText(email);
-            mNameText.setText(username);
+            mNameText.setText(name);
         }
     }
 

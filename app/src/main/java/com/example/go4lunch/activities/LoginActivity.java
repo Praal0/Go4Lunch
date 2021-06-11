@@ -22,6 +22,7 @@ public class LoginActivity extends BaseActivity {
 
     // FOR DATA
     private static final int RC_SIGN_IN = 1000;
+    private String URL_ICON = "https://cdn1.iconfinder.com/data/icons/material-core/20/account-circle-512.png";
     private CommunicationViewModel mViewModel;
 
 
@@ -100,11 +101,18 @@ public class LoginActivity extends BaseActivity {
 
     // Http request that create user in firestore
     private void createUserInFirestone(){
+        String uid;
+        String username;
+        String urlPicture;
         if (this.getCurrentUser() != null){
             Log.e("LOGIN_ACTIVITY", "createUserInFirestore: LOGGED" );
-            String urlPicture = (this.getCurrentUser().getPhotoUrl() != null) ? this.getCurrentUser().getPhotoUrl().toString() : null;
-            String username = this.getCurrentUser().getDisplayName();
-            String uid = this.getCurrentUser().getUid();
+            if (this.getCurrentUser().getPhotoUrl() != null){
+                 urlPicture = this.getCurrentUser().getPhotoUrl().toString();
+            }else{
+                urlPicture = URL_ICON;
+            }
+             username = this.getCurrentUser().getDisplayName();
+             uid = this.getCurrentUser().getUid();
             UserHelper.createUser(uid, username, urlPicture,false).addOnFailureListener(this.onFailureListener());
         }else{
             Log.e("LOGIN_ACTIVITY", "createUserInFirestore: NOT LOGGED" );

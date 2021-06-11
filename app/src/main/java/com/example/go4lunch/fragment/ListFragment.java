@@ -52,7 +52,6 @@ public class ListFragment extends BaseFragment {
 
 
     RecyclerView mRecyclerView;
-    SwipeRefreshLayout mSwipeRefreshLayout;
 
     private Disposable disposable;
     private List<PlaceDetailsResults> mResults;
@@ -74,16 +73,15 @@ public class ListFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
-
+        mRecyclerView = view.findViewById(R.id.list_recycler_view);
         setHasOptionsMenu(true);
 
-        mViewModel.currentUserPosition.observe(getViewLifecycleOwner(), latLng -> {
+        mViewModel.currentUserPosition.observe(getActivity(), latLng -> {
             executeHttpRequestWithRetrofit();
             configureRecyclerView();
         });
 
         this.configureOnClickRecyclerView();
-        this.configureOnSwipeRefresh();
 
         return view;
     }
@@ -153,9 +151,6 @@ public class ListFragment extends BaseFragment {
         mRecyclerView.addItemDecoration(dividerItemDecoration);
     }
 
-    private void configureOnSwipeRefresh(){
-        mSwipeRefreshLayout.setOnRefreshListener(this::executeHttpRequestWithRetrofit);
-    }
 
     // -----------------
     // ACTION
@@ -178,7 +173,6 @@ public class ListFragment extends BaseFragment {
     // -------------------
 
     private void executeHttpRequestWithRetrofit(){
-        mSwipeRefreshLayout.setRefreshing(true);
         this.disposable = PlacesStreams.streamFetchPlaceInfo(mViewModel.getCurrentUserPositionFormatted(), mViewModel.getCurrentUserRadius(), MapFragment.SEARCH_TYPE,MapFragment.API_KEY).subscribeWith(createObserver());
     }
 
@@ -192,7 +186,6 @@ public class ListFragment extends BaseFragment {
             }
             @Override
             public void onError(Throwable e) {
-                getActivity().runOnUiThread(() -> mSwipeRefreshLayout.setRefreshing(false));
                 handleError(e);}
             @Override
             public void onComplete() { }
@@ -208,7 +201,6 @@ public class ListFragment extends BaseFragment {
     // -------------------
 
     private void updateUI(List<PlaceDetailsResults> results){
-        mSwipeRefreshLayout.setRefreshing(false);
         mResults.clear();
         if (results.size() > 0){
             mResults.addAll(results);

@@ -312,8 +312,7 @@ public class PlaceDetailActivity extends BaseActivity implements View.OnClickLis
             RestaurantsHelper.createLike(requestResult.getPlaceId(),getCurrentUser().getUid()).addOnCompleteListener(likeTask -> {
                 if (likeTask.isSuccessful()) {
                     Toast.makeText(this, getResources().getString(R.string.restaurant_like_ok), Toast.LENGTH_SHORT).show();
-                    mButtonLike.setText(getResources().getString(R.string.restaurant_item_dislike));
-                }
+                    mButtonLike.setText(getResources().getString(R.string.restaurant_item_dislike)); }
             });
         }else{
             Toast.makeText(this, getResources().getString(R.string.restaurant_like_ko), Toast.LENGTH_SHORT).show();
