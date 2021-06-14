@@ -1,4 +1,4 @@
-package com.example.go4lunch.activities;
+package com.example.go4lunch.controller.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,7 +8,7 @@ import android.widget.Toast;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.go4lunch.R;
-import com.example.go4lunch.activities.ViewModels.CommunicationViewModel;
+import com.example.go4lunch.ViewModels.CommunicationViewModel;
 import com.example.go4lunch.api.UserHelper;
 import com.firebase.ui.auth.AuthUI;
 
@@ -34,6 +34,7 @@ public class LoginActivity extends BaseActivity {
         if (!this.isCurrentUserLogged()){
             this.startSignInActivity();
         }else {
+            this.mViewModel.updateCurrentUserUID(getCurrentUser().getUid());
             launchMainActivity();
         }
     }

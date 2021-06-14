@@ -1,4 +1,4 @@
- package com.example.go4lunch.activities;
+ package com.example.go4lunch.controller.activities;
 
  import android.content.Intent;
  import android.os.Bundle;
@@ -19,9 +19,9 @@
  import com.bumptech.glide.request.RequestOptions;
  import com.example.go4lunch.R;
  import com.example.go4lunch.base.BaseActivity;
- import com.example.go4lunch.fragment.ListFragment;
- import com.example.go4lunch.fragment.MapFragment;
- import com.example.go4lunch.fragment.MatesFragment;
+ import com.example.go4lunch.controller.fragment.ListFragment;
+ import com.example.go4lunch.controller.fragment.MapFragment;
+ import com.example.go4lunch.controller.fragment.MatesFragment;
  import com.firebase.ui.auth.AuthUI;
  import com.google.android.gms.tasks.OnSuccessListener;
  import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -32,7 +32,6 @@
  import jp.wasabeef.glide.transformations.BlurTransformation;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener{
-
 
     // For design
     private Toolbar toolbar;
@@ -52,7 +51,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         configureBottomNav();
         configureNavigationView();
         updateUIWhenCreating();
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_view,new ListFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_view,new MapFragment()).commit();
     }
 
     // --------------------

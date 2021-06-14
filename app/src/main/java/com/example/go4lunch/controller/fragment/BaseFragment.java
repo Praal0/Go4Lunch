@@ -1,4 +1,4 @@
-package com.example.go4lunch.fragment;
+package com.example.go4lunch.controller.fragment;
 
 import android.os.Bundle;
 import android.util.Log;

@@ -1,5 +1,6 @@
-package com.example.go4lunch.activities;
+package com.example.go4lunch.controller.activities;
 
+import android.app.AlarmManager;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,10 +14,8 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.go4lunch.R;
-import com.example.go4lunch.activities.ViewModels.CommunicationViewModel;
 import com.example.go4lunch.api.NotificationHelper;
 import com.example.go4lunch.api.UserHelper;
 import com.example.go4lunch.base.BaseActivity;
@@ -27,11 +26,11 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 public class SettingActivity extends BaseActivity {
 
+   public static final long INTERVAL = AlarmManager.INTERVAL_FIFTEEN_MINUTES;
     private Toolbar mToolbar;
     private Switch mSwitch;
     private Button btnSave;
     private NotificationHelper mNotificationHelper;
-    protected CommunicationViewModel mViewModel;
 
 
     @Override
@@ -55,6 +54,7 @@ public class SettingActivity extends BaseActivity {
     private void configureToolbar(){
         setSupportActionBar(mToolbar);
         ActionBar ab = getSupportActionBar();
+        assert ab != null;
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
@@ -86,7 +86,7 @@ public class SettingActivity extends BaseActivity {
 
                 if (documentSnapshot != null && documentSnapshot.exists()) {
                     Log.e("TAG", "Current data: " + documentSnapshot.getData());
-                    if (documentSnapshot.getData().get("notificationOn").equals(true)){
+                    if (documentSnapshot.getData().get("notification").equals(true)){
                         mSwitch.setChecked(true);
                         mNotificationHelper.scheduleRepeatingNotification();
                     }else{

@@ -1,8 +1,6 @@
-package com.example.go4lunch.fragment;
+package com.example.go4lunch.controller.fragment;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;

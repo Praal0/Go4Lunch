@@ -1,4 +1,4 @@
-package com.example.go4lunch.activities;
+package com.example.go4lunch.controller.activities;
 
 import android.content.Intent;
 import android.graphics.PorterDuff;
@@ -24,7 +24,7 @@ import com.example.go4lunch.Views.DetailAdapter;
 import com.example.go4lunch.api.RestaurantsHelper;
 import com.example.go4lunch.api.UserHelper;
 import com.example.go4lunch.base.BaseActivity;
-import com.example.go4lunch.fragment.MapFragment;
+import com.example.go4lunch.controller.fragment.MapFragment;
 import com.example.go4lunch.models.PlacesInfo.PlacesDetails.PlaceDetailsInfo;
 import com.example.go4lunch.models.PlacesInfo.PlacesDetails.PlaceDetailsResults;
 import com.example.go4lunch.models.User;
@@ -32,7 +32,6 @@ import com.glide.slider.library.SliderLayout;
 import com.glide.slider.library.animations.DescriptionAnimation;
 import com.glide.slider.library.slidertypes.DefaultSliderView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 

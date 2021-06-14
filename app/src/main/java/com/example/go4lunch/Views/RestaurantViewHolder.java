@@ -18,7 +18,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.go4lunch.BuildConfig;
 import com.example.go4lunch.R;
 import com.example.go4lunch.api.RestaurantsHelper;
-import com.example.go4lunch.fragment.MapFragment;
+import com.example.go4lunch.controller.fragment.MapFragment;
 import com.example.go4lunch.models.PlacesInfo.PlacesDetails.PlaceDetailsResults;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
