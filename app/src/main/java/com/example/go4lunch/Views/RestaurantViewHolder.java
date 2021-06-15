@@ -78,7 +78,12 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
         // Display Name
         this.mNameText.setText(results.getName());
 
+        double latl = results.getGeometry().getLocation().getLat();
+        double longt = results.getGeometry().getLocation().getLng();
+
+        
         // Display Distance
+        getDistance(userLocation,latl,longt);
         String distance = Integer.toString(Math.round(distanceResults[0]));
         this.mDistanceText.setText(itemView.getResources().getString(R.string.list_unit_distance, distance));
 
@@ -108,10 +113,10 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
 
         // Display Opening Hours
         if (results.getOpeningHours() != null){
-            if (results.getOpeningHours().getPeriods().toString().equals("false")){
+            if (results.getOpeningHours().getOpenNow().toString().equals("false")){
                 displayOpeningHour(CLOSED,null);
             }else{
-
+                getOpeningHoursInfo(results);
             }
         }else{
             displayOpeningHour(OPENING_HOURS_NOT_KNOW,null);
@@ -126,6 +131,34 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
             }
         }else{
             glide.load(R.drawable.ic_no_image_available).apply(RequestOptions.centerCropTransform()).into(mMainPicture);
+        }
+    }
+
+    private void getOpeningHoursInfo(PlaceDetailsResults results){
+        int daysArray[] = {0,1,2,3,4,5,6};
+
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_WEEK) - 1;
+        int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
+        int minOfDay = calendar.get(Calendar.MINUTE);
+        if (minOfDay < 10){minOfDay = '0'+minOfDay;}
+        String currentHourString = Integer.toString(hourOfDay)+Integer.toString(minOfDay);
+        int currentHour = Integer.parseInt(currentHourString);
+
+        for (int i=0;i < results.getOpeningHours().getPeriods().size();i++){
+            if (results.getOpeningHours().getPeriods().get(i).getOpen().getDay() == daysArray[day]){
+                String closeHour = results.getOpeningHours().getPeriods().get(i).getClose().getTime();
+                if (currentHour < Integer.parseInt(closeHour) || daysArray[day] < results.getOpeningHours().getPeriods().get(i).getClose().getDay()){
+                    int timeDifference = Integer.parseInt(closeHour) - currentHour;
+                    //Log.e("TAG", "RestaurantName : " + results.getName() + " | CurrentHour : " + currentHour + " | CloseHour : " + Integer.parseInt(closeHour) + " | TimeDifference : " + timeDifference);
+                    if (timeDifference <= 30 && daysArray[day] == results.getOpeningHours().getPeriods().get(i).getClose().getDay()){
+                        displayOpeningHour(CLOSING_SOON, closeHour);
+                    }else{
+                        displayOpeningHour(OPEN,results.getOpeningHours().getPeriods().get(i).getClose().getTime());
+                    }
+                    break;
+                }
+            }
         }
     }
 
@@ -161,12 +194,10 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    private void getDistance(String startLocation, Location endLocation){
+    private void getDistance(String startLocation, double endLatitude,double endLongitude){
         String[] separatedStart = startLocation.split(",");
         double startLatitude = Double.parseDouble(separatedStart[0]);
         double startLongitude = Double.parseDouble(separatedStart[1]);
-        double endLatitude = endLocation.getLatitude();
-        double endLongitude = endLocation.getLongitude();
         android.location.Location.distanceBetween(startLatitude, startLongitude, endLatitude, endLongitude,distanceResults);
     }
 

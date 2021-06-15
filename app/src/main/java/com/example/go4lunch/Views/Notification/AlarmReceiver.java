@@ -136,8 +136,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     /**
      * Create and push the notification
      */
-    public void sendNotification(String users)
-    {
+    public void sendNotification(String users) {
         Log.e("TAG", "sendNotification: USERS " + users );
         // Creates an explicit intent for an Activity in your app
         Intent resultIntent = new Intent(mContext , MainActivity.class);

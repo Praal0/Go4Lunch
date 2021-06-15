@@ -10,7 +10,7 @@ import com.example.go4lunch.controller.activities.SettingActivity;
 
 import java.util.Calendar;
 
-public class UploadWorker extends BroadcastReceiver {
+public class  UploadWorker extends BroadcastReceiver {
 
 
     @Override

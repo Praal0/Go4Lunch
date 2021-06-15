@@ -58,7 +58,6 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Loc
     public static final String API_KEY = BuildConfig.API_KEY;
     public static final String SEARCH_TYPE = "restaurant";
 
-
     private GoogleMap googleMap;
     private MapView mMapView;
     private LocationRequest mLocationRequest;
@@ -66,15 +65,12 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Loc
     private LocationCallback mLocationCallback;
     private Disposable disposable;
 
-
-
     private CommunicationViewModel mViewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(CommunicationViewModel.class);
-
     }
 
     @Override
@@ -316,8 +312,6 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Loc
                 .setInterval(100 * 1000)        // 100 seconds, in milliseconds
                 .setFastestInterval(1000); // 1 second, in milliseconds
     }
-
-
 
     public boolean checkLocationPermission() {
         if (EasyPermissions.hasPermissions(requireContext(), perms)) {
