@@ -33,6 +33,7 @@ public interface PlacesService {
 
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(API_BASE_URL)
+            .client(new OkHttpClient.Builder().addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC)).build())
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build();
