@@ -63,7 +63,6 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Loc
     private LocationRequest mLocationRequest;
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationCallback mLocationCallback;
-    private Disposable disposable;
 
     private CommunicationViewModel mViewModel;
 
@@ -80,9 +79,8 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Loc
         mMapView.getMapAsync(this);
         mMapView.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        mViewModel.currentUserPosition.observe(getViewLifecycleOwner(), latLng -> {
-            executeHttpRequestWithRetrofit();
-        });
+
+        mViewModel.executeHttpRequestWithRetrofitPlaceStream(createObserver());
 
         this.configureLocationRequest();
         this.configureLocationCallBack();
@@ -187,9 +185,6 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Loc
     public void onStop() {
         super.onStop();
         mViewModel.currentUserPosition.removeObservers(this);
-        if (!disposable.isDisposed()){
-            disposable.dispose();
-        }
     }
 
 
@@ -228,12 +223,6 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Loc
     // -------------------
     // HTTP (RxJAVA)
     // -------------------
-
-    private void executeHttpRequestWithRetrofit(){
-        String location = mViewModel.getCurrentUserPositionFormatted();
-        Log.e(TAG, "Location : "+location );
-        disposable = PlacesStreams.streamFetchNearbyPlaces(location, 1000, SEARCH_TYPE, API_KEY).subscribeWith(createObserver());
-    }
 
     private <T> DisposableObserver<T> createObserver(){
         return new DisposableObserver<T>() {

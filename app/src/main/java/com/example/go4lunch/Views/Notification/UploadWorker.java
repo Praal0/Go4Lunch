@@ -28,7 +28,7 @@ public class  UploadWorker extends BroadcastReceiver {
         /* Set the alarm to start at 12 PM */
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 12);
+        calendar.set(Calendar.HOUR_OF_DAY, 15);
 
         manager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), SettingActivity.INTERVAL, pendingIntent);
     }

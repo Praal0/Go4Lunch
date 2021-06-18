@@ -83,7 +83,7 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
 
         
         // Display Distance
-        getDistance(userLocation,latl,longt);
+        //getDistance(userLocation,latl,longt);
         String distance = Integer.toString(Math.round(distanceResults[0]));
         this.mDistanceText.setText(itemView.getResources().getString(R.string.list_unit_distance, distance));
 

@@ -61,7 +61,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                                     for (QueryDocumentSnapshot booking : bookingTask.getResult()){
                                         UserHelper.getUser(booking.getData().get("userId").toString()).addOnCompleteListener(userTask -> {
                                             if (userTask.isSuccessful()){
-                                                if (!(userTask.getResult().getData().get("uid").toString().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))){
+                                                 if (!(userTask.getResult().getData().get("uid").toString().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))){
                                                     Log.e("TAG", "ALARM_RECEIVER | User : " + userTask.getResult().getData().get("username") );
                                                     String username = userTask.getResult().getData().get("username").toString();
                                                     usersList.add(username);

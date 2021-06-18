@@ -25,12 +25,12 @@ public class NotificationHelper {
         mContext = context;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+
     public void scheduleRepeatingNotification(){
         //get calendar instance to be able to select what time notification should be scheduled
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY,12);
+        calendar.set(Calendar.HOUR_OF_DAY,15);
 
         //Setting intent to class where Alarm broadcast message will be handled
         Intent intent = new Intent(mContext, AlarmReceiver.class);

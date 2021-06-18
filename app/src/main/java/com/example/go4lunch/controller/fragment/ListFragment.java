@@ -116,12 +116,9 @@ public class ListFragment extends BaseFragment  {
     // Configure RecyclerView, Adapter, LayoutManager & glue it together
     private void configureRecyclerView(){
         this.mResults = new ArrayList<>();
-        locationSav = "45.6345291,4.7827152";
         this.adapter = new RestaurantAdapter(this.mResults,locationSav);
         this.mRecyclerView.setAdapter(this.adapter);
         this.mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(ContextCompat.getDrawable(getContext(), R.drawable.divider), 100);
-        mRecyclerView.addItemDecoration(dividerItemDecoration);
     }
 
     private void configureLocationCallBack() {
@@ -140,7 +137,6 @@ public class ListFragment extends BaseFragment  {
 
     private void handleNewLocation(Location location) {
         Log.e(TAG, "handleNewLocation: " );
-        locationSav = location.getLatitude() + "," + location.getLongitude();
         double currentLatitude = location.getLatitude();
         double currentLongitude = location.getLongitude();
         this.mViewModel.updateCurrentUserPosition(new LatLng(currentLatitude, currentLongitude));
