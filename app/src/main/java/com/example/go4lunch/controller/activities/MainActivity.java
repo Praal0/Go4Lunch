@@ -17,7 +17,6 @@
  import androidx.drawerlayout.widget.DrawerLayout;
  import androidx.fragment.app.Fragment;
  import androidx.lifecycle.ViewModelProvider;
- import androidx.lifecycle.ViewModelProviders;
 
  import com.bumptech.glide.Glide;
  import com.bumptech.glide.request.RequestOptions;
@@ -26,7 +25,6 @@
  import com.example.go4lunch.api.RestaurantsHelper;
  import com.example.go4lunch.api.UserHelper;
  import com.example.go4lunch.base.BaseActivity;
- import com.example.go4lunch.controller.fragment.ListFragment;
  import com.example.go4lunch.controller.fragment.MapFragment;
  import com.example.go4lunch.controller.fragment.MatesFragment;
  import com.firebase.ui.auth.AuthUI;
@@ -149,7 +147,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
                 case R.id.nav_list:
                     toolbar.setTitle(R.string.hungry);
-                    selectedFragment = new ListFragment();
+                    selectedFragment = new MapFragment();
                     break;
 
                 case R.id.nav_workmates:

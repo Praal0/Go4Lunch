@@ -1,9 +1,15 @@
 package com.example.go4lunch.models.PlacesInfo;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Location {
+
+    public Location(Double lat,Double lng){
+        this.lat = lat;
+        this.lng = lng;
+    }
     @SerializedName("lat")
     @Expose
     public Double lat;

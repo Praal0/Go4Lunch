@@ -16,16 +16,16 @@ import io.reactivex.observers.DisposableObserver;
 import static android.content.ContentValues.TAG;
 import static com.example.go4lunch.controller.fragment.MapFragment.SEARCH_TYPE;
 
-public class CommunicationViewModel extends ViewModel {
+public class     CommunicationViewModel extends ViewModel {
     private static final String API_KEY = BuildConfig.API_KEY;
-    public final MutableLiveData<LatLng> currentUserPosition = new MutableLiveData<>();
-    public final MutableLiveData<String> currentUserUID = new MutableLiveData<>();
+    private final MutableLiveData<LatLng> currentUserPosition = new MutableLiveData<>();
+    private  final MutableLiveData<String> currentUserUID = new MutableLiveData<>();
 
     private String SEARCH_TYPE = "restaurant";
     private Disposable disposable;
 
 
-    public void updateCurrentUserPosition(LatLng latLng){ currentUserPosition.setValue(latLng); }
+
 
     public LatLng getCurrentUserPosition(){
         return currentUserPosition.getValue();
@@ -42,12 +42,12 @@ public class CommunicationViewModel extends ViewModel {
     }
 
     public void executeHttpRequestWithRetrofitPlaceStream( DisposableObserver createObserver){
-        String location = "45.6345291,4.7827152";
+        String location = getCurrentUserPosition().toString();
         Log.e(TAG, "Location : "+location );
         disposable = PlacesStreams.streamFetchNearbyPlaces(location, 1000, SEARCH_TYPE, API_KEY).subscribeWith(createObserver);
     }
     public void executeHttpRequestWithRetrofit( DisposableObserver createObserver){
-        String location = "45.6345291,4.7827152";
+        String location = getCurrentUserPosition().toString();
         disposable = PlacesStreams.streamFetchPlaceInfo(location,1000,
                 MapFragment.SEARCH_TYPE,MapFragment.API_KEY).subscribeWith(createObserver);
     }

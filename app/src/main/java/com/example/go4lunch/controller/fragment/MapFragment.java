@@ -1,7 +1,11 @@
 package com.example.go4lunch.controller.fragment;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Location;
 import android.os.Build;
@@ -19,13 +23,17 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.go4lunch.BuildConfig;
 import com.example.go4lunch.R;
 import com.example.go4lunch.Utils.PlacesStreams;
+import com.example.go4lunch.ViewModels.MapViewModel;
 import com.example.go4lunch.controller.activities.PlaceDetailActivity;
 import com.example.go4lunch.ViewModels.CommunicationViewModel;
+import com.example.go4lunch.injection.Injection;
+import com.example.go4lunch.injection.MapViewModelFactory;
 import com.example.go4lunch.models.PlacesInfo.MapPlacesInfo;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -45,31 +53,35 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.util.List;
+
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 import pub.devrel.easypermissions.EasyPermissions;
 
 
-public class MapFragment extends BaseFragment implements OnMapReadyCallback, LocationListener {
+public class MapFragment extends BaseFragment implements OnMapReadyCallback, EasyPermissions.PermissionCallbacks {
 
-    private static final int PERMS_FINE_COARSE_LOCATION = 100;
-    private static final String TAG = MapFragment.class.getSimpleName();
-    private static final String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
     public static final String API_KEY = BuildConfig.API_KEY;
+    private static final String TAG = MapFragment.class.getSimpleName();
+
     public static final String SEARCH_TYPE = "restaurant";
+    private static final int RC_LOCATION_CONTACTS_PERM = 124;
 
     private GoogleMap googleMap;
     private MapView mMapView;
     private LocationRequest mLocationRequest;
     private FusedLocationProviderClient mFusedLocationClient;
+    private static final String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
     private LocationCallback mLocationCallback;
 
-    private CommunicationViewModel mViewModel;
+    private MapViewModel mViewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(CommunicationViewModel.class);
+        MapViewModelFactory mapViewModelFactory = Injection.provideMapViewModelFactory(this.getActivity().getApplication());
+        mViewModel = new ViewModelProvider(this, mapViewModelFactory).get(MapViewModel.class);
     }
 
     @Override
@@ -79,24 +91,31 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Loc
         mMapView.getMapAsync(this);
         mMapView.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        refresh();
 
+
+        configureLocationCallBack();
         mViewModel.executeHttpRequestWithRetrofitPlaceStream(createObserver());
 
-        this.configureLocationRequest();
-        this.configureLocationCallBack();
-        startLocationUpdates();
-        createDriveFile();
+
         return view;
     }
 
-    @SuppressLint("PotentialBehaviorOverride")
+
     @Override
     public void onMapReady(@NonNull GoogleMap mMap) {
         googleMap = mMap;
-        if (checkLocationPermission()) {
-            //Request location updates:
+
+        //Request location updates:
+
+
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             googleMap.setMyLocationEnabled(true);
         }
+
+
+
         googleMap.getUiSettings().setCompassEnabled(true);
         googleMap.getUiSettings().setMyLocationButtonEnabled(true);
         View locationButton = ((View) mMapView.findViewById(Integer.parseInt("1")).
@@ -129,31 +148,6 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Loc
 
     }
 
-    @SuppressLint("MissingPermission")
-    private void createDriveFile() {
-        if (EasyPermissions.hasPermissions(getContext(), perms)) {
-            mFusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            // Got last known location. In some rare situations this can be null.
-                            if (location != null) {
-                                handleNewLocation(location);
-                            } else {
-                                if (EasyPermissions.hasPermissions(getContext(), perms)) {
-                                    mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
-                                }
-
-                            }
-                        }
-                    });
-        } else {
-            // Do not have permissions, request them now
-            EasyPermissions.requestPermissions(this, getString(R.string.popup_title_perm_access),
-                    PERMS_FINE_COARSE_LOCATION, perms);
-        }
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -182,13 +176,6 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Loc
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        mViewModel.currentUserPosition.removeObservers(this);
-    }
-
-
-    @Override
     public void onDestroyView(){
         super.onDestroyView();
         mMapView.onDestroy();
@@ -201,7 +188,19 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Loc
 
     }
 
-
+    private void configureLocationCallBack() {
+        mLocationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult == null) {
+                    return;
+                }
+                for (Location location : locationResult.getLocations()) {
+                    handleNewLocation(location);
+                }
+            }
+        };
+    }
 
     private void handleNewLocation(Location location) {
         Log.e(TAG, "handleNewLocation: " );
@@ -210,14 +209,6 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Loc
         this.mViewModel.updateCurrentUserPosition(new LatLng(currentLatitude, currentLongitude));
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(this.mViewModel.getCurrentUserPosition()));
         googleMap.animateCamera(CameraUpdateFactory.zoomTo(13), 2000, null);
-        stopLocationUpdates();
-    }
-
-
-
-    @Override
-    public void onLocationChanged(@NonNull Location location) {
-        handleNewLocation(location);
     }
 
     // -------------------
@@ -266,32 +257,8 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Loc
             }
     }
 
-    // -----------------
-    // CONFIGURATION
-    // -----------------
-    private void configureLocationCallBack() {
-        mLocationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                if (locationResult == null) {
-                    return;
-                }
-                for (Location location : locationResult.getLocations()) {
-                    handleNewLocation(location);
-                }
-            }
-        };
-    }
 
-    private void stopLocationUpdates() {
-        mFusedLocationClient.removeLocationUpdates(mLocationCallback);
-    }
 
-    private void startLocationUpdates() {
-        if (checkLocationPermission()){
-            mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
-        }
-    }
 
     private void configureLocationRequest(){
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
@@ -302,16 +269,25 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Loc
                 .setFastestInterval(1000); // 1 second, in milliseconds
     }
 
-    public boolean checkLocationPermission() {
-        if (EasyPermissions.hasPermissions(requireContext(), perms)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
     // -----------------
     // ACTION
     // -----------------
+
+
+    public void refresh() {
+        // No GPS permission
+        if (EasyPermissions.hasPermissions(getContext(),perms)) {
+            mViewModel.startLocationRequest(getContext());
+            mViewModel.getLocation().observe(getViewLifecycleOwner(),(location -> {
+                if (location !=null){
+                    mViewModel.updateCurrentUserPosition(new LatLng(location.getLat(), location.getLng()));
+                }
+            }));
+        } else {
+            EasyPermissions.requestPermissions(this,"Need permission for use MapView",
+                    RC_LOCATION_CONTACTS_PERM, perms);
+        }
+    }
 
     private boolean onClickMarker(Marker marker){
         if (marker.getTag() != null){
@@ -328,4 +304,13 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Loc
     }
 
 
+    @Override
+    public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
+        refresh();
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
+        refresh();
+    }
 }
