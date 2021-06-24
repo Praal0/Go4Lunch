@@ -60,7 +60,7 @@
         </activity>
         <activity
             android:name=".controller.activities.MainActivity"
-            android:label="@string/toolbar_title_login_activity"
+            android:label="@string/hungry"
             android:theme="@style/Theme.Design.NoActionBar" />
         <activity
             android:name=".controller.activities.LoginActivity"

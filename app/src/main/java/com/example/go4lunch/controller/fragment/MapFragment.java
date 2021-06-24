@@ -1,11 +1,8 @@
 package com.example.go4lunch.controller.fragment;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Location;
 import android.os.Build;
@@ -19,26 +16,21 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.go4lunch.BuildConfig;
 import com.example.go4lunch.R;
-import com.example.go4lunch.Utils.PlacesStreams;
 import com.example.go4lunch.ViewModels.MapViewModel;
+import com.example.go4lunch.api.RestaurantsHelper;
 import com.example.go4lunch.controller.activities.PlaceDetailActivity;
-import com.example.go4lunch.ViewModels.CommunicationViewModel;
 import com.example.go4lunch.injection.Injection;
 import com.example.go4lunch.injection.MapViewModelFactory;
 import com.example.go4lunch.models.PlacesInfo.MapPlacesInfo;
-
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
@@ -51,11 +43,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.List;
 
-import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -64,16 +54,13 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
 
     public static final String API_KEY = BuildConfig.API_KEY;
     private static final String TAG = MapFragment.class.getSimpleName();
+    private static final String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
 
     public static final String SEARCH_TYPE = "restaurant";
     private static final int RC_LOCATION_CONTACTS_PERM = 124;
 
     private GoogleMap googleMap;
     private MapView mMapView;
-    private LocationRequest mLocationRequest;
-    private FusedLocationProviderClient mFusedLocationClient;
-    private static final String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
-    private LocationCallback mLocationCallback;
 
     private MapViewModel mViewModel;
 
@@ -92,12 +79,6 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
         mMapView.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         refresh();
-
-
-        configureLocationCallBack();
-        mViewModel.executeHttpRequestWithRetrofitPlaceStream(createObserver());
-
-
         return view;
     }
 
@@ -105,17 +86,10 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
     @Override
     public void onMapReady(@NonNull GoogleMap mMap) {
         googleMap = mMap;
-
-        //Request location updates:
-
-
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (checkLocationPermission()) {
+            //Request location updates:
             googleMap.setMyLocationEnabled(true);
         }
-
-
-
         googleMap.getUiSettings().setCompassEnabled(true);
         googleMap.getUiSettings().setMyLocationButtonEnabled(true);
         View locationButton = ((View) mMapView.findViewById(Integer.parseInt("1")).
@@ -127,7 +101,6 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
         rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
         rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
         rlp.setMargins(0, 0, 30, 30);
-
         try {
             // Customise the styling of the base map using a JSON object defined
             // in a raw resource file.
@@ -145,10 +118,8 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
 
         googleMap.getUiSettings().setRotateGesturesEnabled(true);
         googleMap.setOnMarkerClickListener(MapFragment.this::onClickMarker);
-
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -188,33 +159,9 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
 
     }
 
-    private void configureLocationCallBack() {
-        mLocationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                if (locationResult == null) {
-                    return;
-                }
-                for (Location location : locationResult.getLocations()) {
-                    handleNewLocation(location);
-                }
-            }
-        };
-    }
-
-    private void handleNewLocation(Location location) {
-        Log.e(TAG, "handleNewLocation: " );
-        double currentLatitude = location.getLatitude();
-        double currentLongitude = location.getLongitude();
-        this.mViewModel.updateCurrentUserPosition(new LatLng(currentLatitude, currentLongitude));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(this.mViewModel.getCurrentUserPosition()));
-        googleMap.animateCamera(CameraUpdateFactory.zoomTo(13), 2000, null);
-    }
-
     // -------------------
     // HTTP (RxJAVA)
     // -------------------
-
     private <T> DisposableObserver<T> createObserver(){
         return new DisposableObserver<T>() {
             @Override
@@ -228,11 +175,9 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
         };
     }
 
-
     // -------------------
     // UPDATE UI
     // -------------------
-
     private <T> void updateUI( T results){
         googleMap.clear();
         if(results instanceof MapPlacesInfo){
@@ -241,15 +186,21 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
             if (result.getResults().size() > 0){
                 for (int i = 0; i < result.getResults().size(); i++) {
                     int CurrentObject = i;
-                    Double lat = result.getResults().get(CurrentObject).getGeometry().getLocation().getLat();
-                    Double lng = result.getResults().get(CurrentObject).getGeometry().getLocation().getLng();
-                    String title = result.getResults().get(CurrentObject).getName();
-                    MarkerOptions markerOptions = new MarkerOptions();
-                    markerOptions.position(new LatLng(lat, lng));
-                    markerOptions.title(title);
-                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_place_unbook));
-                    Marker marker = googleMap.addMarker(markerOptions);
-                    marker.setTag(result.getResults().get(CurrentObject).getPlaceId());
+                    RestaurantsHelper.getTodayBooking(result.getResults().get(CurrentObject).getPlaceId(), getTodayDate()).addOnCompleteListener(restaurantTask -> {
+                        if (restaurantTask.isSuccessful()) {
+                            Double lat = result.getResults().get(CurrentObject).getGeometry().getLocation().getLat();
+                            Double lng = result.getResults().get(CurrentObject).getGeometry().getLocation().getLng();
+                            MarkerOptions markerOptions = new MarkerOptions();
+                            markerOptions.position(new LatLng(lat, lng));
+                            if (restaurantTask.getResult().isEmpty()) { // If there is no booking for today
+                                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_place_unbook));
+                            } else { // If there is booking for today
+                                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_place_booked));
+                            }
+                            Marker marker = googleMap.addMarker(markerOptions);
+                            marker.setTag(result.getResults().get(CurrentObject).getPlaceId());
+                        }
+                    });
                 }
             }
             }else{
@@ -257,30 +208,19 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
             }
     }
 
-
-
-
-    private void configureLocationRequest(){
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
-        // Create the LocationRequest object
-        mLocationRequest = LocationRequest.create()
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(100 * 1000)        // 100 seconds, in milliseconds
-                .setFastestInterval(1000); // 1 second, in milliseconds
-    }
-
     // -----------------
     // ACTION
     // -----------------
-
-
     public void refresh() {
         // No GPS permission
-        if (EasyPermissions.hasPermissions(getContext(),perms)) {
+        if (checkLocationPermission()) {
             mViewModel.startLocationRequest(getContext());
             mViewModel.getLocation().observe(getViewLifecycleOwner(),(location -> {
                 if (location !=null){
                     mViewModel.updateCurrentUserPosition(new LatLng(location.getLat(), location.getLng()));
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLng(this.mViewModel.getCurrentUserPosition()));
+                    googleMap.animateCamera(CameraUpdateFactory.zoomTo(13), 2000, null);
+                    mViewModel.executeHttpRequestWithRetrofitPlaceStream(createObserver());
                 }
             }));
         } else {
@@ -303,7 +243,6 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
         }
     }
 
-
     @Override
     public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
         refresh();
@@ -312,5 +251,13 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
     @Override
     public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
         refresh();
+    }
+
+    public boolean checkLocationPermission() {
+        if (EasyPermissions.hasPermissions(getContext(), perms)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

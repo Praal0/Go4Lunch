@@ -96,6 +96,7 @@
     <string name="restaurant_closing_soon">Closing soon (%1$s)</string>
     <string name="restaurant_mates_number">(%1$d)</string>
 
+
     <!-- NOTIFICATION SERVICE -->
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
     <string name="mates_is_eating_at">is eating</string>
@@ -107,9 +108,9 @@
     <string name="notification_message">Here is a reminder of your choice for today</string>
     <string name="notification_message_big">Here is a reminder of your choice for today : %1$s %2$s. Workmates participating : %3$s</string>
     <string name="notification_message_no_workmates">None</string>
+    <string name="drawer_no_restaurant_booked">No restaurant booked</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="drawer_no_restaurant_booked">No restaurant booked</string>
 
 
 </resources>

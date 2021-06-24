@@ -14,9 +14,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
-
-
-
 public interface PlacesService {
 
     String API_BASE_URL = "https://maps.googleapis.com/maps/api/place/";
@@ -30,13 +27,10 @@ public interface PlacesService {
     @GET("autocomplete/json?strictbounds&types=establishment")
     Observable<AutoCompleteResult> getPlaceAutoComplete(@Query("input") String query, @Query("location") String location, @Query("radius") int radius, @Query("key") String apiKey );
 
-
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(API_BASE_URL)
-            .client(new OkHttpClient.Builder().addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC)).build())
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .client(new OkHttpClient.Builder().addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC)).build())
             .build();
-
-   
 }

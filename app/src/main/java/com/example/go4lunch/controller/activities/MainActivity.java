@@ -25,6 +25,7 @@
  import com.example.go4lunch.api.RestaurantsHelper;
  import com.example.go4lunch.api.UserHelper;
  import com.example.go4lunch.base.BaseActivity;
+ import com.example.go4lunch.controller.fragment.ListFragment;
  import com.example.go4lunch.controller.fragment.MapFragment;
  import com.example.go4lunch.controller.fragment.MatesFragment;
  import com.firebase.ui.auth.AuthUI;
@@ -147,7 +148,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
                 case R.id.nav_list:
                     toolbar.setTitle(R.string.hungry);
-                    selectedFragment = new MapFragment();
+                    selectedFragment = new ListFragment();
                     break;
 
                 case R.id.nav_workmates:
@@ -168,7 +169,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     private void configureToolBar(){
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.hungry);
     }
 
     @Override
@@ -190,7 +190,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     Log.e("MAIN_ACTIVITY", "Listen failed.", e);
                     return;
                 }
-
                 if (documentSnapshot != null && documentSnapshot.exists()) {
                     Log.e("MAIN_ACTIVITY", "Current data: " + documentSnapshot.getData());
                 } else {
