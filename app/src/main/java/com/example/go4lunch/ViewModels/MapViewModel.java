@@ -28,10 +28,6 @@ public class MapViewModel extends ViewModel{
     private static final String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
     public  final MutableLiveData<LatLng> currentUserPosition = new MutableLiveData<>();
     private String SEARCH_TYPE = "restaurant";
-    private  final MutableLiveData<String> currentUserUID = new MutableLiveData<>();
-
-
-    private Disposable disposable;
 
     @NonNull
     private final LocationRepository locationRepository;
@@ -40,7 +36,7 @@ public class MapViewModel extends ViewModel{
         if (getCurrentUserPosition() != null){
             String location = getCurrentUserPositionFormatted();
             Log.e(TAG, "Location : " + location);
-            disposable = PlacesStreams.streamFetchPlaceInfo(location,1000, MapFragment.SEARCH_TYPE,MapFragment.API_KEY).subscribeWith(createObserver);
+            PlacesStreams.streamFetchPlaceInfo(location, 1000, MapFragment.SEARCH_TYPE, MapFragment.API_KEY).subscribeWith(createObserver);
         }
     }
 
@@ -70,12 +66,11 @@ public class MapViewModel extends ViewModel{
             return null;
     }
 
-
     public void executeHttpRequestWithRetrofitPlaceStream(DisposableObserver createObserver) {
         if (getCurrentUserPosition() != null){
             String location = getCurrentUserPositionFormatted();
             Log.e(TAG, "Location : " + location);
-            disposable = PlacesStreams.streamFetchNearbyPlaces(location, 1000, SEARCH_TYPE, API_KEY).subscribeWith(createObserver);
+            PlacesStreams.streamFetchNearbyPlaces(location, 1000, SEARCH_TYPE, API_KEY).subscribeWith(createObserver);
         }else{
 
         }
@@ -86,10 +81,6 @@ public class MapViewModel extends ViewModel{
         } else {
             return false;
         }
-    }
-
-    public void updateCurrentUserUID(String uid){
-        currentUserUID.setValue(uid);
     }
 
     public void startLocationRequest(Context context) {

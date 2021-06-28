@@ -5,10 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,14 +18,12 @@ import android.widget.Toast;
 
 import com.example.go4lunch.R;
 import com.example.go4lunch.Utils.ItemClickSupport;
-import com.example.go4lunch.ViewModels.CommunicationViewModel;
 import com.example.go4lunch.ViewModels.MapViewModel;
 import com.example.go4lunch.Views.RestaurantAdapter;
 import com.example.go4lunch.controller.activities.PlaceDetailActivity;
 import com.example.go4lunch.injection.Injection;
 import com.example.go4lunch.injection.MapViewModelFactory;
 import com.example.go4lunch.models.PlacesInfo.PlacesDetails.PlaceDetailsResults;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
@@ -79,12 +75,9 @@ public class ListFragment extends BaseFragment implements EasyPermissions.Permis
         mRecyclerView = view.findViewById(R.id.list_recycler_view);
         // Inflate the layout for this fragment
         refresh();
-        configureRecyclerView();
         setHasOptionsMenu(true);
         this.configureOnClickRecyclerView();
-
         return view;
-
     }
 
     private <T> DisposableObserver<T> createObserver(){
@@ -119,6 +112,9 @@ public class ListFragment extends BaseFragment implements EasyPermissions.Permis
         this.adapter = new RestaurantAdapter(this.mResults, mViewModel.getCurrentUserPositionF());
         this.mRecyclerView.setAdapter(this.adapter);
         this.mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        dividerItemDecoration.setDrawable(getResources().getDrawable(R.drawable.divider));
+        mRecyclerView.addItemDecoration(dividerItemDecoration);
     }
 
     private void updateUI(List<PlaceDetailsResults> results){
@@ -139,6 +135,7 @@ public class ListFragment extends BaseFragment implements EasyPermissions.Permis
                 if (location !=null){
                     mViewModel.updateCurrentUserPosition(new LatLng(location.getLat(), location.getLng()));
                     mViewModel.executeHttpRequestWithRetrofitFetchPlaceInfo(createObserver());
+                    configureRecyclerView();
                 }
             }));
         }else{
@@ -154,7 +151,6 @@ public class ListFragment extends BaseFragment implements EasyPermissions.Permis
             return false;
         }
     }
-
 
     @Override
     public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {

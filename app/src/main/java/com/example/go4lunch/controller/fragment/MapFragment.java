@@ -1,11 +1,10 @@
 package com.example.go4lunch.controller.fragment;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.location.Location;
-import android.os.Build;
+import android.location.LocationListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,7 +17,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.go4lunch.BuildConfig;
@@ -29,11 +27,6 @@ import com.example.go4lunch.controller.activities.PlaceDetailActivity;
 import com.example.go4lunch.injection.Injection;
 import com.example.go4lunch.injection.MapViewModelFactory;
 import com.example.go4lunch.models.PlacesInfo.MapPlacesInfo;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -50,7 +43,7 @@ import io.reactivex.observers.DisposableObserver;
 import pub.devrel.easypermissions.EasyPermissions;
 
 
-public class MapFragment extends BaseFragment implements OnMapReadyCallback, EasyPermissions.PermissionCallbacks {
+public class MapFragment extends BaseFragment implements OnMapReadyCallback, EasyPermissions.PermissionCallbacks, LocationListener {
 
     public static final String API_KEY = BuildConfig.API_KEY;
     private static final String TAG = MapFragment.class.getSimpleName();
@@ -61,7 +54,6 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
 
     private GoogleMap googleMap;
     private MapView mMapView;
-
     private MapViewModel mViewModel;
 
     @Override
@@ -215,9 +207,10 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
             mViewModel.startLocationRequest(getContext());
             mViewModel.getLocation().observe(getViewLifecycleOwner(),(location -> {
                 if (location !=null){
-                    mViewModel.updateCurrentUserPosition(new LatLng(location.getLat(), location.getLng()));
-                    googleMap.moveCamera(CameraUpdateFactory.newLatLng(this.mViewModel.getCurrentUserPosition()));
-                    googleMap.animateCamera(CameraUpdateFactory.zoomTo(12), 2000, null);
+                    LatLng latLng = new LatLng(location.getLat(),location.getLng());
+                    mViewModel.updateCurrentUserPosition(latLng);
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
+                    googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
                     mViewModel.executeHttpRequestWithRetrofitPlaceStream(createObserver());
                 }
             }));
@@ -251,11 +244,16 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
         refresh();
     }
 
-    public boolean checkLocationPermission() {
+    private boolean checkLocationPermission() {
         if (EasyPermissions.hasPermissions(getContext(), perms)) {
             return true;
         } else {
             return false;
         }
+    }
+
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+        refresh();
     }
 }

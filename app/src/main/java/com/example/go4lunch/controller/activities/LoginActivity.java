@@ -8,7 +8,7 @@ import android.widget.Toast;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.go4lunch.R;
-import com.example.go4lunch.ViewModels.CommunicationViewModel;
+import com.example.go4lunch.ViewModels.MatesViewModel;
 import com.example.go4lunch.api.UserHelper;
 import com.firebase.ui.auth.AuthUI;
 
@@ -23,13 +23,13 @@ public class LoginActivity extends BaseActivity {
     // FOR DATA
     private static final int RC_SIGN_IN = 1000;
     private String URL_ICON = "https://cdn1.iconfinder.com/data/icons/material-core/20/account-circle-512.png";
-    private CommunicationViewModel mViewModel;
+    private MatesViewModel mViewModel;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(CommunicationViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(MatesViewModel.class);
         setContentView(R.layout.activity_login);
         if (!this.isCurrentUserLogged()){
             this.startSignInActivity();

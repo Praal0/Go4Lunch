@@ -26,11 +26,11 @@ public class MatesViewHolder extends RecyclerView.ViewHolder {
 
     public MatesViewHolder(@NonNull View itemView) {
         super(itemView);
-
-
+        mImageView = itemView.findViewById(R.id.mates_main_picture);
+        mTextView = itemView.findViewById(R.id.mates_textview_username);
     }
 
-    @SuppressLint("StringFormatInvalid")
+
     public void updateWithData(User results){
         RequestManager glide = Glide.with(itemView);
         if (!(results.getUrlPicture() == null)){
@@ -43,11 +43,11 @@ public class MatesViewHolder extends RecyclerView.ViewHolder {
             if (restaurantTask.isSuccessful()){
                 if (restaurantTask.getResult().size() == 1){ // User already booked a restaurant today
                     for (QueryDocumentSnapshot restaurant : restaurantTask.getResult()) {
-                        this.mTextView.setText(itemView.getResources().getString(R.string.mates_is_eating_at, results.getUsername(), restaurant.getData().get("restaurantName")));
+                        this.mTextView.setText(results.getUsername() + " " +itemView.getResources().getString(R.string.mates_is_eating_at) +" "+ restaurant.getData().get("restaurantName"));
                         this.changeTextColor(R.color.black);
                     }
                 }else{ // No restaurant booked for this user today
-                    this.mTextView.setText(itemView.getResources().getString(R.string.mates_hasnt_decided, results.getUsername()));
+                    this.mTextView.setText(results.getUsername() + " " +itemView.getResources().getString(R.string.mates_hasnt_decided));
                     this.changeTextColor(R.color.colorGray);
                 }
             }

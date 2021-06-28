@@ -10,7 +10,7 @@ import com.example.go4lunch.controller.activities.SettingActivity;
 
 import java.util.Calendar;
 
-public class  UploadWorker extends BroadcastReceiver {
+public class  UploadWorker extends BroadcastReceiver{
 
 
     @Override
@@ -30,6 +30,6 @@ public class  UploadWorker extends BroadcastReceiver {
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, 12);
 
-        manager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), SettingActivity.INTERVAL, pendingIntent);
+        manager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 }

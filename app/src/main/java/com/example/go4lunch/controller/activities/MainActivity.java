@@ -1,6 +1,7 @@
  package com.example.go4lunch.controller.activities;
 
  import android.content.Intent;
+ import android.content.pm.ActivityInfo;
  import android.os.Bundle;
  import android.text.TextUtils;
  import android.util.Log;
@@ -21,7 +22,7 @@
  import com.bumptech.glide.Glide;
  import com.bumptech.glide.request.RequestOptions;
  import com.example.go4lunch.R;
- import com.example.go4lunch.ViewModels.CommunicationViewModel;
+ import com.example.go4lunch.ViewModels.MatesViewModel;
  import com.example.go4lunch.api.RestaurantsHelper;
  import com.example.go4lunch.api.UserHelper;
  import com.example.go4lunch.base.BaseActivity;
@@ -50,10 +51,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private NavigationView mNavigationView;
     private BottomNavigationView bottomNav;
     private static final int SIGN_OUT_TASK = 10;
-    protected CommunicationViewModel mViewModel;
+    protected MatesViewModel mViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setSupportActionBar(toolbar);
@@ -181,7 +183,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void retrieveCurrentUser(){
-        mViewModel = new ViewModelProvider(this).get(CommunicationViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(MatesViewModel.class);
         mViewModel.updateCurrentUserUID(getCurrentUser().getUid());
         UserHelper.getUsersCollection().document(getCurrentUser().getUid()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override

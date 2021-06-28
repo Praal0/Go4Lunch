@@ -73,14 +73,12 @@ public class SettingActivity extends BaseActivity {
 
     private void retrieveUserSettings(){
         UserHelper.getUsersCollection().document(getCurrentUser().getUid()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
                     Log.e("TAG", "Listen failed.", e);
                     return;
                 }
-
                 if (documentSnapshot != null && documentSnapshot.exists()) {
                     Log.e("TAG", "Current data: " + documentSnapshot.getData());
                     if (documentSnapshot.getData().get("notification").equals(true)){
