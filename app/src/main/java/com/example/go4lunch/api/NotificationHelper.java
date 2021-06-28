@@ -30,7 +30,7 @@ public class NotificationHelper {
         //get calendar instance to be able to select what time notification should be scheduled
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY,15);
+        calendar.set(Calendar.MINUTE,1);
 
         //Setting intent to class where Alarm broadcast message will be handled
         Intent intent = new Intent(mContext, AlarmReceiver.class);

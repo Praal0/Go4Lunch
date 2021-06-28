@@ -1,7 +1,6 @@
 package com.example.go4lunch.controller.activities;
 
 import android.app.AlarmManager;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -67,8 +66,6 @@ public class SettingActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case android.R.id.home:
-                Intent homeIntent = new Intent(this, MainActivity.class);
-                startActivity(homeIntent);
                 finish();
         }
         return (super.onOptionsItemSelected(menuItem));
@@ -89,6 +86,7 @@ public class SettingActivity extends BaseActivity {
                     if (documentSnapshot.getData().get("notification").equals(true)){
                         mSwitch.setChecked(true);
                         mNotificationHelper.scheduleRepeatingNotification();
+
                     }else{
                         mSwitch.setChecked(false);
                         mNotificationHelper.cancelAlarmRTC();

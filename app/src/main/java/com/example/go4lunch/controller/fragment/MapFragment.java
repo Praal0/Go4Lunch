@@ -82,7 +82,6 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
         return view;
     }
 
-
     @Override
     public void onMapReady(@NonNull GoogleMap mMap) {
         googleMap = mMap;
@@ -156,7 +155,6 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
     public void onLowMemory() {
         super.onLowMemory();
         mMapView.onLowMemory();
-
     }
 
     // -------------------
@@ -219,11 +217,11 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
                 if (location !=null){
                     mViewModel.updateCurrentUserPosition(new LatLng(location.getLat(), location.getLng()));
                     googleMap.moveCamera(CameraUpdateFactory.newLatLng(this.mViewModel.getCurrentUserPosition()));
-                    googleMap.animateCamera(CameraUpdateFactory.zoomTo(13), 2000, null);
+                    googleMap.animateCamera(CameraUpdateFactory.zoomTo(12), 2000, null);
                     mViewModel.executeHttpRequestWithRetrofitPlaceStream(createObserver());
                 }
             }));
-        } else {
+        }else{
             EasyPermissions.requestPermissions(this,"Need permission for use MapView",
                     RC_LOCATION_CONTACTS_PERM, perms);
         }

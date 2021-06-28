@@ -25,12 +25,9 @@ public class     CommunicationViewModel extends ViewModel {
     private Disposable disposable;
 
 
-
-
     public LatLng getCurrentUserPosition(){
         return currentUserPosition.getValue();
     }
-
 
     public String getCurrentUserPositionFormatted(){
         String location = currentUserPosition.getValue().toString().replace("lat/lng: (", "");
@@ -41,11 +38,6 @@ public class     CommunicationViewModel extends ViewModel {
         currentUserUID.setValue(uid);
     }
 
-    public void executeHttpRequestWithRetrofitPlaceStream( DisposableObserver createObserver){
-        String location = getCurrentUserPosition().toString();
-        Log.e(TAG, "Location : "+location );
-        disposable = PlacesStreams.streamFetchNearbyPlaces(location, 1000, SEARCH_TYPE, API_KEY).subscribeWith(createObserver);
-    }
     public void executeHttpRequestWithRetrofit( DisposableObserver createObserver){
         String location = getCurrentUserPosition().toString();
         disposable = PlacesStreams.streamFetchPlaceInfo(location,1000,

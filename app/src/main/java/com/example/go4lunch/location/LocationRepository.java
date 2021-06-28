@@ -40,7 +40,6 @@ public class LocationRepository {
             callback = new LocationCallback() {
                 @Override
                 public void onLocationResult(@NonNull LocationResult locationResult) {
-
                     Location location = new Location(locationResult.getLastLocation().getLatitude(),locationResult.getLastLocation().getLongitude());
                     locationMutableLiveData.setValue(location);
                 }

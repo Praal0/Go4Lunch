@@ -26,7 +26,7 @@ public class MapViewModel extends ViewModel{
     @NonNull
     private static final String API_KEY = BuildConfig.API_KEY;
     private static final String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
-    private final MutableLiveData<LatLng> currentUserPosition = new MutableLiveData<>();
+    public  final MutableLiveData<LatLng> currentUserPosition = new MutableLiveData<>();
     private String SEARCH_TYPE = "restaurant";
     private  final MutableLiveData<String> currentUserUID = new MutableLiveData<>();
 
@@ -36,10 +36,12 @@ public class MapViewModel extends ViewModel{
     @NonNull
     private final LocationRepository locationRepository;
 
-    public void executeHttpRequestWithRetrofit( DisposableObserver createObserver){
-        String location = getCurrentUserPosition().toString();
-        disposable = PlacesStreams.streamFetchPlaceInfo(location,1000,
-                MapFragment.SEARCH_TYPE,MapFragment.API_KEY).subscribeWith(createObserver);
+    public void executeHttpRequestWithRetrofitFetchPlaceInfo( DisposableObserver createObserver){
+        if (getCurrentUserPosition() != null){
+            String location = getCurrentUserPositionFormatted();
+            Log.e(TAG, "Location : " + location);
+            disposable = PlacesStreams.streamFetchPlaceInfo(location,1000, MapFragment.SEARCH_TYPE,MapFragment.API_KEY).subscribeWith(createObserver);
+        }
     }
 
     public MapViewModel(
@@ -59,6 +61,15 @@ public class MapViewModel extends ViewModel{
         String location = currentUserPosition.getValue().toString().replace("lat/lng: (", "");
         return location.replace(")", "");
     }
+
+    public String getCurrentUserPositionF(){
+        if (getCurrentUserPosition() != null){
+            String location = getCurrentUserPositionFormatted();
+            return location.replace(")", "");
+        }else
+            return null;
+    }
+
 
     public void executeHttpRequestWithRetrofitPlaceStream(DisposableObserver createObserver) {
         if (getCurrentUserPosition() != null){
