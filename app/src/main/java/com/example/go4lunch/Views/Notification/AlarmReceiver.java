@@ -12,6 +12,7 @@ import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
+import com.example.go4lunch.BuildConfig;
 import com.example.go4lunch.R;
 import com.example.go4lunch.Utils.PlacesStreams;
 import com.example.go4lunch.controller.activities.MainActivity;
@@ -44,6 +45,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     private List<String> usersList;
     private String mRestaurantName;
     private String mRestaurantAddress;
+    private String API_KEY = BuildConfig.API_KEY;
 
 
     @Override
@@ -87,7 +89,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     }
 
     private void executeHttpRequestWithRetrofit(String placeId){
-        this.mDisposable = PlacesStreams.streamSimpleFetchPlaceInfo(placeId, MapFragment.API_KEY).subscribeWith(createObserver());
+        this.mDisposable = PlacesStreams.streamSimpleFetchPlaceInfo(placeId, API_KEY).subscribeWith(createObserver());
     }
 
     private <T> DisposableObserver<T> createObserver() {

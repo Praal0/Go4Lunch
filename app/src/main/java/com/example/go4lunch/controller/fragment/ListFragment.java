@@ -1,6 +1,8 @@
 package com.example.go4lunch.controller.fragment;
 
 import android.Manifest;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -12,14 +14,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.example.go4lunch.BuildConfig;
 import com.example.go4lunch.R;
 import com.example.go4lunch.Utils.ItemClickSupport;
+import com.example.go4lunch.Utils.PlacesStreams;
 import com.example.go4lunch.ViewModels.MapViewModel;
 import com.example.go4lunch.Views.RestaurantAdapter;
+import com.example.go4lunch.controller.activities.MainActivity;
 import com.example.go4lunch.controller.activities.PlaceDetailActivity;
 import com.example.go4lunch.injection.Injection;
 import com.example.go4lunch.injection.MapViewModelFactory;
@@ -32,14 +41,9 @@ import java.util.List;
 import io.reactivex.observers.DisposableObserver;
 import pub.devrel.easypermissions.EasyPermissions;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ListFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ListFragment extends BaseFragment implements EasyPermissions.PermissionCallbacks{
 
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private String API_KEY = BuildConfig.API_KEY;
     private RecyclerView mRecyclerView;
     private List<PlaceDetailsResults> mResults;
     private RestaurantAdapter adapter;
@@ -52,13 +56,7 @@ public class ListFragment extends BaseFragment implements EasyPermissions.Permis
         // Required empty public constructor
     }
 
-    public static ListFragment newInstance() {
-        ListFragment fragment = new ListFragment();
-        Bundle args = new Bundle();
 
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -94,6 +92,43 @@ public class ListFragment extends BaseFragment implements EasyPermissions.Permis
             @Override
             public void onComplete() { }
         };
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+        inflater.inflate(R.menu.toolbar_menu, menu);
+
+        SearchManager searchManager = (SearchManager) getContext().getSystemService(Context.SEARCH_SERVICE);
+
+        MenuItem item = menu.findItem(R.id.menu_search);
+        SearchView searchView = new SearchView(((MainActivity) getContext()).getSupportActionBar().getThemedContext());
+        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        item.setActionView(searchView);
+        searchView.setQueryHint(getResources().getString(R.string.toolbar_search_hint));
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(((MainActivity) getContext()).getComponentName()));
+
+        searchView.setIconifiedByDefault(false);// Do not iconify the widget; expand it by default
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if (query.length() > 2 ){
+                    PlacesStreams.streamFetchAutoCompleteInfo(query,mViewModel.getCurrentUserPositionFormatted(),10000,API_KEY).subscribeWith(createObserver());
+                }else{
+                    Toast.makeText(getContext(), getResources().getString(R.string.search_too_short), Toast.LENGTH_LONG).show();
+                }
+                return true;
+
+            }
+            @Override
+            public boolean onQueryTextChange(String query) {
+                if (query.length() > 2){
+                    PlacesStreams.streamFetchAutoCompleteInfo(query,mViewModel.getCurrentUserPositionFormatted(),10000,API_KEY).subscribeWith(createObserver());
+                }
+                return false;
+            }
+        });
     }
 
     // Configure item click on RecyclerView

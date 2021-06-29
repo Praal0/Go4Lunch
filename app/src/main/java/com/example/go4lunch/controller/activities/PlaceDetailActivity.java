@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.go4lunch.BuildConfig;
 import com.example.go4lunch.R;
 import com.example.go4lunch.Utils.PlacesStreams;
 import com.example.go4lunch.Views.DetailAdapter;
@@ -52,6 +53,7 @@ public class PlaceDetailActivity extends BaseActivity implements View.OnClickLis
     RatingBar mRatingBar;
     SliderLayout mDemoSlider;
 
+    private String API_KEY = BuildConfig.API_KEY;
 
     private static final double MAX_RATING = 5;
     private static final double MAX_STAR = 3;
@@ -192,7 +194,7 @@ public class PlaceDetailActivity extends BaseActivity implements View.OnClickLis
     // -------------------
 
     private void executeHttpRequestWithRetrofit(String placeId){
-        this.mDisposable = PlacesStreams.streamSimpleFetchPlaceInfo(placeId,MapFragment.API_KEY).subscribeWith(createObserver());
+        this.mDisposable = PlacesStreams.streamSimpleFetchPlaceInfo(placeId,API_KEY).subscribeWith(createObserver());
     }
 
     private <T> DisposableObserver<T> createObserver(){
@@ -272,7 +274,7 @@ public class PlaceDetailActivity extends BaseActivity implements View.OnClickLis
     private void showDisplaySlider(PlaceDetailsInfo results) {
         ArrayList<String> listUrl = new ArrayList<>();
         for (int i =0; i < results.getResult().getPhotos().size();i++){
-            String url = BASE_URL+"?maxheight="+MAX_HEIGHT_LARGE+"&photoreference="+results.getResult().getPhotos().get(i).getPhotoReference()+"&key="+ MapFragment.API_KEY;
+            String url = BASE_URL+"?maxheight="+MAX_HEIGHT_LARGE+"&photoreference="+results.getResult().getPhotos().get(i).getPhotoReference()+"&key="+ API_KEY;
             listUrl.add(url);
         }
         if (listUrl.size() == 1){

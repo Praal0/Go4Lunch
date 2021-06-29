@@ -127,7 +127,7 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
         // Display Photos
         if (!(results.getPhotos() == null)){
             if (!(results.getPhotos().isEmpty())){
-                glide.load(BASE_URL+"?maxwidth="+MAX_WIDTH+"&maxheight="+MAX_HEIGHT+"&photoreference="+results.getPhotos().get(0).getPhotoReference()+"&key="+ MapFragment.API_KEY).into(mMainPicture);
+                glide.load(BASE_URL+"?maxwidth="+MAX_WIDTH+"&maxheight="+MAX_HEIGHT+"&photoreference="+results.getPhotos().get(0).getPhotoReference()+"&key="+ API_KEY).into(mMainPicture);
             }
         }else{
             glide.load(R.drawable.ic_no_image_available).apply(RequestOptions.centerCropTransform()).into(mMainPicture);

@@ -36,7 +36,7 @@ public class MapViewModel extends ViewModel{
         if (getCurrentUserPosition() != null){
             String location = getCurrentUserPositionFormatted();
             Log.e(TAG, "Location : " + location);
-            PlacesStreams.streamFetchPlaceInfo(location, 1000, MapFragment.SEARCH_TYPE, MapFragment.API_KEY).subscribeWith(createObserver);
+            PlacesStreams.streamFetchPlaceInfo(location, 1000, MapFragment.SEARCH_TYPE, API_KEY).subscribeWith(createObserver);
         }
     }
 
