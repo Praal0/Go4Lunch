@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -51,6 +52,7 @@ public class ListFragment extends BaseFragment implements EasyPermissions.Permis
     private static final int RC_LOCATION_CONTACTS_PERM = 124;
 
     private MapViewModel mViewModel;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     public ListFragment() {
         // Required empty public constructor
@@ -71,12 +73,16 @@ public class ListFragment extends BaseFragment implements EasyPermissions.Permis
 
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         mRecyclerView = view.findViewById(R.id.list_recycler_view);
+        mSwipeRefreshLayout = view.findViewById(R.id.list_swipe_refresh);
         // Inflate the layout for this fragment
         refresh();
         setHasOptionsMenu(true);
         this.configureOnClickRecyclerView();
+        this.configureOnSwipeRefresh();
         return view;
     }
+
+
 
     private <T> DisposableObserver<T> createObserver(){
         return new DisposableObserver<T>() {
@@ -88,10 +94,16 @@ public class ListFragment extends BaseFragment implements EasyPermissions.Permis
             }
             @Override
             public void onError(Throwable e) {
+                getActivity().runOnUiThread(() -> mSwipeRefreshLayout.setRefreshing(false));
                 handleError(e);}
             @Override
             public void onComplete() { }
         };
+    }
+
+    private void executeHttpRequestWithRetrofit(){
+        mSwipeRefreshLayout.setRefreshing(true);
+        PlacesStreams.streamFetchPlaceInfo(mViewModel.getCurrentUserPositionFormatted(), 1000, MapFragment.SEARCH_TYPE,API_KEY).subscribeWith(createObserver());
     }
 
     @Override
@@ -142,6 +154,10 @@ public class ListFragment extends BaseFragment implements EasyPermissions.Permis
                 });
     }
 
+    private void configureOnSwipeRefresh() {
+        mSwipeRefreshLayout.setOnRefreshListener(this::executeHttpRequestWithRetrofit);
+    }
+
     private void configureRecyclerView() {
         this.mResults = new ArrayList<>();
         this.adapter = new RestaurantAdapter(this.mResults, mViewModel.getCurrentUserPositionF());
@@ -153,6 +169,7 @@ public class ListFragment extends BaseFragment implements EasyPermissions.Permis
     }
 
     private void updateUI(List<PlaceDetailsResults> results){
+        mSwipeRefreshLayout.setRefreshing(false);
         mResults.clear();
         if (results.size() > 0){
             mResults.addAll(results);

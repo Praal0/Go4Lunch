@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.go4lunch.R;
 import com.example.go4lunch.Utils.ItemClickSupport;
@@ -32,6 +33,7 @@ import java.util.List;
 public class MatesFragment extends BaseFragment {
 
     private RecyclerView mRecyclerView;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private List<User> mUsers;
     private MatesAdapter mMatesAdapter;
@@ -44,6 +46,7 @@ public class MatesFragment extends BaseFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_mates, container, false);
         mRecyclerView = view.findViewById(R.id.mates_recycler_view);
+        mSwipeRefreshLayout = view.findViewById(R.id.list_swipe_refresh);
 
         setHasOptionsMenu(true);
 
@@ -52,6 +55,7 @@ public class MatesFragment extends BaseFragment {
             configureRecyclerView();
             updateUIWhenCreating();
             configureOnClickRecyclerView();
+            configureOnSwipeRefresh();
         });
 
         return view;
@@ -78,6 +82,10 @@ public class MatesFragment extends BaseFragment {
         mRecyclerView.addItemDecoration(dividerItemDecoration);
     }
 
+    private void configureOnSwipeRefresh(){
+        mSwipeRefreshLayout.setOnRefreshListener(this::updateUIWhenCreating);
+    }
+
 
 
     // -----------------
@@ -88,7 +96,6 @@ public class MatesFragment extends BaseFragment {
     private void configureOnClickRecyclerView(){
         ItemClickSupport.addTo(mRecyclerView, R.layout.fragment_mates_item)
                 .setOnItemClickListener((recyclerView, position, v) -> {
-
                     User result = mMatesAdapter.getMates(position);
                     retrieveBookedRestaurantByUser(result);
                 });
@@ -120,8 +127,10 @@ public class MatesFragment extends BaseFragment {
 
     // Update UI when activity is creating
     private void updateUIWhenCreating(){
+        mSwipeRefreshLayout.setRefreshing(true);
         CollectionReference collectionReference = UserHelper.getUsersCollection();
         collectionReference.get().addOnCompleteListener(task -> {
+            mSwipeRefreshLayout.setRefreshing(false);
             if (task.isSuccessful()){
                 mUsers.clear();
                 for (QueryDocumentSnapshot document : task.getResult()) {
@@ -134,6 +143,7 @@ public class MatesFragment extends BaseFragment {
                     }
                 }
             }else {
+                getActivity().runOnUiThread(() -> mSwipeRefreshLayout.setRefreshing(false));
                 Log.e("TAG", "Error getting documents: ", task.getException());
             }
             mMatesAdapter.notifyDataSetChanged();
