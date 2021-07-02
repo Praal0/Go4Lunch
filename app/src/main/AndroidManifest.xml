@@ -8,10 +8,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
-        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:configChanges="orientation|screenSize"
         android:icon="@mipmap/ic_launcher"
@@ -19,10 +18,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Go4Lunch"
+        android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity
-            android:name=".controller.activities.WebActivity"
+            android:name=".controller.activities.SelecteChatActivity"
             android:theme="@style/Theme.Design.NoActionBar"/>
+        <activity
+            android:name=".controller.activities.WebActivity"
+            android:theme="@style/Theme.Design.NoActionBar" />
         <activity
             android:name=".controller.activities.SettingActivity"
             android:theme="@style/Theme.Design.NoActionBar" />
@@ -73,26 +76,19 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- NOTIFICATION SERVICE -->
+        </activity> <!-- NOTIFICATION SERVICE -->
         <receiver android:name=".Views.Notification.AlarmReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
-        </receiver>
-
-        <!-- Will not be called unless the application explicitly enables it -->
-        <receiver android:name=".Views.Notification.UploadWorker"
+        </receiver> <!-- Will not be called unless the application explicitly enables it -->
+        <receiver
+            android:name=".Views.Notification.UploadWorker"
             android:enabled="false">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
     </application>
-
-
-
 
 </manifest>

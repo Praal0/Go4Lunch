@@ -108,8 +108,6 @@ public class MatesFragment extends BaseFragment {
                     for (QueryDocumentSnapshot booking : bookingTask.getResult()){
                         showBookedRestaurantByUser(booking.getData().get("restaurantId").toString());
                     }
-                }else{
-
                 }
             }
         });

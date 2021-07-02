@@ -59,6 +59,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setSupportActionBar(toolbar);
+
         init();
         configureToolBar();
         initNavigationdrawer();
@@ -242,7 +243,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         int id = item.getItemId();
         switch (id){
             case R.id.nav_lunch :
-                RestaurantsHelper.getBooking(getCurrentUser().getUid(),getTodayDate()).addOnCompleteListener(bookingTask -> {
+                /*RestaurantsHelper.getBooking(getCurrentUser().getUid(),getTodayDate()).addOnCompleteListener(bookingTask -> {
                     if (bookingTask.isSuccessful()){
                         if (bookingTask.getResult().isEmpty()){
                             Toast.makeText(this, getResources().getString(R.string.drawer_no_restaurant_booked), Toast.LENGTH_SHORT).show();
@@ -255,7 +256,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         }
 
                     }
-                });
+                });*/
+                launchActivity(SelecteChatActivity.class,null);
                 break;
 
             case R.id.nav_setting:

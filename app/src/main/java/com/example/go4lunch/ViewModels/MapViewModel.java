@@ -1,6 +1,7 @@
 package com.example.go4lunch.ViewModels;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 
@@ -75,16 +76,10 @@ public class MapViewModel extends ViewModel{
 
         }
     }
-    public boolean checkLocationPermission(Context context) {
-        if (EasyPermissions.hasPermissions(context, perms)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 
+    @SuppressLint("MissingPermission")
     public void startLocationRequest(Context context) {
-        if (checkLocationPermission(context)) {
+        if (EasyPermissions.hasPermissions(context, perms)) {
             locationRepository.startLocationRequest();
         }
     }

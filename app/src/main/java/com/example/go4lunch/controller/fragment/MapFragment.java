@@ -5,6 +5,8 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
@@ -219,9 +221,14 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
                             MarkerOptions markerOptions = new MarkerOptions();
                             markerOptions.position(new LatLng(lat, lng));
                             if (restaurantTask.getResult().isEmpty()) { // If there is no booking for today
-                                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_place_unbook));
+                                Bitmap bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.baseline_place_unbook),
+                                        128,128,true);
+
+                                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
                             } else { // If there is booking for today
-                                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_place_booked));
+                                Bitmap bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.baseline_place_booked),
+                                        128,128,true);
+                                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
                             }
                             Marker marker = googleMap.addMarker(markerOptions);
                             marker.setTag(result.getResults().get(CurrentObject).getPlaceId());

@@ -6,15 +6,9 @@
     <string name="error_authentication_canceled">Authentification cancel&#8230;</string>
     <string name="error_no_internet">No internet connection!</string>
     <string name="error_unknown_error">An unknown error has occurred&#8230;</string>
-    <string name="connection_succeed">Authentification sucess !</string>
-    <string name="button_login_text_logged">Show profil</string>
-    <string name="button_login_text_not_logged">Connexion</string>
 
     <!-- LOGIN ACTIVITY -->
-    <string name="toolbar_title_login_activity">Your Profil</string>
-    <string name="text_input_username">User</string>
-    <string name="text_view_email">E-mail :</string>
-    <string name="info_no_email_found">email not found</string>
+    <string name="info_no_email_found">E-mail not found</string>
     <string name="info_no_username_found">Username no found</string>
 
     <!-- ERROR TEXT -->
@@ -27,7 +21,7 @@
     <!-- BOTTOM MENU -->
     <string name="bottom_menu_map">Map view</string>
     <string name="bottom_menu_list">List view</string>
-    <string name="bottom_menu_mates">Workmates</string>
+    <string name="bottom_menu_mates" translatable="false">Workmates</string>
     <string name="bottom_menu_chat">Chat</string>
 
 
@@ -37,17 +31,11 @@
 
 
     <!-- FACEBOOK PURPOSE -->
-    <string name="facebook_application_id">323231805859099</string>
-    <string name="fb_login_protocol_scheme">fb323231805859099</string>
+    <string name="facebook_application_id" translatable="false">323231805859099</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb323231805859099</string>
 
     <!-- SETTINGS ACTIVITY -->
-    <string name="settings_zoom_title">Default zoom on map</string>
-    <string name="settings_search_radius_title">Restaurants search radius</string>
-    <string name="settings_notification_title">Notifications</string>
-    <string name="settings_notification_text">Each day you will have a reminder for your restaurant\'s choice, if you have selected one</string>
-
-    <string name="settings_save_error_zoom">Minimum is %1$s, Maximum is %2$s</string>
-    <string name="settings_save_error_radius">Minimum is %1$s, Maximum is %2$s</string>
+    <string name="settings_notification_title" translatable="false">Notifications</string>
 
     <string name="settings_save_text">Save</string>
     <string name="settings_save_ok">Settings saved!</string>
@@ -63,12 +51,12 @@
     <string name="chat_no_image_chosen">No image selected</string>
 
     <string name="restaurant_item_website">website</string>
-    <string name="restaurant_item_like">like</string>
+    <string name="restaurant_item_like" translatable="false">like</string>
     <string name="restaurant_item_call">call</string>
     <string name="restaurant_detail_no_phone">No Phone</string>
     <string name="restaurant_detail_no_website">No website</string>
     <string name="restaurant_like_ok">This restaurant is now like</string>
-    <string name="restaurant_item_dislike">Dislike</string>
+    <string name="restaurant_item_dislike" translatable="false">Dislike</string>
     <string name="restaurant_like_ko">We cannot like this Restaurant</string>
     <string name="restaurant_dislike_ok">This restaurant is now dislike</string>
     <string name="restaurant_error_retrieving_info">error_retriving_info</string>
@@ -77,8 +65,8 @@
     <string name="toolbar_search_hint">search</string>
     <string name="search_too_short">too short</string>
 
-    <string name="hungry">I\'m hungry!</string>
-    <string name="workmates">Available workmates</string>
+    <string name="hungry" translatable="false">I\'m hungry!</string>
+    <string name="workmates" translatable="false">Available workmates</string>
     <string name="findPlace">Search</string>
     <string name="setting_update">"Settings is now updated ! "</string>
 
@@ -91,10 +79,10 @@
     <!-- RESTAURANT LIST -->
     <string name="restaurant_closed">Closed</string>
     <string name="restaurant_opening_not_know">Opening hours are not known</string>
-    <string name="list_unit_distance">%1$sm</string>
+    <string name="list_unit_distance" translatable="false">%1$sm</string>
     <string name="restaurant_open_until">Open until %1$s</string>
     <string name="restaurant_closing_soon">Closing soon (%1$s)</string>
-    <string name="restaurant_mates_number">(%1$d)</string>
+    <string name="restaurant_mates_number" translatable="false">(%1$d)</string>
 
 
     <!-- NOTIFICATION SERVICE -->
@@ -111,6 +99,7 @@
     <string name="drawer_no_restaurant_booked">No restaurant booked</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- TODO: Remove or change this placeholder text -->
 
 
 </resources>

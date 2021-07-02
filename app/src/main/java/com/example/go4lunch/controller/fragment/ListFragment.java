@@ -58,8 +58,6 @@ public class ListFragment extends BaseFragment implements EasyPermissions.Permis
         // Required empty public constructor
     }
 
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -181,7 +179,7 @@ public class ListFragment extends BaseFragment implements EasyPermissions.Permis
 
     public void refresh() {
         // No GPS permission
-        if (checkLocationPermission()) {
+        if (EasyPermissions.hasPermissions(getContext(), perms)) {
             mViewModel.startLocationRequest(getContext());
             mViewModel.getLocation().observe(getViewLifecycleOwner(),(location -> {
                 if (location !=null){
@@ -196,13 +194,7 @@ public class ListFragment extends BaseFragment implements EasyPermissions.Permis
         }
     }
 
-    private boolean checkLocationPermission() {
-        if (EasyPermissions.hasPermissions(getContext(), perms)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+
 
     @Override
     public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Go4Lunch</string>
+    <string name="toolbar_search_hint">recherche</string>
+    <string name="restaurant_detail_recyclerview">%1$s as rejoint!</string>
+    <string name="restaurant_dislike_ok">Ce restaurant n\'est plus liké</string>
+    <string name="restaurant_like_ko">Vous ne pouvez pas liké ce restaurant</string>
+    <string name="restaurant_like_ok">Vous avez liké ce restaurant</string>
+    <string name="restaurant_detail_no_website">Pas de site web</string>
+    <string name="restaurant_item_website">Site Web</string>
+    <string name="chat_no_image_chosen">Pas d\'image sélectionner</string>
+    <string name="chat_input_text_hint">Tchat</string>
+    <string name="navigation_drawer_open">Ouverture navigation drawer</string>
+    <string name="navigation_drawer_close">Fermeture navigation drawer</string>
+    <string name="logout">DECONNEXION</string>
+    <string name="lunch">TON DÉJEUNER</string>
+    <string name="settings_save_ok">Paramétres sauvegarder</string>
+    <string name="settings" translatable="false">PARAMETRES</string>
+    <string name="settings_save_text">Sauvegarder</string>
+    <string name="popup_title_perm_access">Cette application a besoin de l\'autorisations pour fonctionner correctement.</string>
+    <string name="popup_title_permission_files_access">Cette application a besoin de l\'autorisations pour acceder au images.</string>
+    <string name="bottom_menu_chat">Tchat</string>
+    <string name="restaurant_item_call">Appel</string>
+    <string name="restaurant_detail_no_phone">Pas de Téléphone</string>
+    <string name="search_too_short">trop court</string>
+    <string name="restaurant_error_retrieving_info">erreur lors de la reception des informations.</string>
+    <string name="notification_message_no_workmates">Aucun</string>
+    <string name="drawer_no_restaurant_booked">Pas de restaurant reservé</string>
+    <string name="notification_message">Voici un rappel de votre choix pour aujourd\'hui</string>
+    <string name="notification_message_big">Voici un rappel de votre choix pour aujourd\'hui : %1$s %2$s. Collaborateurs participants : %3$s</string>
+    <string name="mates_hasnt_decided">n\'a pas encore décidé</string>
+    <string name="mates_is_eating_at">mange au restaurant</string>
+    <string name="findPlace">Recherche</string>
+    <string name="setting_update">Paramétre est maintenant sauvegarder</string>
+    <string name="setting">Paramétres</string>
+    <string name="chatTitle">Tchat</string>
+    <string name="restaurant_cancel_booking">Réservation Annulée</string>
+    <string name="restaurant_change_booking">Reservation Modifié</string>
+    <string name="restaurant_new_booking">Nouvelle Réservation</string>
+    <string name="restaurant_closed">Fermé</string>
+    <string name="restaurant_opening_not_know">Les heures d\'ouverture ne sont pas connues</string>
+    <string name="restaurant_open_until">Ouvert jusqu\'au %1$s</string>
+    <string name="restaurant_closing_soon">Ferme Bientôt : (%1$s)</string>
+    <string name="error_not_connected">Vous devez vous connecter !</string>
+    <string name="no_restaurant_error_message">Aucun restaurant trouvé</string>
+    <string name="bottom_menu_map">Vue Carte</string>
+    <string name="bottom_menu_list">"Vue List "</string>
+    <string name="error_authentication_canceled">Authentification annulée&#8230;</string>
+    <string name="error_no_internet">Pas de connexion internet !</string>
+    <string name="error_unknown_error">Une erreur inconnue est survenue#8230;</string>
+    <string name="info_no_email_found">E-mail introuvable</string>
+    <string name="info_no_username_found">Nom de l\'utilisateur introuvable</string>
+    <string name="http_error_message">ExceptionHttp, Code d\'Erreur : %1$i</string>
+    <string name="timeout_error_message">Délai d\'attente de la demande, veuillez vérifier votre connexion Internet</string>
+    <string name="exception_error_message">Une erreur s\'est produite, veuillez vérifier votre connexion Internet</string>
+    <string name="generic_error_message">Aucun restaurant trouvé</string>
+</resources>
