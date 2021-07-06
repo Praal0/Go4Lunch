@@ -58,6 +58,10 @@ public class ListFragment extends BaseFragment implements EasyPermissions.Permis
         // Required empty public constructor
     }
 
+    public static ListFragment newInstance() {
+        return new ListFragment();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

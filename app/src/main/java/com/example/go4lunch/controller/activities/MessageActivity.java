@@ -1,12 +1,5 @@
 package com.example.go4lunch.controller.activities;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
@@ -18,7 +11,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -27,7 +27,6 @@ import com.example.go4lunch.Views.ChatAdapter;
 import com.example.go4lunch.api.MessageHelper;
 import com.example.go4lunch.api.UserHelper;
 import com.example.go4lunch.base.BaseActivity;
-import com.example.go4lunch.controller.activities.MainActivity;
 import com.example.go4lunch.models.Message;
 import com.example.go4lunch.models.User;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -36,24 +35,26 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
 
 import java.util.UUID;
 
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class ChatActivity extends BaseActivity implements  ChatAdapter.Listener{
-
-    private RecyclerView recyclerView;
-    private TextInputEditText editTextMessage;
-    private ImageView imageViewPreview;
+public class MessageActivity extends BaseActivity implements  ChatAdapter.Listener {
     private Toolbar mToolbar;
-    private ImageButton activity_chat_send_button, activity_chat_file_button;
+    private ImageView profileImageView;
+    private TextView profileTextView;
+    private Intent intent;
+    private String userId;
+    private RecyclerView recyclerView;
+    private ImageView imageViewPreview;
     private Uri uriImageSelected;
 
 
@@ -61,38 +62,66 @@ public class ChatActivity extends BaseActivity implements  ChatAdapter.Listener{
     private static final String PERMS = Manifest.permission.READ_EXTERNAL_STORAGE;
     private static final int RC_IMAGE_PERMS = 100;
     private static final int RC_CHOOSE_PHOTO = 200;
-    private ChatAdapter mChatAdapter;
+    private TextInputEditText editTextMessage;
+    private ImageButton activity_chat_send_button, activity_chat_file_button;
     private User modelCurrentUser;
+    private User modelReceiverUser;
+    private ChatAdapter mChatAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.activity_chat);
+        setContentView(R.layout.activity_message);
         initView();
-        this.configureRecyclerView();
-        this.configureToolbar();
-        this.getCurrentUserFromFirestore();
-        this.clickSendMessage();
-        this.clickAddFile();
+        configureRecyclerView();
+        configureToolbar();
+        updateUIWhenCreating();
+        getCurrentUserFromFirestore();
+        clickSendMessage();
+        clickAddFile();
     }
-
 
     private void initView() {
         recyclerView = findViewById(R.id.activity_chat_recycler_view);
         editTextMessage = findViewById(R.id.activity_chat_message_edit_text);
-        imageViewPreview = findViewById(R.id.activity_chat_image_chosen_preview);
         activity_chat_send_button = findViewById(R.id.activity_chat_send_button);
         activity_chat_file_button = findViewById(R.id.activity_chat_add_file_button);
-        mToolbar = findViewById(R.id.simple_toolbar);
-        mToolbar.setTitle(R.string.chatTitle);
+        profileImageView = findViewById(R.id.profil_image);
+        profileTextView = findViewById(R.id.profil_textView);
+        mToolbar = findViewById(R.id.toolbar);
     }
 
+    private void configureToolbar(){
+        setSupportActionBar(mToolbar);
+        ActionBar ab = getSupportActionBar();
+        ab.setTitle("");
+        ab.setHomeButtonEnabled(true);
+        ab.setDisplayHomeAsUpEnabled(true);
+
+        intent = getIntent();
+        userId = intent.getStringExtra("userId");
+
+    }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        // Calling the appropriate method after activity result
-        this.handleResponse(requestCode, resultCode, data);
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case android.R.id.home:
+                Intent homeIntent = new Intent(this, SelecteChatActivity.class);
+                startActivity(homeIntent);
+                finish();
+        }
+        return (super.onOptionsItemSelected(menuItem));
+    }
+
+    private void getCurrentUserFromFirestore(){
+        UserHelper.getUser(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                modelCurrentUser = documentSnapshot.toObject(User.class);
+            }
+        });
     }
 
     // --------------------
@@ -105,16 +134,9 @@ public class ChatActivity extends BaseActivity implements  ChatAdapter.Listener{
             public void onClick(View v) {
                 if (!TextUtils.isEmpty(editTextMessage.getText()) && modelCurrentUser != null) {
                     // Check if the ImageView is set
-                    if (imageViewPreview.getDrawable() == null) {
-                        // SEND A TEXT MESSAGE
-                        MessageHelper.createMessageForChat(editTextMessage.getText().toString(), modelCurrentUser,null).addOnFailureListener(onFailureListener());
-                        editTextMessage.setText("");
-                    } else {
-                        // SEND A IMAGE + TEXT IMAGE
-                        uploadPhotoInFirebaseAndSendMessage(editTextMessage.getText().toString());
-                        editTextMessage.setText("");
-                        imageViewPreview.setImageDrawable(null);
-                    }
+                    // SEND A TEXT MESSAGE
+                    MessageHelper.createMessageForChat(editTextMessage.getText().toString(), modelCurrentUser,modelReceiverUser).addOnFailureListener(onFailureListener());
+                    editTextMessage.setText("");
                 }
             }
         });
@@ -129,52 +151,7 @@ public class ChatActivity extends BaseActivity implements  ChatAdapter.Listener{
         });
     }
 
-
-
-    // ---------------------
-    // CONFIGURATION
-    // ---------------------
-
-    private void configureToolbar(){
-        setSupportActionBar(mToolbar);
-        ActionBar ab = getSupportActionBar();
-        ab.setHomeButtonEnabled(true);
-        ab.setDisplayHomeAsUpEnabled(true);
-
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem menuItem) {
-        switch (menuItem.getItemId()) {
-            case android.R.id.home:
-                Intent homeIntent = new Intent(this, MainActivity.class);
-                startActivity(homeIntent);
-                finish();
-        }
-        return (super.onOptionsItemSelected(menuItem));
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        // Forward results to EasyPermissions
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
-    }
-
-    // --------------------
-    // REST REQUESTS
-    // --------------------
-
-    private void getCurrentUserFromFirestore(){
-        UserHelper.getUser(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                modelCurrentUser = documentSnapshot.toObject(User.class);
-            }
-        });
-    }
-
-    private void uploadPhotoInFirebaseAndSendMessage(final String message) {
+    private void uploadPhotoInFirebaseAndSendMessage(String message) {
         String uuid = UUID.randomUUID().toString(); // GENERATE UNIQUE STRING
         //  UPLOAD TO GCS
         final StorageReference mImageRef = FirebaseStorage.getInstance().getReference(uuid);
@@ -195,7 +172,7 @@ public class ChatActivity extends BaseActivity implements  ChatAdapter.Listener{
             public void onComplete(@NonNull Task<Uri> task) {
                 if (task.isSuccessful()) {
                     Uri downloadUri = task.getResult();
-                    MessageHelper.createMessageWithImageForChat(downloadUri.toString(), message, modelCurrentUser,null).addOnFailureListener(onFailureListener());
+                    MessageHelper.createMessageWithImageForChat(downloadUri.toString(), message, modelCurrentUser,modelReceiverUser).addOnFailureListener(onFailureListener());
                 } else {
                     Log.e("CHAT_ACTIVITY_TAG", "Error ON_COMPLETE : " + task.getException() );
                 }
@@ -207,16 +184,27 @@ public class ChatActivity extends BaseActivity implements  ChatAdapter.Listener{
     // UI
     // --------------------
 
-    private void configureRecyclerView(){
-        this.mChatAdapter = new ChatAdapter(generateOptionsForAdapter(MessageHelper.getAllMessageForChat()), Glide.with(this), this, this.getCurrentUser().getUid());
-        mChatAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onItemRangeInserted(int positionStart, int itemCount) {
-                recyclerView.smoothScrollToPosition(mChatAdapter.getItemCount()); // Scroll to bottom on new messages
+    // Update UI when activity is creating
+    private void updateUIWhenCreating(){
+        CollectionReference collectionReference = UserHelper.getUsersCollection();
+        collectionReference.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    if (document.getData().get("uid").toString().equals(userId)){
+                        modelReceiverUser = document.toObject(User.class);
+                        profileTextView.setText(document.getData().get("username").toString());
+                        Glide.with(MessageActivity.this).load(document.getData().get("urlPicture").toString())
+                                .apply(RequestOptions.circleCropTransform()).into(profileImageView);
+                    }
+                }
+            }else {
+                Log.e("TAG", "Error getting documents: ", task.getException());
             }
         });
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(this.mChatAdapter);
+    }
+
+    private void configureRecyclerView(){
+
     }
 
 
@@ -255,12 +243,14 @@ public class ChatActivity extends BaseActivity implements  ChatAdapter.Listener{
             }
         }
     }
-    
+
+
     // --------------------
     // CALLBACK
     // --------------------
 
     @Override
     public void onDataChanged() {
+
     }
 }

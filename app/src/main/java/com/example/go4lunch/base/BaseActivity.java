@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -47,16 +49,23 @@ public class BaseActivity extends AppCompatActivity {
         return df.format(c.getTime());
     }
 
-
-    public void setAppLocal(String localCode){
-        Locale locale = new Locale(localCode);
+    public void setLocale(String languageCode) {
+        Locale locale = new Locale(languageCode);
         Locale.setDefault(locale);
         Configuration configuration = new Configuration();
-        configuration.setLocale(locale);
-        getApplicationContext().getResources().updateConfiguration(configuration,getApplicationContext().getResources().getDisplayMetrics());
+        configuration.locale = locale;
+        getBaseContext().getResources().updateConfiguration(configuration,getBaseContext().getResources().getDisplayMetrics());
+        // save data to shared preference
+        SharedPreferences.Editor editor = getSharedPreferences("Settings",MODE_PRIVATE).edit();
+        editor.putString("My_Lang",languageCode);
+        editor.apply();
     }
 
-
+    public void loadLocale(){
+        SharedPreferences preferences =  getSharedPreferences("Settings",Activity.MODE_PRIVATE);
+        String language = preferences.getString("My_Lang","");
+        setLocale(language);
+    }
 
     // --------------------
     // ERROR HANDLER

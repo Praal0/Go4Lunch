@@ -21,6 +21,10 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity
+            android:name=".controller.activities.MessageActivity"
+            android:theme="@style/Theme.Design.NoActionBar" />
+
+        <activity
             android:name=".controller.activities.SelecteChatActivity"
             android:theme="@style/Theme.Design.NoActionBar"/>
         <activity

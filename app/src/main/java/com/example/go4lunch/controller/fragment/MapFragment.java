@@ -71,6 +71,10 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
         mViewModel = new ViewModelProvider(this, mapViewModelFactory).get(MapViewModel.class);
     }
 
+    public static MapFragment newInstance() {
+        return new MapFragment();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);

@@ -8,6 +8,7 @@
     tools:context=".controller.activities.SettingActivity">
 
     <include
+        android:id="@+id/include"
         layout="@layout/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
@@ -32,11 +33,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_to_parent"
+        android:layout_marginTop="464dp"
         android:backgroundTint="@color/colorPrimaryDark"
         android:text="@string/settings_save_text"
         android:textColor="@color/colorWhite"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settings_switch"
+        app:layout_constraintTop_toBottomOf="@+id/langue_btn"
         tools:targetApi="lollipop" />
+
+    <Button
+        android:id="@+id/langue_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="41dp"
+        android:layout_marginTop="104dp"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:text="@string/settings_language_text"
+        android:textColor="@color/colorWhite"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,7 +1,10 @@
  package com.example.go4lunch.controller.activities;
 
+ import android.app.Activity;
  import android.content.Intent;
+ import android.content.SharedPreferences;
  import android.content.pm.ActivityInfo;
+ import android.content.res.Configuration;
  import android.os.Bundle;
  import android.text.TextUtils;
  import android.util.Log;
@@ -10,20 +13,19 @@
  import android.view.View;
  import android.widget.ImageView;
  import android.widget.TextView;
- import android.widget.Toast;
 
  import androidx.appcompat.app.ActionBarDrawerToggle;
  import androidx.appcompat.widget.Toolbar;
  import androidx.core.view.GravityCompat;
  import androidx.drawerlayout.widget.DrawerLayout;
  import androidx.fragment.app.Fragment;
+ import androidx.fragment.app.FragmentTransaction;
  import androidx.lifecycle.ViewModelProvider;
 
  import com.bumptech.glide.Glide;
  import com.bumptech.glide.request.RequestOptions;
  import com.example.go4lunch.R;
  import com.example.go4lunch.ViewModels.MatesViewModel;
- import com.example.go4lunch.api.RestaurantsHelper;
  import com.example.go4lunch.api.UserHelper;
  import com.example.go4lunch.base.BaseActivity;
  import com.example.go4lunch.controller.fragment.ListFragment;
@@ -36,9 +38,8 @@
  import com.google.firebase.firestore.DocumentSnapshot;
  import com.google.firebase.firestore.EventListener;
  import com.google.firebase.firestore.FirebaseFirestoreException;
- import com.google.firebase.firestore.QueryDocumentSnapshot;
 
- import java.util.HashMap;
+ import java.util.Locale;
  import java.util.Map;
 
  import jp.wasabeef.glide.transformations.BlurTransformation;
@@ -57,9 +58,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     protected void onCreate(Bundle savedInstanceState) {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
         super.onCreate(savedInstanceState);
+        loadLocale();
         setContentView(R.layout.activity_main);
         setSupportActionBar(toolbar);
-
         init();
         configureToolBar();
         initNavigationdrawer();
@@ -68,8 +69,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         updateUIWhenCreating();
         retrieveCurrentUser();
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_view,new MapFragment()).commit();
-
     }
+
+
 
     // --------------------
     // ACTIONS
@@ -113,6 +115,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             }
         }
         startActivity(intent);
+        finish();
     }
 
     // ---------------------
@@ -142,21 +145,21 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     private void configureBottomNav() {
         bottomNav.setOnItemSelectedListener(item -> {
-            Fragment selectedFragment = null;
+            Fragment newFragment = new Fragment();
             switch (item.getItemId()) {
                 case R.id.nav_map:
                     toolbar.setTitle(R.string.hungry);
-                    selectedFragment = new MapFragment();
+                    newFragment = MapFragment.newInstance();
                     break;
 
                 case R.id.nav_list:
                     toolbar.setTitle(R.string.hungry);
-                    selectedFragment = new ListFragment();
+                    newFragment = ListFragment.newInstance();
                     break;
 
                 case R.id.nav_workmates:
                     toolbar.setTitle(R.string.workmates);
-                    selectedFragment = new MatesFragment();
+                    newFragment = new MatesFragment();
                     break;
 
                 case R.id.nav_tchat:
@@ -164,8 +167,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     toolbar.setTitle(R.string.chatTitle);
                     break;
             }
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_view,
-                    selectedFragment).commit();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            // Replace whatever is in the fragment_container view with this fragment,
+            // and add the transaction to the back stack if needed
+            transaction.replace(R.id.fragment_view, newFragment);
+            transaction.addToBackStack(null);
+            // Commit the transaction
+            transaction.commit();
             return true;
         });
     }

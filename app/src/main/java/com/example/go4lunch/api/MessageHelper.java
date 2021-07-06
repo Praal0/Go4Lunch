@@ -15,19 +15,19 @@ public class MessageHelper {
 
     private static final String COLLECTION_NAME = "messages";
 
-    public static Task<DocumentReference> createMessageForChat(String textMessage, User userSender){
+    public static Task<DocumentReference> createMessageForChat(String textMessage, User userSender,User userReceiver){
         // Create the Message object
-        Message message = new Message(textMessage, userSender, Calendar.getInstance().getTime());
+        Message message = new Message(textMessage, userSender,userReceiver, Calendar.getInstance().getTime());
 
         // Store Message to Firestore
         return ChatHelper.getChatCollection()
                 .add(message);
     }
 
-    public static Task<DocumentReference> createMessageWithImageForChat(String urlImage, String textMessage, User userSender){
+    public static Task<DocumentReference> createMessageWithImageForChat(String urlImage, String textMessage, User userSender,User userReceiver){
 
         // Creating Message with the URL image
-        Message message = new Message(textMessage, urlImage, userSender, Calendar.getInstance().getTime());
+        Message message = new Message(textMessage, urlImage, userSender,userReceiver, Calendar.getInstance().getTime());
 
         // Storing Message on Firestore
         return ChatHelper.getChatCollection()
