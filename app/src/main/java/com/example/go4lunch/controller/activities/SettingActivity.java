@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -59,12 +60,15 @@ public class SettingActivity extends BaseActivity {
         btnSave = findViewById(R.id.settings_save);
         btnLanguage = findViewById(R.id.langue_btn);
         mSwitch = findViewById(R.id.settings_switch);
-        mToolbar = findViewById(R.id.simple_toolbar);
+        mToolbar = findViewById(R.id.toolbar_setting);
     }
 
     private void configureToolbar(){
         setSupportActionBar(mToolbar);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar ab = getSupportActionBar();
+        ab.setTitle(R.string.setting);
+        ab.setHomeButtonEnabled(true);
+        ab.setDisplayHomeAsUpEnabled(true);
     }
 
 
@@ -77,9 +81,20 @@ public class SettingActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case android.R.id.home:
+                Intent homeIntent = new Intent(this, MainActivity.class);
+                startActivity(homeIntent);
                 finish();
         }
         return (super.onOptionsItemSelected(menuItem));
+    }
+
+    // When we use back button of phone
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent homeIntent = new Intent(this, MainActivity.class);
+        startActivity(homeIntent);
+        finish();
     }
 
     private void retrieveUserSettings(){
@@ -94,6 +109,7 @@ public class SettingActivity extends BaseActivity {
                     Log.e("TAG", "Current data: " + documentSnapshot.getData());
                     if (documentSnapshot.getData().get("notification").equals(true)){
                         mSwitch.setChecked(true);
+                        mNotificationHelper.cancelAlarmRTC();
                         mNotificationHelper.scheduleRepeatingNotification();
 
                     }else{
@@ -137,13 +153,11 @@ public class SettingActivity extends BaseActivity {
                         switch (which){
                             case 0 :
                                 setLocale("fr");
-                                Snackbar.make(v, "L'application est maintenant en Français", Snackbar.LENGTH_SHORT).show();
                                 recreate();
                                 break;
 
                             case 1 :
                                 setLocale("en");
-                                Snackbar.make(v, "Application is now in English", Snackbar.LENGTH_SHORT).show();
                                 recreate();
                                 break;
 

@@ -50,9 +50,7 @@ public class LoginActivity extends BaseActivity {
     // UTILS
     // --------------------
     private void handleResponseAfterSignIn(int requestCode, int resultCode, Intent data){
-
         IdpResponse response = IdpResponse.fromResultIntent(data);
-
         if (requestCode == RC_SIGN_IN) {
             if (resultCode == RESULT_OK) { // SUCCESS
                 this.createUserInFirestone();

@@ -13,7 +13,7 @@ import java.util.Date;
 
 public class MessageHelper {
 
-    private static final String COLLECTION_NAME = "messages";
+
 
     public static Task<DocumentReference> createMessageForChat(String textMessage, User userSender,User userReceiver){
         // Create the Message object

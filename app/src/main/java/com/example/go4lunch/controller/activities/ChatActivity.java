@@ -1,7 +1,6 @@
 package com.example.go4lunch.controller.activities;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,11 +22,10 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.go4lunch.R;
-import com.example.go4lunch.Views.ChatAdapter;
+import com.example.go4lunch.Views.MessageAdapter;
 import com.example.go4lunch.api.MessageHelper;
 import com.example.go4lunch.api.UserHelper;
 import com.example.go4lunch.base.BaseActivity;
-import com.example.go4lunch.controller.activities.MainActivity;
 import com.example.go4lunch.models.Message;
 import com.example.go4lunch.models.User;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -47,7 +45,7 @@ import java.util.UUID;
 
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class ChatActivity extends BaseActivity implements  ChatAdapter.Listener{
+public class ChatActivity extends BaseActivity implements  MessageAdapter.Listener{
 
     private RecyclerView recyclerView;
     private TextInputEditText editTextMessage;
@@ -61,13 +59,12 @@ public class ChatActivity extends BaseActivity implements  ChatAdapter.Listener{
     private static final String PERMS = Manifest.permission.READ_EXTERNAL_STORAGE;
     private static final int RC_IMAGE_PERMS = 100;
     private static final int RC_CHOOSE_PHOTO = 200;
-    private ChatAdapter mChatAdapter;
+    private MessageAdapter mMessageAdapter;
     private User modelCurrentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.activity_chat);
         initView();
         this.configureRecyclerView();
         this.configureToolbar();
@@ -80,7 +77,6 @@ public class ChatActivity extends BaseActivity implements  ChatAdapter.Listener{
     private void initView() {
         recyclerView = findViewById(R.id.activity_chat_recycler_view);
         editTextMessage = findViewById(R.id.activity_chat_message_edit_text);
-        imageViewPreview = findViewById(R.id.activity_chat_image_chosen_preview);
         activity_chat_send_button = findViewById(R.id.activity_chat_send_button);
         activity_chat_file_button = findViewById(R.id.activity_chat_add_file_button);
         mToolbar = findViewById(R.id.simple_toolbar);
@@ -208,15 +204,15 @@ public class ChatActivity extends BaseActivity implements  ChatAdapter.Listener{
     // --------------------
 
     private void configureRecyclerView(){
-        this.mChatAdapter = new ChatAdapter(generateOptionsForAdapter(MessageHelper.getAllMessageForChat()), Glide.with(this), this, this.getCurrentUser().getUid());
-        mChatAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+        this.mMessageAdapter = new MessageAdapter(generateOptionsForAdapter(MessageHelper.getAllMessageForChat()), Glide.with(this), this, this.getCurrentUser().getUid());
+        mMessageAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
-                recyclerView.smoothScrollToPosition(mChatAdapter.getItemCount()); // Scroll to bottom on new messages
+                recyclerView.smoothScrollToPosition(mMessageAdapter.getItemCount()); // Scroll to bottom on new messages
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(this.mChatAdapter);
+        recyclerView.setAdapter(this.mMessageAdapter);
     }
 
 

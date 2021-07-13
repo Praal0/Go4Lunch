@@ -13,6 +13,7 @@
  import android.view.View;
  import android.widget.ImageView;
  import android.widget.TextView;
+ import android.widget.Toast;
 
  import androidx.appcompat.app.ActionBarDrawerToggle;
  import androidx.appcompat.widget.Toolbar;
@@ -26,11 +27,13 @@
  import com.bumptech.glide.request.RequestOptions;
  import com.example.go4lunch.R;
  import com.example.go4lunch.ViewModels.MatesViewModel;
+ import com.example.go4lunch.api.RestaurantsHelper;
  import com.example.go4lunch.api.UserHelper;
  import com.example.go4lunch.base.BaseActivity;
  import com.example.go4lunch.controller.fragment.ListFragment;
  import com.example.go4lunch.controller.fragment.MapFragment;
  import com.example.go4lunch.controller.fragment.MatesFragment;
+ import com.example.go4lunch.controller.fragment.UsersFragment;
  import com.firebase.ui.auth.AuthUI;
  import com.google.android.gms.tasks.OnSuccessListener;
  import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -38,7 +41,9 @@
  import com.google.firebase.firestore.DocumentSnapshot;
  import com.google.firebase.firestore.EventListener;
  import com.google.firebase.firestore.FirebaseFirestoreException;
+ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+ import java.util.HashMap;
  import java.util.Locale;
  import java.util.Map;
 
@@ -163,8 +168,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     break;
 
                 case R.id.nav_tchat:
-                    launchActivity(ChatActivity.class,null);
                     toolbar.setTitle(R.string.chatTitle);
+                    newFragment = new UsersFragment();
                     break;
             }
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -188,6 +193,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+            finish();
         }
     }
 
@@ -251,7 +257,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         int id = item.getItemId();
         switch (id){
             case R.id.nav_lunch :
-                /*RestaurantsHelper.getBooking(getCurrentUser().getUid(),getTodayDate()).addOnCompleteListener(bookingTask -> {
+                RestaurantsHelper.getBooking(getCurrentUser().getUid(),getTodayDate()).addOnCompleteListener(bookingTask -> {
                     if (bookingTask.isSuccessful()){
                         if (bookingTask.getResult().isEmpty()){
                             Toast.makeText(this, getResources().getString(R.string.drawer_no_restaurant_booked), Toast.LENGTH_SHORT).show();
@@ -264,8 +270,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         }
 
                     }
-                });*/
-                launchActivity(SelecteChatActivity.class,null);
+                });
                 break;
 
             case R.id.nav_setting:

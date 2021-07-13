@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -29,6 +28,7 @@ import com.example.go4lunch.Utils.ItemClickSupport;
 import com.example.go4lunch.Utils.PlacesStreams;
 import com.example.go4lunch.ViewModels.MapViewModel;
 import com.example.go4lunch.Views.RestaurantAdapter;
+import com.example.go4lunch.base.BaseFragment;
 import com.example.go4lunch.controller.activities.MainActivity;
 import com.example.go4lunch.controller.activities.PlaceDetailActivity;
 import com.example.go4lunch.injection.Injection;
@@ -128,7 +128,7 @@ public class ListFragment extends BaseFragment implements EasyPermissions.Permis
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if (query.length() > 2 ){
-                    PlacesStreams.streamFetchAutoCompleteInfo(query,mViewModel.getCurrentUserPositionFormatted(),10000,API_KEY).subscribeWith(createObserver());
+                    PlacesStreams.streamFetchAutoCompleteInfo(query,mViewModel.getCurrentUserPositionFormatted(),1000,API_KEY).subscribeWith(createObserver());
                 }else{
                     Toast.makeText(getContext(), getResources().getString(R.string.search_too_short), Toast.LENGTH_LONG).show();
                 }
@@ -138,7 +138,7 @@ public class ListFragment extends BaseFragment implements EasyPermissions.Permis
             @Override
             public boolean onQueryTextChange(String query) {
                 if (query.length() > 2){
-                    PlacesStreams.streamFetchAutoCompleteInfo(query,mViewModel.getCurrentUserPositionFormatted(),10000,API_KEY).subscribeWith(createObserver());
+                    PlacesStreams.streamFetchAutoCompleteInfo(query,mViewModel.getCurrentUserPositionFormatted(),1000,API_KEY).subscribeWith(createObserver());
                 }
                 return false;
             }

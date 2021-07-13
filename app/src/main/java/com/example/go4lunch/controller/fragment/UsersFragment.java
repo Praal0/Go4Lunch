@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -19,6 +21,7 @@ import com.example.go4lunch.Utils.ItemClickSupport;
 import com.example.go4lunch.ViewModels.MatesViewModel;
 import com.example.go4lunch.Views.UserAdapter;
 import com.example.go4lunch.api.UserHelper;
+import com.example.go4lunch.base.BaseFragment;
 import com.example.go4lunch.controller.activities.MessageActivity;
 import com.example.go4lunch.models.User;
 import com.google.firebase.firestore.CollectionReference;
@@ -28,7 +31,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class UsersFragment extends Fragment {
+public class UsersFragment extends BaseFragment {
+    public static final String USER_DATA = "user";
+
     private RecyclerView mRecyclerView;
     private List<User> mUsers;
     private UserAdapter mUserAdapter;
@@ -57,6 +62,12 @@ public class UsersFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+    }
+
     // -----------------
     // CONFIGURATION
     // -----------------
@@ -81,9 +92,8 @@ public class UsersFragment extends Fragment {
         ItemClickSupport.addTo(mRecyclerView, R.layout.fragment_mates_item)
                 .setOnItemClickListener((recyclerView, position, v) -> {
                     Intent intent = new Intent(getContext(), MessageActivity.class);
-                    intent.putExtra("userId",mUserAdapter.getMates(position).getUid());
+                    intent.putExtra(USER_DATA,mUserAdapter.getMates(position));
                     startActivity(intent);
-
                 });
     }
 
@@ -94,7 +104,7 @@ public class UsersFragment extends Fragment {
             if (task.isSuccessful()){
                 mUsers.clear();
                 for (QueryDocumentSnapshot document : task.getResult()) {
-                    if (!(mViewModel.getCurrentUserUID().equals(document.getData().get("uid").toString()))){
+                    if (!(getCurrentUser().getUid().toString().equals(document.getData().get("uid").toString()))){
                         String uid = document.getData().get("uid").toString();
                         String username = document.getData().get("username").toString();
                         String urlPicture = document.getData().get("urlPicture").toString();

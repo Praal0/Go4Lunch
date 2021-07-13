@@ -25,9 +25,6 @@
             android:theme="@style/Theme.Design.NoActionBar" />
 
         <activity
-            android:name=".controller.activities.SelecteChatActivity"
-            android:theme="@style/Theme.Design.NoActionBar"/>
-        <activity
             android:name=".controller.activities.WebActivity"
             android:theme="@style/Theme.Design.NoActionBar" />
         <activity

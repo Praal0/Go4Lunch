@@ -106,6 +106,15 @@ public class PlaceDetailActivity extends BaseActivity implements View.OnClickLis
     // CONFIGURATION
     // -----------------
 
+    // When we use back button of phone
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent homeIntent = new Intent(this, MainActivity.class);
+        startActivity(homeIntent);
+        finish();
+    }
+
     private void disposeWhenDestroy(){
         if (this.mDisposable != null && !this.mDisposable.isDisposed()) this.mDisposable.dispose();
     }

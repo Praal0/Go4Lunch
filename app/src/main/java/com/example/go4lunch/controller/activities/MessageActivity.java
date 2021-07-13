@@ -1,6 +1,7 @@
 package com.example.go4lunch.controller.activities;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,9 +22,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.go4lunch.R;
-import com.example.go4lunch.Views.ChatAdapter;
+import com.example.go4lunch.Views.MessageAdapter;
 import com.example.go4lunch.api.MessageHelper;
 import com.example.go4lunch.api.UserHelper;
 import com.example.go4lunch.base.BaseActivity;
@@ -35,10 +37,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -47,26 +47,29 @@ import java.util.UUID;
 
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class MessageActivity extends BaseActivity implements  ChatAdapter.Listener {
+import static com.example.go4lunch.controller.fragment.UsersFragment.USER_DATA;
+
+public class MessageActivity extends BaseActivity implements  MessageAdapter.Listener {
     private Toolbar mToolbar;
     private ImageView profileImageView;
     private TextView profileTextView;
     private Intent intent;
-    private String userId;
     private RecyclerView recyclerView;
     private ImageView imageViewPreview;
     private Uri uriImageSelected;
+    private TextInputEditText editTextMessage;
+    private ImageButton activity_chat_send_button, activity_chat_file_button;
 
 
     // FOR DATA
     private static final String PERMS = Manifest.permission.READ_EXTERNAL_STORAGE;
     private static final int RC_IMAGE_PERMS = 100;
     private static final int RC_CHOOSE_PHOTO = 200;
-    private TextInputEditText editTextMessage;
-    private ImageButton activity_chat_send_button, activity_chat_file_button;
     private User modelCurrentUser;
+    private User userReceiver;
     private User modelReceiverUser;
-    private ChatAdapter mChatAdapter;
+    private String userSenderId,userReceiverId;
+    private MessageAdapter mMessageAdapter;
 
 
     @Override
@@ -100,16 +103,14 @@ public class MessageActivity extends BaseActivity implements  ChatAdapter.Listen
         ab.setDisplayHomeAsUpEnabled(true);
 
         intent = getIntent();
-        userId = intent.getStringExtra("userId");
-
+        userReceiver = intent.getParcelableExtra(USER_DATA);
+        userReceiverId = userReceiver.getUid();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case android.R.id.home:
-                Intent homeIntent = new Intent(this, SelecteChatActivity.class);
-                startActivity(homeIntent);
                 finish();
         }
         return (super.onOptionsItemSelected(menuItem));
@@ -120,6 +121,7 @@ public class MessageActivity extends BaseActivity implements  ChatAdapter.Listen
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 modelCurrentUser = documentSnapshot.toObject(User.class);
+                userSenderId = modelCurrentUser.getUid();
             }
         });
     }
@@ -134,13 +136,21 @@ public class MessageActivity extends BaseActivity implements  ChatAdapter.Listen
             public void onClick(View v) {
                 if (!TextUtils.isEmpty(editTextMessage.getText()) && modelCurrentUser != null) {
                     // Check if the ImageView is set
-                    // SEND A TEXT MESSAGE
-                    MessageHelper.createMessageForChat(editTextMessage.getText().toString(), modelCurrentUser,modelReceiverUser).addOnFailureListener(onFailureListener());
-                    editTextMessage.setText("");
+                    if (imageViewPreview.getDrawable() == null) {
+                        // SEND A TEXT MESSAGE
+                        MessageHelper.createMessageForChat(editTextMessage.getText().toString(), modelCurrentUser,null).addOnFailureListener(onFailureListener());
+                        editTextMessage.setText("");
+                    } else {
+                        // SEND A IMAGE + TEXT IMAGE
+                        uploadPhotoInFirebaseAndSendMessage(editTextMessage.getText().toString());
+                        editTextMessage.setText("");
+                        imageViewPreview.setImageDrawable(null);
+                    }
                 }
             }
         });
     }
+
 
     private void clickAddFile() {
         activity_chat_file_button.setOnClickListener(new View.OnClickListener() {
@@ -185,28 +195,15 @@ public class MessageActivity extends BaseActivity implements  ChatAdapter.Listen
     // --------------------
 
     // Update UI when activity is creating
+    @SuppressLint("CheckResult")
     private void updateUIWhenCreating(){
-        CollectionReference collectionReference = UserHelper.getUsersCollection();
-        collectionReference.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()){
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                    if (document.getData().get("uid").toString().equals(userId)){
-                        modelReceiverUser = document.toObject(User.class);
-                        profileTextView.setText(document.getData().get("username").toString());
-                        Glide.with(MessageActivity.this).load(document.getData().get("urlPicture").toString())
-                                .apply(RequestOptions.circleCropTransform()).into(profileImageView);
-                    }
-                }
-            }else {
-                Log.e("TAG", "Error getting documents: ", task.getException());
-            }
-        });
+        profileTextView.setText(userReceiver.getUsername().toString());
+        Glide.with(MessageActivity.this).load(userReceiver.getUrlPicture())
+                .apply(RequestOptions.circleCropTransform()).into(profileImageView);
     }
 
     private void configureRecyclerView(){
-
     }
-
 
     private FirestoreRecyclerOptions<Message> generateOptionsForAdapter(Query query){
         return new FirestoreRecyclerOptions.Builder<Message>()

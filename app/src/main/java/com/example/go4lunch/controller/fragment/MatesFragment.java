@@ -22,6 +22,7 @@ import com.example.go4lunch.ViewModels.MatesViewModel;
 import com.example.go4lunch.Views.MatesAdapter;
 import com.example.go4lunch.api.RestaurantsHelper;
 import com.example.go4lunch.api.UserHelper;
+import com.example.go4lunch.base.BaseFragment;
 import com.example.go4lunch.controller.activities.PlaceDetailActivity;
 import com.example.go4lunch.models.User;
 import com.google.firebase.firestore.CollectionReference;
@@ -86,8 +87,6 @@ public class MatesFragment extends BaseFragment {
         mSwipeRefreshLayout.setOnRefreshListener(this::updateUIWhenCreating);
     }
 
-
-
     // -----------------
     // ACTION
     // -----------------
@@ -132,7 +131,7 @@ public class MatesFragment extends BaseFragment {
             if (task.isSuccessful()){
                 mUsers.clear();
                 for (QueryDocumentSnapshot document : task.getResult()) {
-                    if (!(mViewModel.getCurrentUserUID().equals(document.getData().get("uid").toString()))){
+                    if (!(getCurrentUser().getUid().toString().equals(document.getData().get("uid").toString()))){
                         String uid = document.getData().get("uid").toString();
                         String username = document.getData().get("username").toString();
                         String urlPicture = document.getData().get("urlPicture").toString();

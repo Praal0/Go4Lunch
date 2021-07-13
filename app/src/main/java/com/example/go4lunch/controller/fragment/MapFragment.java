@@ -30,6 +30,7 @@ import com.example.go4lunch.R;
 import com.example.go4lunch.Utils.PlacesStreams;
 import com.example.go4lunch.ViewModels.MapViewModel;
 import com.example.go4lunch.api.RestaurantsHelper;
+import com.example.go4lunch.base.BaseFragment;
 import com.example.go4lunch.controller.activities.MainActivity;
 import com.example.go4lunch.controller.activities.PlaceDetailActivity;
 import com.example.go4lunch.injection.Injection;
@@ -143,7 +144,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if (query.length() > 2 ){
-                    PlacesStreams.streamFetchAutoCompleteInfo(query,mViewModel.getCurrentUserPositionFormatted(),10000,API_KEY).subscribeWith(createObserver());
+                    PlacesStreams.streamFetchAutoCompleteInfo(query,mViewModel.getCurrentUserPositionFormatted(),1000,API_KEY).subscribeWith(createObserver());
                 }else{
                     Toast.makeText(getContext(), getResources().getString(R.string.search_too_short), Toast.LENGTH_LONG).show();
                 }

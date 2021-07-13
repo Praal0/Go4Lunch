@@ -1,4 +1,4 @@
-package com.example.go4lunch.controller.fragment;
+package com.example.go4lunch.base;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -7,10 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.load.HttpException;
 import com.example.go4lunch.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
@@ -31,6 +34,9 @@ public class BaseFragment extends Fragment {
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         return df.format(c.getTime());
     }
+
+    @Nullable
+    public FirebaseUser getCurrentUser(){ return FirebaseAuth.getInstance().getCurrentUser(); }
 
     protected void handleError(Throwable throwable) {
         getActivity().runOnUiThread(() -> {

@@ -27,7 +27,7 @@ import java.util.Locale;
 
 
 
-public class ChatViewHolder extends RecyclerView.ViewHolder {
+public class MessageViewHolder extends RecyclerView.ViewHolder {
 
     //ROOT VIEW
     RelativeLayout rootView;
@@ -54,7 +54,7 @@ public class ChatViewHolder extends RecyclerView.ViewHolder {
     private final int colorCurrentUser;
     private final int colorRemoteUser;
 
-    public ChatViewHolder(View itemView) {
+    public MessageViewHolder(View itemView) {
         super(itemView);
         colorCurrentUser = ContextCompat.getColor(itemView.getContext(), R.color.colorAccent);
         colorRemoteUser = ContextCompat.getColor(itemView.getContext(), R.color.colorPrimary);
