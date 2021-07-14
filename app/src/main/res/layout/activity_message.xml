@@ -52,7 +52,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
-        android:id="@+id/activity_chat_image_chosen_preview2"
+        android:id="@+id/activity_chat_image_chosen_preview"
         android:layout_width="50dip"
         android:layout_height="50dip"
         android:layout_margin="@dimen/margin_to_parent"

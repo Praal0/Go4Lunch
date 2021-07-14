@@ -33,6 +33,7 @@ import java.util.List;
 
 public class UsersFragment extends BaseFragment {
     public static final String USER_DATA = "user";
+    public static final String CURRENT_USER_DATA = "userCurrent";
 
     private RecyclerView mRecyclerView;
     private List<User> mUsers;
@@ -93,6 +94,8 @@ public class UsersFragment extends BaseFragment {
                 .setOnItemClickListener((recyclerView, position, v) -> {
                     Intent intent = new Intent(getContext(), MessageActivity.class);
                     intent.putExtra(USER_DATA,mUserAdapter.getMates(position));
+                    User user = new User(getCurrentUser().getUid(),getCurrentUser().getDisplayName(),"",false);
+                    intent.putExtra(CURRENT_USER_DATA,user);
                     startActivity(intent);
                 });
     }

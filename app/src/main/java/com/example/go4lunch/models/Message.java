@@ -7,36 +7,41 @@ import java.util.Date;
 public class Message {
     private String message;
     private Date dateCreated;
-    private User userSender;
-    private User userReceiver;
+    private String idUserSender;
+    private String urlImageUserSender;
+    private String idUserReceiver;
     private String urlImage;
 
-    public Message(String message, User userSender,User userReceiver , Date dateCreated) {
+    public Message() {}
+
+    public Message(String message, String idUserSender,String urlImageUserSender,String idUserReceiver, Date dateCreated) {
         this.message = message;
-        this.userSender = userSender;
-        this.userReceiver = userReceiver;
+        this.idUserSender = idUserSender;
+        this.urlImageUserSender = urlImageUserSender;
+        this.idUserReceiver = idUserReceiver;
         this.dateCreated = dateCreated;
     }
 
-    public Message(String message, String urlImage, User userSender,User userReceiver, Date dateCreated) {
+    public Message(String message, String urlImage, String idUserSender,String urlImageUserSender,String idUserReceiver, Date dateCreated) {
         this.message = message;
         this.urlImage = urlImage;
-        this.userSender = userSender;
-        this.userReceiver = userReceiver;
+        this.idUserSender = idUserSender;
+        this.urlImageUserSender = urlImageUserSender;
+        this.idUserReceiver = idUserReceiver;
         this.dateCreated = dateCreated;
     }
 
     // --- GETTERS ---
     public String getMessage() { return message; }
     public Date getDateCreated() { return dateCreated; }
-    public User getUserSender() { return userSender; }
-    public User getUserReceiver(){return userReceiver;}
     public String getUrlImage() { return urlImage; }
+    public String getIdUserSender(){return idUserSender;}
+    public String getUrlImageUserSender(){return urlImageUserSender;}
+    public String getIdUserReceiver(){return idUserReceiver;}
+
 
     // --- SETTERS ---
     public void setMessage(String message) { this.message = message; }
     public void setDateCreated(Date dateCreated) { this.dateCreated = dateCreated; }
-    public void setUserSender(User userSender) { this.userSender = userSender; }
     public void setUrlImage(String urlImage) { this.urlImage = urlImage; }
-    public void setUserReceiver(User userReceiver){this.userReceiver = userReceiver;}
 }

@@ -17,7 +17,7 @@ public class MessageHelper {
 
     public static Task<DocumentReference> createMessageForChat(String textMessage, User userSender,User userReceiver){
         // Create the Message object
-        Message message = new Message(textMessage, userSender,userReceiver, Calendar.getInstance().getTime());
+        Message message = new Message(textMessage,userSender.getUid(),userSender.getUrlPicture(),userReceiver.getUid(), Calendar.getInstance().getTime());
 
         // Store Message to Firestore
         return ChatHelper.getChatCollection()
@@ -27,7 +27,7 @@ public class MessageHelper {
     public static Task<DocumentReference> createMessageWithImageForChat(String urlImage, String textMessage, User userSender,User userReceiver){
 
         // Creating Message with the URL image
-        Message message = new Message(textMessage, urlImage, userSender,userReceiver, Calendar.getInstance().getTime());
+        Message message = new Message(textMessage, urlImage, userSender.getUid(),userSender.getUrlPicture(),userReceiver.getUid(), Calendar.getInstance().getTime());
 
         // Storing Message on Firestore
         return ChatHelper.getChatCollection()
@@ -36,11 +36,10 @@ public class MessageHelper {
 
     // --- GET ---
 
-    public static Query getAllMessageForChat(){
+    public static Query getAllMessageForChat(String userSender, String userReceiver){
         return ChatHelper.getChatCollection()
                 .orderBy("dateCreated")
                 .limit(50);
     }
-
 
 }

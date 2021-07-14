@@ -31,9 +31,6 @@
             android:name=".controller.activities.SettingActivity"
             android:theme="@style/Theme.Design.NoActionBar" />
         <activity
-            android:name=".controller.activities.ChatActivity"
-            android:theme="@style/Theme.Design.NoActionBar" />
-        <activity
             android:name=".controller.activities.PlaceDetailActivity"
             android:theme="@style/Theme.Design.NoActionBar" />
 

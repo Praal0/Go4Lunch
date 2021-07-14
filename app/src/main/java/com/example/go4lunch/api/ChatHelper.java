@@ -1,5 +1,6 @@
 package com.example.go4lunch.api;
 
+import com.example.go4lunch.models.User;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -11,4 +12,6 @@ public class ChatHelper {
     public static CollectionReference getChatCollection(){
         return FirebaseFirestore.getInstance().collection(COLLECTION_NAME);
     }
+
+
 }

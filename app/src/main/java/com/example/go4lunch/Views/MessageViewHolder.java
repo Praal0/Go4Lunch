@@ -75,7 +75,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
     public void updateWithMessage(Message message, String currentUserId, RequestManager glide){
 
         // Check if current user is the sender
-        Boolean isCurrentUser = message.getUserSender().getUid().equals(currentUserId);
+        Boolean isCurrentUser = message.getIdUserSender().equals(currentUserId);
 
         // Update message TextView
         this.textViewMessage.setText(message.getMessage());
@@ -85,8 +85,8 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
         if (message.getDateCreated() != null) this.textViewDate.setText(this.convertDateToHour(message.getDateCreated(), itemView.getContext()));
 
         // Update profile picture ImageView
-        if (message.getUserSender().getUrlPicture() != null)
-            glide.load(message.getUserSender().getUrlPicture())
+        if (message.getUrlImageUserSender() != null)
+            glide.load(message.getUrlImageUserSender())
                     .apply(RequestOptions.circleCropTransform())
                     .into(imageViewProfile);
 
