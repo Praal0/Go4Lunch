@@ -1,10 +1,7 @@
- package com.example.go4lunch.controller.activities;
+ package com.example.go4lunch.ui;
 
- import android.app.Activity;
  import android.content.Intent;
- import android.content.SharedPreferences;
  import android.content.pm.ActivityInfo;
- import android.content.res.Configuration;
  import android.os.Bundle;
  import android.text.TextUtils;
  import android.util.Log;
@@ -30,10 +27,13 @@
  import com.example.go4lunch.api.RestaurantsHelper;
  import com.example.go4lunch.api.UserHelper;
  import com.example.go4lunch.base.BaseActivity;
- import com.example.go4lunch.controller.fragment.ListFragment;
+ import com.example.go4lunch.ui.detail.PlaceDetailActivity;
+ import com.example.go4lunch.controller.activities.SettingActivity;
+ import com.example.go4lunch.ui.list.ListFragment;
  import com.example.go4lunch.controller.fragment.MapFragment;
  import com.example.go4lunch.controller.fragment.MatesFragment;
  import com.example.go4lunch.controller.fragment.UsersFragment;
+ import com.example.go4lunch.ui.login.LoginActivity;
  import com.firebase.ui.auth.AuthUI;
  import com.google.android.gms.tasks.OnSuccessListener;
  import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -44,7 +44,6 @@
  import com.google.firebase.firestore.QueryDocumentSnapshot;
 
  import java.util.HashMap;
- import java.util.Locale;
  import java.util.Map;
 
  import jp.wasabeef.glide.transformations.BlurTransformation;

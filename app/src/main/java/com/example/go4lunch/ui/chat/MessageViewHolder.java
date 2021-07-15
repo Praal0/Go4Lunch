@@ -1,4 +1,4 @@
-package com.example.go4lunch.Views;
+package com.example.go4lunch.ui.chat;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

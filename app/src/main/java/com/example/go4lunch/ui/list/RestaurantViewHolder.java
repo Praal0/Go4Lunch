@@ -1,4 +1,4 @@
-package com.example.go4lunch.Views;
+package com.example.go4lunch.ui.list;
 
 import android.content.Context;
 import android.graphics.Typeface;

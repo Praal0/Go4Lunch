@@ -1,4 +1,4 @@
-package com.example.go4lunch.controller.activities;
+package com.example.go4lunch.ui.login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.go4lunch.R;
 import com.example.go4lunch.ViewModels.MatesViewModel;
 import com.example.go4lunch.api.UserHelper;
+import com.example.go4lunch.ui.MainActivity;
 import com.firebase.ui.auth.AuthUI;
 
 import java.util.Arrays;

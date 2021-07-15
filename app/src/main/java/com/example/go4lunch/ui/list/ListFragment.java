@@ -1,4 +1,4 @@
-package com.example.go4lunch.controller.fragment;
+package com.example.go4lunch.ui.list;
 
 import android.Manifest;
 import android.app.SearchManager;
@@ -27,10 +27,10 @@ import com.example.go4lunch.R;
 import com.example.go4lunch.Utils.ItemClickSupport;
 import com.example.go4lunch.Utils.PlacesStreams;
 import com.example.go4lunch.ViewModels.MapViewModel;
-import com.example.go4lunch.Views.RestaurantAdapter;
 import com.example.go4lunch.base.BaseFragment;
-import com.example.go4lunch.controller.activities.MainActivity;
-import com.example.go4lunch.controller.activities.PlaceDetailActivity;
+import com.example.go4lunch.controller.fragment.MapFragment;
+import com.example.go4lunch.ui.MainActivity;
+import com.example.go4lunch.ui.detail.PlaceDetailActivity;
 import com.example.go4lunch.injection.Injection;
 import com.example.go4lunch.injection.MapViewModelFactory;
 import com.example.go4lunch.models.PlacesInfo.PlacesDetails.PlaceDetailsResults;

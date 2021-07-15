@@ -1,4 +1,4 @@
-package com.example.go4lunch.controller.activities;
+package com.example.go4lunch.ui.detail;
 
 import android.content.Intent;
 import android.graphics.PorterDuff;
@@ -21,14 +21,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.go4lunch.BuildConfig;
 import com.example.go4lunch.R;
 import com.example.go4lunch.Utils.PlacesStreams;
-import com.example.go4lunch.Views.DetailAdapter;
 import com.example.go4lunch.api.RestaurantsHelper;
 import com.example.go4lunch.api.UserHelper;
 import com.example.go4lunch.base.BaseActivity;
-import com.example.go4lunch.controller.fragment.MapFragment;
+import com.example.go4lunch.controller.activities.WebActivity;
 import com.example.go4lunch.models.PlacesInfo.PlacesDetails.PlaceDetailsInfo;
 import com.example.go4lunch.models.PlacesInfo.PlacesDetails.PlaceDetailsResults;
 import com.example.go4lunch.models.User;
+import com.example.go4lunch.ui.MainActivity;
 import com.glide.slider.library.SliderLayout;
 import com.glide.slider.library.animations.DescriptionAnimation;
 import com.glide.slider.library.slidertypes.DefaultSliderView;
@@ -183,7 +183,7 @@ public class PlaceDetailActivity extends BaseActivity implements View.OnClickLis
 
             case R.id.restaurant_item_website:
                 if (requestResult.getWebsite() != null){
-                    Intent intent = new Intent(this,WebActivity.class);
+                    Intent intent = new Intent(this, WebActivity.class);
                     intent.putExtra("Website", requestResult.getWebsite());
                     startActivity(intent);
                 }else{

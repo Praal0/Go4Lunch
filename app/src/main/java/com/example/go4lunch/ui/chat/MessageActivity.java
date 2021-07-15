@@ -1,7 +1,6 @@
-package com.example.go4lunch.controller.activities;
+package com.example.go4lunch.ui.chat;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,7 +23,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.go4lunch.R;
-import com.example.go4lunch.Views.MessageAdapter;
 import com.example.go4lunch.api.MessageHelper;
 import com.example.go4lunch.api.UserHelper;
 import com.example.go4lunch.base.BaseActivity;

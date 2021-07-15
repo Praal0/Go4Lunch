@@ -1,4 +1,4 @@
-package com.example.go4lunch.Views;
+package com.example.go4lunch.ui.mates;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,26 +12,30 @@ import com.example.go4lunch.models.User;
 
 import java.util.List;
 
-public class DetailAdapter extends RecyclerView.Adapter<DetailViewHolder> {
+public class MatesAdapter extends RecyclerView.Adapter<MatesViewHolder> {
     // FOR DATA
     private List<User> mResults;
 
     // CONSTRUCTOR
-    public DetailAdapter(List<User> result) {
+    public MatesAdapter(List<User> result) {
         this.mResults = result;
     }
 
     @Override
-    public DetailViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MatesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.activity_place_detail_item, parent,false);
-        return new DetailViewHolder(view);
+        View view = inflater.inflate(R.layout.fragment_mates_item, parent,false);
+        return new MatesViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(DetailViewHolder viewHolder, int position) {
+    public void onBindViewHolder(MatesViewHolder viewHolder, int position) {
         viewHolder.updateWithData(this.mResults.get(position));
+    }
+
+    public User getMates(int position){
+        return this.mResults.get(position);
     }
 
     @Override

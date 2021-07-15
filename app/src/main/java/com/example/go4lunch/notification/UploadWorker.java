@@ -1,4 +1,4 @@
-package com.example.go4lunch.Views.Notification;
+package com.example.go4lunch.notification;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -6,7 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.example.go4lunch.controller.activities.SettingActivity;
+import com.example.go4lunch.notification.AlarmReceiver;
 
 import java.util.Calendar;
 

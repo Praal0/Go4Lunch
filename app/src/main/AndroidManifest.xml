@@ -21,7 +21,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity
-            android:name=".controller.activities.MessageActivity"
+            android:name=".ui.chat.MessageActivity"
             android:theme="@style/Theme.Design.NoActionBar" />
 
         <activity
@@ -31,7 +31,7 @@
             android:name=".controller.activities.SettingActivity"
             android:theme="@style/Theme.Design.NoActionBar" />
         <activity
-            android:name=".controller.activities.PlaceDetailActivity"
+            android:name=".ui.detail.PlaceDetailActivity"
             android:theme="@style/Theme.Design.NoActionBar" />
 
         <meta-data
@@ -62,12 +62,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".controller.activities.MainActivity"
+            android:name=".ui.MainActivity"
             android:label="@string/hungry"
             android:theme="@style/Theme.Design.NoActionBar" />
         <activity
-            android:name=".controller.activities.LoginActivity"
-            android:parentActivityName=".controller.activities.MainActivity"
+            android:name=".ui.login.LoginActivity"
+            android:parentActivityName=".ui.MainActivity"
             android:theme="@style/Theme.Design.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -75,13 +75,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity> <!-- NOTIFICATION SERVICE -->
-        <receiver android:name=".Views.Notification.AlarmReceiver">
+        <receiver android:name=".notification.AlarmReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver> <!-- Will not be called unless the application explicitly enables it -->
         <receiver
-            android:name=".Views.Notification.UploadWorker"
+            android:name=".notification.UploadWorker"
             android:enabled="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

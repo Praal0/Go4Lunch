@@ -1,4 +1,4 @@
-package com.example.go4lunch.Views;
+package com.example.go4lunch.ui.mates;
 
 import android.annotation.SuppressLint;
 import android.view.View;
