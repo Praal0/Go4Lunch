@@ -24,11 +24,11 @@ import android.widget.Toast;
 
 import com.example.go4lunch.BuildConfig;
 import com.example.go4lunch.R;
-import com.example.go4lunch.Utils.ItemClickSupport;
-import com.example.go4lunch.Utils.PlacesStreams;
-import com.example.go4lunch.ViewModels.MapViewModel;
+import com.example.go4lunch.utils.ItemClickSupport;
+import com.example.go4lunch.utils.PlacesStreams;
+import com.example.go4lunch.viewModels.MapViewModel;
 import com.example.go4lunch.base.BaseFragment;
-import com.example.go4lunch.controller.fragment.MapFragment;
+import com.example.go4lunch.ui.map.MapFragment;
 import com.example.go4lunch.ui.MainActivity;
 import com.example.go4lunch.ui.detail.PlaceDetailActivity;
 import com.example.go4lunch.injection.Injection;

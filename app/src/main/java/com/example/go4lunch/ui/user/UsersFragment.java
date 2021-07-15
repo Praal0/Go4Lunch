@@ -1,4 +1,4 @@
-package com.example.go4lunch.controller.fragment;
+package com.example.go4lunch.ui.user;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,8 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.go4lunch.R;
-import com.example.go4lunch.Utils.ItemClickSupport;
-import com.example.go4lunch.ViewModels.MatesViewModel;
+import com.example.go4lunch.utils.ItemClickSupport;
+import com.example.go4lunch.viewModels.MatesViewModel;
 import com.example.go4lunch.ui.user.UserAdapter;
 import com.example.go4lunch.api.UserHelper;
 import com.example.go4lunch.base.BaseFragment;

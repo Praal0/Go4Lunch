@@ -20,11 +20,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.go4lunch.BuildConfig;
 import com.example.go4lunch.R;
-import com.example.go4lunch.Utils.PlacesStreams;
+import com.example.go4lunch.utils.PlacesStreams;
 import com.example.go4lunch.api.RestaurantsHelper;
 import com.example.go4lunch.api.UserHelper;
 import com.example.go4lunch.base.BaseActivity;
-import com.example.go4lunch.controller.activities.WebActivity;
+import com.example.go4lunch.ui.web.WebActivity;
 import com.example.go4lunch.models.PlacesInfo.PlacesDetails.PlaceDetailsInfo;
 import com.example.go4lunch.models.PlacesInfo.PlacesDetails.PlaceDetailsResults;
 import com.example.go4lunch.models.User;

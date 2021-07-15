@@ -1,4 +1,4 @@
-package com.example.go4lunch.controller.fragment;
+package com.example.go4lunch.ui.mates;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,8 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.go4lunch.R;
-import com.example.go4lunch.Utils.ItemClickSupport;
-import com.example.go4lunch.ViewModels.MatesViewModel;
+import com.example.go4lunch.utils.ItemClickSupport;
+import com.example.go4lunch.viewModels.MatesViewModel;
 import com.example.go4lunch.ui.mates.MatesAdapter;
 import com.example.go4lunch.api.RestaurantsHelper;
 import com.example.go4lunch.api.UserHelper;

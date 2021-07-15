@@ -1,4 +1,4 @@
-package com.example.go4lunch.controller.activities;
+package com.example.go4lunch.ui.setting;
 
 import android.app.AlarmManager;
 import android.content.DialogInterface;

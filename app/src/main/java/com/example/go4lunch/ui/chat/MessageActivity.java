@@ -44,7 +44,7 @@ import java.util.UUID;
 
 import pub.devrel.easypermissions.EasyPermissions;
 
-import static com.example.go4lunch.controller.fragment.UsersFragment.USER_DATA;
+import static com.example.go4lunch.ui.user.UsersFragment.USER_DATA;
 
 public class MessageActivity extends BaseActivity implements  MessageAdapter.Listener {
     private Toolbar mToolbar;

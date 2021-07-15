@@ -1,4 +1,4 @@
-package com.example.go4lunch.controller.fragment;
+package com.example.go4lunch.ui.map;
 
 import android.Manifest;
 import android.app.SearchManager;
@@ -27,8 +27,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.go4lunch.BuildConfig;
 import com.example.go4lunch.R;
-import com.example.go4lunch.Utils.PlacesStreams;
-import com.example.go4lunch.ViewModels.MapViewModel;
+import com.example.go4lunch.utils.PlacesStreams;
+import com.example.go4lunch.viewModels.MapViewModel;
 import com.example.go4lunch.api.RestaurantsHelper;
 import com.example.go4lunch.base.BaseFragment;
 import com.example.go4lunch.ui.MainActivity;

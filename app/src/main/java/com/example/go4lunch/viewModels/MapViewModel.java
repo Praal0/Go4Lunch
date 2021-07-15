@@ -1,4 +1,4 @@
-package com.example.go4lunch.ViewModels;
+package com.example.go4lunch.viewModels;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -11,13 +11,12 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.go4lunch.BuildConfig;
-import com.example.go4lunch.Utils.PlacesStreams;
-import com.example.go4lunch.controller.fragment.MapFragment;
+import com.example.go4lunch.utils.PlacesStreams;
+import com.example.go4lunch.ui.map.MapFragment;
 import com.example.go4lunch.location.LocationRepository;
 import com.example.go4lunch.models.PlacesInfo.Location;
 import com.google.android.gms.maps.model.LatLng;
 
-import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 import pub.devrel.easypermissions.EasyPermissions;
 

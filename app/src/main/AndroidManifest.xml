@@ -25,10 +25,10 @@
             android:theme="@style/Theme.Design.NoActionBar" />
 
         <activity
-            android:name=".controller.activities.WebActivity"
+            android:name=".ui.web.WebActivity"
             android:theme="@style/Theme.Design.NoActionBar" />
         <activity
-            android:name=".controller.activities.SettingActivity"
+            android:name=".ui.setting.SettingActivity"
             android:theme="@style/Theme.Design.NoActionBar" />
         <activity
             android:name=".ui.detail.PlaceDetailActivity"

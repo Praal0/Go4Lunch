@@ -8,7 +8,7 @@ import android.widget.Toast;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.go4lunch.R;
-import com.example.go4lunch.ViewModels.MatesViewModel;
+import com.example.go4lunch.viewModels.MatesViewModel;
 import com.example.go4lunch.api.UserHelper;
 import com.example.go4lunch.ui.MainActivity;
 import com.firebase.ui.auth.AuthUI;

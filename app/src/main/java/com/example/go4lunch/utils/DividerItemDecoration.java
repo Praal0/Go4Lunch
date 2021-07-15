@@ -1,4 +1,4 @@
-package com.example.go4lunch.Utils;
+package com.example.go4lunch.utils;
 
 import android.content.res.Resources;
 import android.graphics.Canvas;

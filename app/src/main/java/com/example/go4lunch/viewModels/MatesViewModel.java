@@ -1,4 +1,4 @@
-package com.example.go4lunch.ViewModels;
+package com.example.go4lunch.viewModels;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
