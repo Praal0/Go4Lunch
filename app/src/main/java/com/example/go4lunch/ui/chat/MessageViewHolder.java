@@ -71,7 +71,6 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
     }
 
 
-
     public void updateWithMessage(Message message, String currentUserId, RequestManager glide){
 
         // Check if current user is the sender
@@ -134,11 +133,5 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
             SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yy h.mm a", Locale.getDefault());
             return dateFormat.format(date);
         }
-    }
-
-    private String getTodayDate(){
-        Calendar c = Calendar.getInstance();
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        return df.format(c.getTime());
     }
 }

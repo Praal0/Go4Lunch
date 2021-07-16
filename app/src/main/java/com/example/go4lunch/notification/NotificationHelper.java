@@ -1,4 +1,4 @@
-package com.example.go4lunch.api;
+package com.example.go4lunch.notification;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;

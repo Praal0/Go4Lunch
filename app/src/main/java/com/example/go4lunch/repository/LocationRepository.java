@@ -1,4 +1,4 @@
-package com.example.go4lunch.location;
+package com.example.go4lunch.repository;
 
 import android.os.Looper;
 

@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.go4lunch.viewModels.MapViewModel;
-import com.example.go4lunch.location.LocationRepository;
+import com.example.go4lunch.repository.LocationRepository;
 
 public class MapViewModelFactory implements ViewModelProvider.Factory {
     private final LocationRepository locationRepository;

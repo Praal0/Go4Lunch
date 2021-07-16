@@ -16,7 +16,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.go4lunch.R;
-import com.example.go4lunch.api.NotificationHelper;
+import com.example.go4lunch.notification.NotificationHelper;
 import com.example.go4lunch.api.UserHelper;
 import com.example.go4lunch.base.BaseActivity;
 import com.example.go4lunch.ui.MainActivity;

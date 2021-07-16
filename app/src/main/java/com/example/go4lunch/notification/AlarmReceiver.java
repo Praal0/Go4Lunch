@@ -16,7 +16,6 @@ import com.example.go4lunch.BuildConfig;
 import com.example.go4lunch.R;
 import com.example.go4lunch.utils.PlacesStreams;
 import com.example.go4lunch.ui.MainActivity;
-import com.example.go4lunch.api.NotificationHelper;
 import com.example.go4lunch.api.RestaurantsHelper;
 import com.example.go4lunch.api.UserHelper;
 import com.example.go4lunch.models.PlacesInfo.PlacesDetails.PlaceDetailsInfo;

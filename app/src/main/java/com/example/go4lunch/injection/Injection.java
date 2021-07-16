@@ -2,7 +2,7 @@ package com.example.go4lunch.injection;
 
 import android.app.Application;
 
-import com.example.go4lunch.location.LocationRepository;
+import com.example.go4lunch.repository.LocationRepository;
 import com.google.android.gms.location.FusedLocationProviderClient;
 
 public class Injection {

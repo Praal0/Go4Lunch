@@ -17,17 +17,20 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.go4lunch.R;
-import com.example.go4lunch.api.MessageHelper;
 import com.example.go4lunch.api.UserHelper;
 import com.example.go4lunch.base.BaseActivity;
 import com.example.go4lunch.models.Message;
 import com.example.go4lunch.models.User;
+import com.example.go4lunch.viewModels.ChatViewModel;
+import com.example.go4lunch.viewModels.MatesViewModel;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -40,6 +43,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.List;
 import java.util.UUID;
 
 import pub.devrel.easypermissions.EasyPermissions;
@@ -55,6 +59,8 @@ public class MessageActivity extends BaseActivity implements  MessageAdapter.Lis
     private Uri uriImageSelected;
     private TextInputEditText editTextMessage;
     private ImageButton activity_chat_send_button, activity_chat_file_button;
+    private ChatViewModel chatViewModel;
+
 
     // FOR DATA
     private static final String PERMS = Manifest.permission.READ_EXTERNAL_STORAGE;
@@ -135,7 +141,7 @@ public class MessageActivity extends BaseActivity implements  MessageAdapter.Lis
                     // Check if the ImageView is set
                     if (imageViewPreview.getDrawable() == null) {
                         // SEND A TEXT MESSAGE
-                        MessageHelper.createMessageForChat(editTextMessage.getText().toString(), modelCurrentUser, modelUserReceiver).addOnFailureListener(onFailureListener());
+                        ChatViewModel.createMessageForChat(editTextMessage.getText().toString(), modelCurrentUser, modelUserReceiver).addOnFailureListener(onFailureListener());
                         editTextMessage.setText("");
                     } else {
                         // SEND A IMAGE + TEXT IMAGE
@@ -178,7 +184,7 @@ public class MessageActivity extends BaseActivity implements  MessageAdapter.Lis
             public void onComplete(@NonNull Task<Uri> task) {
                 if (task.isSuccessful()) {
                     Uri downloadUri = task.getResult();
-                    MessageHelper.createMessageWithImageForChat(downloadUri.toString(), message, modelCurrentUser,modelUserReceiver).addOnFailureListener(onFailureListener());
+                    ChatViewModel.createMessageWithImageForChat(downloadUri.toString(), message, modelCurrentUser,modelUserReceiver).addOnFailureListener(onFailureListener());
                 } else {
                     Log.e("CHAT_ACTIVITY_TAG", "Error ON_COMPLETE : " + task.getException() );
                 }
@@ -198,7 +204,15 @@ public class MessageActivity extends BaseActivity implements  MessageAdapter.Lis
     }
 
     private void configureRecyclerView(){
-        this.mMessageAdapter = new MessageAdapter(generateOptionsForAdapter(MessageHelper.getAllMessageForChat(modelCurrentUser.getUid(),modelUserReceiver.getUid())), Glide.with(this), this, this.getCurrentUser().getUid());
+        chatViewModel = new ViewModelProvider(this).get(ChatViewModel.class);
+        final Observer<List<Message>> listObserver = new Observer<List<Message>>() {
+            @Override
+            public void onChanged(List<Message> messages) {
+                //mMessageAdapter = new MessageAdapter(mTaskViewModel.getTasks().observe(this, this::updateTasks);
+            }
+        };
+        //chatViewModel.getAllMessageForChat(modelCurrentUser.getUid(),modelUserReceiver.getUid()).observe(this,);
+
         mMessageAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {

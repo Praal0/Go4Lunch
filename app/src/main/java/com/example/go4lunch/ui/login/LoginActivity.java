@@ -14,6 +14,8 @@ import com.example.go4lunch.ui.MainActivity;
 import com.firebase.ui.auth.AuthUI;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import com.example.go4lunch.base.BaseActivity;
 import com.firebase.ui.auth.ErrorCodes;
@@ -70,21 +72,25 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void startSignInActivity(){
+
+        // Choose authentication providers
+          List<AuthUI.IdpConfig> providers = Arrays.asList(
+                  new AuthUI.IdpConfig.EmailBuilder().build(),
+                  new AuthUI.IdpConfig.GoogleBuilder().build(),
+                  new AuthUI.IdpConfig.FacebookBuilder().build());
+
+        // Launch the activity
         startActivityForResult(
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
                         .setTheme(R.style.LoginTheme)
-                        .setLogo(R.drawable.meal_logo_login)
-                        .setAvailableProviders(
-                                Arrays.asList(
-                                        new AuthUI.IdpConfig.EmailBuilder().build(), // EMAIL
-                                        new AuthUI.IdpConfig.FacebookBuilder().build(), // FACEBOOK
-                                        new AuthUI.IdpConfig.GoogleBuilder().build()   // GOOGLE
-                                ))
+                        .setAvailableProviders(providers)
                         .setIsSmartLockEnabled(false, true)
+                        .setLogo(R.drawable.meal_logo_login)
                         .build(),
                 RC_SIGN_IN);
     }
+
     // --------------------
     // ACTION
     // --------------------

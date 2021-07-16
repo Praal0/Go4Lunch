@@ -289,8 +289,9 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
 
     @Override
     public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
-        refresh();
+
     }
+
 
     private boolean checkLocationPermission() {
         if (EasyPermissions.hasPermissions(getContext(), perms)) {
