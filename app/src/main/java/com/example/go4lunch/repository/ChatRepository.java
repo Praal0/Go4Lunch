@@ -64,11 +64,6 @@ public class ChatRepository {
                         messageLiveData.setValue(messageLists);
                     }
                 });
-
-        /*return getChatCollection()
-                .whereEqualTo("idUserSender",userSender).whereEqualTo("idUserReceiver",userReceiver)
-                .orderBy("dateCreated")
-                .limit(50);*/
     }
 
 

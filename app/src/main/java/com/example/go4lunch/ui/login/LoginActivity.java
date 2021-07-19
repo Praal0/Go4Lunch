@@ -61,7 +61,7 @@ public class LoginActivity extends BaseActivity {
             } else { // ERRORS
                 if (response == null) {
                     Toast.makeText(this, getString(R.string.error_authentication_canceled), Toast.LENGTH_SHORT).show();
-                    startSignInActivity();
+                    finish();
                 } else if (response.getError().getErrorCode() == ErrorCodes.NO_NETWORK) {
                     Toast.makeText(this, getString(R.string.error_no_internet), Toast.LENGTH_SHORT).show();
                 } else if (response.getError().getErrorCode() == ErrorCodes.UNKNOWN_ERROR) {
@@ -70,7 +70,7 @@ public class LoginActivity extends BaseActivity {
             }
         }
     }
-
+    
     private void startSignInActivity(){
 
         // Choose authentication providers
@@ -90,6 +90,7 @@ public class LoginActivity extends BaseActivity {
                         .build(),
                 RC_SIGN_IN);
     }
+
 
     // --------------------
     // ACTION

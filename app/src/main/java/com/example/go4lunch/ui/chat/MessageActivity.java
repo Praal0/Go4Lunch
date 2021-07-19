@@ -204,14 +204,15 @@ public class MessageActivity extends BaseActivity implements  MessageAdapter.Lis
     }
 
     private void configureRecyclerView(){
+
         chatViewModel = new ViewModelProvider(this).get(ChatViewModel.class);
         final Observer<List<Message>> listObserver = new Observer<List<Message>>() {
             @Override
             public void onChanged(List<Message> messages) {
-                //mMessageAdapter = new MessageAdapter(mTaskViewModel.getTasks().observe(this, this::updateTasks);
+                //mMessageAdapter = new MessageAdapter();
             }
         };
-        //chatViewModel.getAllMessageForChat(modelCurrentUser.getUid(),modelUserReceiver.getUid()).observe(this,);
+        chatViewModel.getAllMessageForChat(modelCurrentUser.getUid(),modelUserReceiver.getUid());
 
         mMessageAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
@@ -239,12 +240,12 @@ public class MessageActivity extends BaseActivity implements  MessageAdapter.Lis
             EasyPermissions.requestPermissions(this, getString(R.string.popup_title_permission_files_access), RC_IMAGE_PERMS, PERMS);
             return;
         }
-        // 3 - Launch an "Selection Image" Activity
+        // Launch an "Selection Image" Activity
         Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(i, RC_CHOOSE_PHOTO);
     }
 
-    // 4 - Handle activity response (after user has chosen or not a picture)
+    // Handle activity response (after user has chosen or not a picture)
     private void handleResponse(int requestCode, int resultCode, Intent data){
         if (requestCode == RC_CHOOSE_PHOTO) {
             if (resultCode == RESULT_OK) { //SUCCESS
@@ -266,6 +267,5 @@ public class MessageActivity extends BaseActivity implements  MessageAdapter.Lis
 
     @Override
     public void onDataChanged() {
-
     }
 }
