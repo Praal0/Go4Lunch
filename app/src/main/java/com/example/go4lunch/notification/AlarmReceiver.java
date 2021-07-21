@@ -14,6 +14,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.example.go4lunch.BuildConfig;
 import com.example.go4lunch.R;
+import com.example.go4lunch.ui.map.MapFragment;
 import com.example.go4lunch.utils.PlacesStreams;
 import com.example.go4lunch.ui.MainActivity;
 import com.example.go4lunch.api.RestaurantsHelper;
@@ -36,15 +37,13 @@ public class AlarmReceiver extends BroadcastReceiver {
     public static final String NOTIFICATION_CHANNEL_ID = "10001";
     public static final String NOTIFICATION_CHANNEL_NAME = "Go4Lunch";
 
-    private Context mContext;
-    private Disposable mDisposable;
     private NotificationManager mNotificationManager;
     private NotificationCompat.Builder mBuilder;
     private List<String> usersList;
     private String mRestaurantName;
     private String mRestaurantAddress;
-    private String API_KEY = BuildConfig.API_KEY;
-
+    private Context mContext;
+    private Disposable mDisposable;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -61,7 +60,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                                     for (QueryDocumentSnapshot booking : bookingTask.getResult()){
                                         UserHelper.getUser(booking.getData().get("userId").toString()).addOnCompleteListener(userTask -> {
                                             if (userTask.isSuccessful()){
-                                                 if (!(userTask.getResult().getData().get("uid").toString().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))){
+                                                if (!(userTask.getResult().getData().get("uid").toString().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))){
                                                     Log.e("TAG", "ALARM_RECEIVER | User : " + userTask.getResult().getData().get("username") );
                                                     String username = userTask.getResult().getData().get("username").toString();
                                                     usersList.add(username);
@@ -83,11 +82,10 @@ public class AlarmReceiver extends BroadcastReceiver {
                 }
             });
         }
-
     }
 
     private void executeHttpRequestWithRetrofit(String placeId){
-        this.mDisposable = PlacesStreams.streamSimpleFetchPlaceInfo(placeId, API_KEY).subscribeWith(createObserver());
+        this.mDisposable = PlacesStreams.streamSimpleFetchPlaceInfo(placeId, MapFragment.API_KEY).subscribeWith(createObserver());
     }
 
     private <T> DisposableObserver<T> createObserver() {
@@ -136,7 +134,8 @@ public class AlarmReceiver extends BroadcastReceiver {
     /**
      * Create and push the notification
      */
-    public void sendNotification(String users) {
+    public void sendNotification(String users)
+    {
         Log.e("TAG", "sendNotification: USERS " + users );
         // Creates an explicit intent for an Activity in your app
         Intent resultIntent = new Intent(mContext , MainActivity.class);

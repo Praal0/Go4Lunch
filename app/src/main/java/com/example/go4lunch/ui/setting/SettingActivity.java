@@ -98,12 +98,10 @@ public class SettingActivity extends BaseActivity {
                     Log.e("TAG", "Current data: " + documentSnapshot.getData());
                     if (documentSnapshot.getData().get("notification").equals(true)){
                         mSwitch.setChecked(true);
-                        mNotificationHelper.cancelAlarmRTC();
-                        mNotificationHelper.scheduleRepeatingNotification();
 
                     }else{
                         mSwitch.setChecked(false);
-                        mNotificationHelper.cancelAlarmRTC();
+
                     }
                 } else {
                     Log.e("TAG", "Current data: null");
@@ -119,6 +117,11 @@ public class SettingActivity extends BaseActivity {
                 UserHelper.updateUserSettings(getCurrentUser().getUid(),mSwitch.isChecked()).addOnSuccessListener(
                         updateTask ->{
                             Log.e("SETTINGS_ACTIVITY", "saveSettings: DONE" );
+                            if (mSwitch.isChecked()){
+                                mNotificationHelper.sendNotification();
+                            }else{
+                                mNotificationHelper.cancelAlarmRTC();
+                            }
                             Snackbar.make(v, R.string.setting_update, Snackbar.LENGTH_SHORT).show();
                         });
             }

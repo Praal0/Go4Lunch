@@ -54,7 +54,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 public class MapFragment extends BaseFragment implements OnMapReadyCallback, EasyPermissions.PermissionCallbacks, LocationListener {
 
-    private static final String API_KEY = BuildConfig.API_KEY;
+    public static final String API_KEY = BuildConfig.API_KEY;
     private static final String TAG = MapFragment.class.getSimpleName();
     private static final String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
 
@@ -144,7 +144,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if (query.length() > 2 ){
-                    PlacesStreams.streamFetchAutoCompleteInfo(query,mViewModel.getCurrentUserPositionFormatted(),1000,API_KEY).subscribeWith(createObserver());
+
                 }else{
                     Toast.makeText(getContext(), getResources().getString(R.string.search_too_short), Toast.LENGTH_LONG).show();
                 }

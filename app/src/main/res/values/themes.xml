@@ -14,19 +14,27 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="LoginTheme" parent="Theme.Go4Lunch">
-        <item name="colorPrimary">@color/colorOrange</item>
-        <item name="colorPrimaryDark">@color/colorOrange</item>
+    <style name="LoginTheme" parent="FirebaseUI.Text.BodyText">
+        <item name="colorPrimary">@color/colorError</item>
+        <item name="colorPrimaryDark">@color/colorError</item>
+        <item name="textInputStyle">@style/TextInputLayout</item>
         <item name="colorControlNormal">@android:color/white</item>
         <item name="colorControlActivated">@android:color/white</item>
         <item name="colorControlHighlight">@android:color/white</item>
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">@color/white</item>
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="android:textColorSecondary">@android:color/white</item>
-        <item name="android:windowBackground">@android:color/holo_orange_dark</item>
+        <item name="android:windowBackground">@drawable/lunch_portrait</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:textColorHint">@color/colorOrange</item>
+    </style>
+
+
+    <style name="TextInputLayout" parent="Widget.Design.TextInputLayout">
+        <item name="android:textColor">@color/white</item>
+        <item name="colorPrimary">@color/colorOrange</item>
+        <item name="colorPrimaryDark">@color/colorOrange</item>
     </style>
 
     <!-- Rating Bar. -->

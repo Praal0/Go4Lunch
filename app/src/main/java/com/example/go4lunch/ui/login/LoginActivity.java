@@ -77,7 +77,8 @@ public class LoginActivity extends BaseActivity {
           List<AuthUI.IdpConfig> providers = Arrays.asList(
                   new AuthUI.IdpConfig.EmailBuilder().build(),
                   new AuthUI.IdpConfig.GoogleBuilder().build(),
-                  new AuthUI.IdpConfig.FacebookBuilder().build());
+                  new AuthUI.IdpConfig.FacebookBuilder().build(),
+                  new AuthUI.IdpConfig.TwitterBuilder().build());
 
         // Launch the activity
         startActivityForResult(

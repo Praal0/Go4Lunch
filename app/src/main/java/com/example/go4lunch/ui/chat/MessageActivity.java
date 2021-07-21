@@ -209,7 +209,7 @@ public class MessageActivity extends BaseActivity implements  MessageAdapter.Lis
         final Observer<List<Message>> listObserver = new Observer<List<Message>>() {
             @Override
             public void onChanged(List<Message> messages) {
-                //mMessageAdapter = new MessageAdapter();
+                //mMessageAdapter = new MessageAdapter(generateOptionsForAdapter(), Glide.with(this), this, modelCurrentUser.getUid());
             }
         };
         chatViewModel.getAllMessageForChat(modelCurrentUser.getUid(),modelUserReceiver.getUid());
