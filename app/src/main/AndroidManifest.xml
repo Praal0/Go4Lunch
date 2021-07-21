@@ -74,16 +74,9 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- NOTIFICATION SERVICE -->
+        </activity>
+        <!-- NOTIFICATION SERVICE -->
         <receiver android:name=".notification.AlarmReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-            </intent-filter>
-        </receiver>
-
-        <!-- Will not be called unless the application explicitly enables it -->
-        <receiver android:name=".notification.DeviceBootReceiver"
-            android:enabled="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
