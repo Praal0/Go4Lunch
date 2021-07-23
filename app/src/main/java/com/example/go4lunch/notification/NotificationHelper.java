@@ -28,8 +28,12 @@ public class NotificationHelper  {
         //get calendar instance to be able to select what time notification should be scheduled
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 14);
-        calendar.set(Calendar.MINUTE, 44);
+        calendar.set(Calendar.HOUR_OF_DAY, 12);
+        calendar.set(Calendar.MINUTE,45);
+
+        if (Calendar.getInstance().after(calendar)) {
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
 
         //Setting intent to class where Alarm broadcast message will be handled
         Intent intent = new Intent(mContext, AlarmReceiver.class);
@@ -39,8 +43,11 @@ public class NotificationHelper  {
         //getting instance of AlarmManager service
         alarmManagerRTC = (AlarmManager) mContext.getSystemService(ALARM_SERVICE);
 
-        // UNCOMMENT TO SEND IMMEDIATELY
-        alarmManagerRTC.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, alarmIntentRTC);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManagerRTC.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntentRTC);
+        } else {
+            alarmManagerRTC.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntentRTC);
+        }
 
     }
 

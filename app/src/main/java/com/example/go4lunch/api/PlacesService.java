@@ -1,4 +1,4 @@
-package com.example.go4lunch.utils;
+package com.example.go4lunch.api;
 
 
 import com.example.go4lunch.models.AutoComplete.AutoCompleteResult;

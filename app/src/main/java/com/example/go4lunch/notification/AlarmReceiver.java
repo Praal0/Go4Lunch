@@ -12,10 +12,9 @@ import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
-import com.example.go4lunch.BuildConfig;
 import com.example.go4lunch.R;
 import com.example.go4lunch.ui.map.MapFragment;
-import com.example.go4lunch.utils.PlacesStreams;
+import com.example.go4lunch.api.PlacesStreams;
 import com.example.go4lunch.ui.MainActivity;
 import com.example.go4lunch.api.RestaurantsHelper;
 import com.example.go4lunch.api.UserHelper;
@@ -134,8 +133,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     /**
      * Create and push the notification
      */
-    public void sendNotification(String users)
-    {
+    public void sendNotification(String users){
         Log.e("TAG", "sendNotification: USERS " + users );
         // Creates an explicit intent for an Activity in your app
         Intent resultIntent = new Intent(mContext , MainActivity.class);

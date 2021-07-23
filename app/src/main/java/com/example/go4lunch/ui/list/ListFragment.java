@@ -25,7 +25,7 @@ import android.widget.Toast;
 import com.example.go4lunch.BuildConfig;
 import com.example.go4lunch.R;
 import com.example.go4lunch.utils.ItemClickSupport;
-import com.example.go4lunch.utils.PlacesStreams;
+import com.example.go4lunch.api.PlacesStreams;
 import com.example.go4lunch.viewModels.MapViewModel;
 import com.example.go4lunch.base.BaseFragment;
 import com.example.go4lunch.ui.map.MapFragment;

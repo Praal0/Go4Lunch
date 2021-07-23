@@ -1,6 +1,6 @@
 package com.example.go4lunch.viewModels;
 
-import androidx.lifecycle.MutableLiveData;
+import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 
 import com.example.go4lunch.models.Message;
@@ -11,32 +11,20 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.Query;
 
 import java.util.Calendar;
-import java.util.List;
 
 public class ChatViewModel extends ViewModel {
 
-    private static volatile ChatViewModel instance;
     private ChatRepository chatRepository;
 
-    private ChatViewModel() {
-        chatRepository = ChatRepository.getInstance();
+    public ChatViewModel(
+            @NonNull ChatRepository chatRepository
+    ) {
+        this.chatRepository = chatRepository;
     }
 
-    public static ChatViewModel getInstance() {
-        ChatViewModel result = instance;
-        if (result != null) {
-            return result;
-        }
-        synchronized(ChatViewModel.class) {
-            if (instance == null) {
-                instance = new ChatViewModel();
-            }
-            return instance;
-        }
-    }
 
-    public MutableLiveData<List<Message>> getAllMessageForChat(String userSender, String userReceiver){
-        return chatRepository.messageLiveData;
+    public Query getAllMessageForChat(String userSender, String userReceiver){
+        return chatRepository.getAllMessageForChat(userSender,userReceiver);
     }
 
 

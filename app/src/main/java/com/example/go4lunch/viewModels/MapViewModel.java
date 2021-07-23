@@ -11,7 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.go4lunch.BuildConfig;
-import com.example.go4lunch.utils.PlacesStreams;
+import com.example.go4lunch.api.PlacesStreams;
 import com.example.go4lunch.ui.map.MapFragment;
 import com.example.go4lunch.repository.LocationRepository;
 import com.example.go4lunch.models.PlacesInfo.Location;

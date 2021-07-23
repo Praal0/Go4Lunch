@@ -27,9 +27,13 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.go4lunch.R;
 import com.example.go4lunch.api.UserHelper;
 import com.example.go4lunch.base.BaseActivity;
+import com.example.go4lunch.injection.ChatViewModelFactory;
+import com.example.go4lunch.injection.Injection;
+import com.example.go4lunch.injection.MapViewModelFactory;
 import com.example.go4lunch.models.Message;
 import com.example.go4lunch.models.User;
 import com.example.go4lunch.viewModels.ChatViewModel;
+import com.example.go4lunch.viewModels.MapViewModel;
 import com.example.go4lunch.viewModels.MatesViewModel;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.Continuation;
@@ -76,6 +80,8 @@ public class MessageActivity extends BaseActivity implements  MessageAdapter.Lis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
         initView();
+        ChatViewModelFactory chatViewModelFactory = Injection.provideChatViewModelFactory(this.getApplication());
+        chatViewModel = new ViewModelProvider(this, chatViewModelFactory).get(ChatViewModel.class);
         configureToolbar();
         updateUIWhenCreating();
         getCurrentUserFromFirestore();
@@ -204,16 +210,8 @@ public class MessageActivity extends BaseActivity implements  MessageAdapter.Lis
     }
 
     private void configureRecyclerView(){
-
-        chatViewModel = new ViewModelProvider(this).get(ChatViewModel.class);
-        final Observer<List<Message>> listObserver = new Observer<List<Message>>() {
-            @Override
-            public void onChanged(List<Message> messages) {
-                //mMessageAdapter = new MessageAdapter(generateOptionsForAdapter(), Glide.with(this), this, modelCurrentUser.getUid());
-            }
-        };
-        chatViewModel.getAllMessageForChat(modelCurrentUser.getUid(),modelUserReceiver.getUid());
-
+        mMessageAdapter = new MessageAdapter(generateOptionsForAdapter(chatViewModel.getAllMessageForChat(modelCurrentUser.getUid(),modelUserReceiver.getUid())), Glide.with(this), this, modelCurrentUser.getUid());
+        mMessageAdapter.startListening();
         mMessageAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
@@ -229,6 +227,13 @@ public class MessageActivity extends BaseActivity implements  MessageAdapter.Lis
                 .setQuery(query, Message.class)
                 .setLifecycleOwner(this)
                 .build();
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mMessageAdapter.stopListening();
     }
 
     // --------------------

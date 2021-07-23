@@ -1,13 +1,10 @@
 package com.example.go4lunch;
 
-import android.content.Context;
-
-import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.example.go4lunch.models.PlacesInfo.MapPlacesInfo;
 import com.example.go4lunch.models.PlacesInfo.PlacesDetails.PlaceDetailsInfo;
-import com.example.go4lunch.utils.PlacesStreams;
+import com.example.go4lunch.api.PlacesStreams;
 
 import org.junit.Before;
 import org.junit.Test;
