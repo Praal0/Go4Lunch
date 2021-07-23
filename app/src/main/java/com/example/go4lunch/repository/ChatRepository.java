@@ -29,8 +29,8 @@ public class ChatRepository {
         return FirebaseFirestore.getInstance().collection(CHAT_COLLECTION);
     }
 
-    public Query getAllMessageForChat(String userSender, String userReceiver){
-        return getChatCollection().whereEqualTo("idUserSender",userSender).whereEqualTo("idUserReceiver",userReceiver)
+    public Query getAllMessageForChat(){
+        return getChatCollection()
                 .orderBy("dateCreated")
                 .limit(50);
     }

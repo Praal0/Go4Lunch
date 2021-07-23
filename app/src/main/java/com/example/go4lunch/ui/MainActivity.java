@@ -23,6 +23,7 @@
  import com.bumptech.glide.Glide;
  import com.bumptech.glide.request.RequestOptions;
  import com.example.go4lunch.R;
+ import com.example.go4lunch.ui.chat.MessageActivity;
  import com.example.go4lunch.viewModels.MatesViewModel;
  import com.example.go4lunch.api.RestaurantsHelper;
  import com.example.go4lunch.api.UserHelper;
@@ -167,8 +168,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     break;
 
                 case R.id.nav_tchat:
-                    toolbar.setTitle(R.string.chatTitle);
-                    newFragment = new UsersFragment();
+                    launchActivity(MessageActivity.class,null);
                     break;
             }
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
