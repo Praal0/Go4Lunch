@@ -235,6 +235,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         .load(this.getCurrentUser().getPhotoUrl())
                         .apply(RequestOptions.circleCropTransform())
                         .into(mImageView);
+            }else{
+                Glide.with(this).load(R.drawable.ic_anon_user_48dp)
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(mImageView);
             }
 
             //Get email from Firebase

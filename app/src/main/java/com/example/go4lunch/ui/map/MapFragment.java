@@ -143,21 +143,18 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if (query.length() > 2 ){
+                if (query.length() > 3 ){
                     PlacesStreams.streamFetchAutoCompleteInfo(query,mViewModel.getCurrentUserPositionFormatted(),1000,API_KEY).subscribeWith(createObserver());
                 }else{
                     Toast.makeText(getContext(), getResources().getString(R.string.search_too_short), Toast.LENGTH_LONG).show();
-                    mViewModel.executeHttpRequestWithRetrofitPlaceStream(createObserver());
                 }
                 return true;
 
             }
             @Override
             public boolean onQueryTextChange(String query) {
-                if (query.length() > 2){
-                   PlacesStreams.streamFetchAutoCompleteInfo(query,mViewModel.getCurrentUserPositionFormatted(),10000,API_KEY).subscribeWith(createObserver());
-                }else{
-                    mViewModel.executeHttpRequestWithRetrofitPlaceStream(createObserver());
+                if (query.length() > 3){
+                   PlacesStreams.streamFetchAutoCompleteInfo(query,mViewModel.getCurrentUserPositionFormatted(),1000,API_KEY).subscribeWith(createObserver());
                 }
                 return false;
             }

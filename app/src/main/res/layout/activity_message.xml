@@ -17,21 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorOrange"
-            tools:targetApi="lollipop">
-
-            <ImageView
-                android:id="@+id/profil_image"
-                android:layout_width="30dp"
-                android:layout_height="30dp" />
-
-            <TextView
-                android:id="@+id/profil_textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="25dp"
-                android:textColor="@color/white"
-                android:textSize="18dp" />
-        </androidx.appcompat.widget.Toolbar>
+            tools:targetApi="lollipop"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout

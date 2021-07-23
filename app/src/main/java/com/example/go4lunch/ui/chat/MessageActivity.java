@@ -32,6 +32,7 @@ import com.example.go4lunch.injection.Injection;
 import com.example.go4lunch.injection.MapViewModelFactory;
 import com.example.go4lunch.models.Message;
 import com.example.go4lunch.models.User;
+import com.example.go4lunch.ui.MainActivity;
 import com.example.go4lunch.viewModels.ChatViewModel;
 import com.example.go4lunch.viewModels.MapViewModel;
 import com.example.go4lunch.viewModels.MatesViewModel;
@@ -56,8 +57,6 @@ import static com.example.go4lunch.ui.user.UsersFragment.USER_DATA;
 
 public class MessageActivity extends BaseActivity implements  MessageAdapter.Listener {
     private Toolbar mToolbar;
-    private ImageView profileImageView;
-    private TextView profileTextView;
     private RecyclerView recyclerView;
     private ImageView imageViewPreview;
     private Uri uriImageSelected;
@@ -100,8 +99,6 @@ public class MessageActivity extends BaseActivity implements  MessageAdapter.Lis
         editTextMessage = findViewById(R.id.activity_chat_message_edit_text);
         activity_chat_send_button = findViewById(R.id.activity_chat_send_button);
         activity_chat_file_button = findViewById(R.id.activity_chat_add_file_button);
-        profileImageView = findViewById(R.id.profil_image);
-        profileTextView = findViewById(R.id.profil_textView);
         mToolbar = findViewById(R.id.toolbar);
         Intent intent = getIntent();
         modelUserReceiver = intent.getParcelableExtra(USER_DATA);
@@ -115,10 +112,21 @@ public class MessageActivity extends BaseActivity implements  MessageAdapter.Lis
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
+    // When we use back button of phone
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent homeIntent = new Intent(this, MainActivity.class);
+        startActivity(homeIntent);
+        finish();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case android.R.id.home:
+                Intent homeIntent = new Intent(this, MainActivity.class);
+                startActivity(homeIntent);
                 finish();
         }
         return (super.onOptionsItemSelected(menuItem));
