@@ -55,7 +55,6 @@ public class ListFragment extends BaseFragment implements EasyPermissions.Permis
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     public ListFragment() {
-        // Required empty public constructor
     }
 
     public static ListFragment newInstance() {
@@ -194,12 +193,10 @@ public class ListFragment extends BaseFragment implements EasyPermissions.Permis
                 }
             }));
         }else{
-            EasyPermissions.requestPermissions(this,"Need permission for use MapView",
-                    RC_LOCATION_CONTACTS_PERM, perms);
+            EasyPermissions.requestPermissions(this,"Need permission for use MapView and ListView",
+                    RC_LOCATION_CONTACTS_PERM, String.valueOf(perms));
         }
     }
-
-
 
     @Override
     public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
@@ -208,6 +205,7 @@ public class ListFragment extends BaseFragment implements EasyPermissions.Permis
 
     @Override
     public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
-        refresh();
+        EasyPermissions.requestPermissions(this,"Need permission for use MapView and ListView",
+                RC_LOCATION_CONTACTS_PERM, String.valueOf(perms));
     }
 }
