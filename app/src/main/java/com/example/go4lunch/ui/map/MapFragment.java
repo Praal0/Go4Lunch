@@ -28,6 +28,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.go4lunch.BuildConfig;
 import com.example.go4lunch.R;
 import com.example.go4lunch.api.PlacesStreams;
+import com.example.go4lunch.models.PlacesInfo.PlacesDetails.PlaceDetailsResults;
 import com.example.go4lunch.viewModels.MapViewModel;
 import com.example.go4lunch.api.RestaurantsHelper;
 import com.example.go4lunch.base.BaseFragment;
@@ -46,6 +47,7 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.observers.DisposableObserver;
@@ -143,7 +145,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if (query.length() > 2 ){
+                if (query.length() > 3 ){
                     PlacesStreams.streamFetchAutoCompleteInfo(query,mViewModel.getCurrentUserPositionFormatted(),1000,API_KEY).subscribeWith(createObserver());
                 }else{
                     Toast.makeText(getContext(), getResources().getString(R.string.search_too_short), Toast.LENGTH_LONG).show();
@@ -154,7 +156,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
             }
             @Override
             public boolean onQueryTextChange(String query) {
-                if (query.length() > 2){
+                if (query.length() > 3){
                    PlacesStreams.streamFetchAutoCompleteInfo(query,mViewModel.getCurrentUserPositionFormatted(),10000,API_KEY).subscribeWith(createObserver());
                 }else{
                     mViewModel.executeHttpRequestWithRetrofitPlaceStream(createObserver());
@@ -218,35 +220,79 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
         googleMap.clear();
         if(results instanceof MapPlacesInfo){
             MapPlacesInfo result = ((MapPlacesInfo) results);
-            Log.e(TAG, "updateUI: " + result .getResults().size());
-            if (result.getResults().size() > 0){
-                for (int i = 0; i < result.getResults().size(); i++) {
-                    int CurrentObject = i;
-                    RestaurantsHelper.getTodayBooking(result.getResults().get(CurrentObject).getPlaceId(), getTodayDate()).addOnCompleteListener(restaurantTask -> {
-                        if (restaurantTask.isSuccessful()) {
-                            Double lat = result.getResults().get(CurrentObject).getGeometry().getLocation().getLat();
-                            Double lng = result.getResults().get(CurrentObject).getGeometry().getLocation().getLng();
-                            MarkerOptions markerOptions = new MarkerOptions();
-                            markerOptions.position(new LatLng(lat, lng));
-                            if (restaurantTask.getResult().isEmpty()) { // If there is no booking for today
-                                Bitmap bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.baseline_place_unbook),
-                                        128,128,true);
+            makerMapPlacesInfo(result);
+        }else if(results instanceof ArrayList){
+            Log.e(TAG, "updateUI: SEARCH_NUMBER : " + ((ArrayList)results).size() );
+            makerArrayList(results);
+        }
+    }
 
-                                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
-                            } else { // If there is booking for today
-                                Bitmap bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.baseline_place_booked),
-                                        128,128,true);
-                                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
-                            }
-                            Marker marker = googleMap.addMarker(markerOptions);
-                            marker.setTag(result.getResults().get(CurrentObject).getPlaceId());
+    private <T> void makerArrayList(T results) {
+        if (((ArrayList)results).size() > 0){
+            for(Object result : ((ArrayList)results)){
+                PlaceDetailsResults detail = ((PlaceDetailsResults) result);
+                RestaurantsHelper.getTodayBooking(detail.getPlaceId(), getTodayDate()).addOnCompleteListener(restaurantTask -> {
+                    if (restaurantTask.isSuccessful()) {
+                        Double lat = detail.getGeometry().getLocation().getLat();
+                        Double lng = detail.getGeometry().getLocation().getLng();
+                        String title = detail.getName();
+
+                        MarkerOptions markerOptions = new MarkerOptions();
+                        markerOptions.position(new LatLng(lat, lng));
+                        markerOptions.title(title);
+                        if (restaurantTask.getResult().isEmpty()) {
+                            Bitmap bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(),
+                                    R.drawable.baseline_place_unbook),
+                                    128,128,true);// If there is no booking for today
+                            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
+                        } else { // If there is booking for today
+                            Bitmap bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(),
+                                    R.drawable.baseline_place_booked),
+                                    128,128,true);// If there is no booking for today
+                            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
                         }
-                    });
-                }
+                        Marker marker = googleMap.addMarker(markerOptions);
+                        marker.setTag(detail.getPlaceId());
+                    }
+                });
             }
-            }else{
-                Toast.makeText(getContext(), getResources().getString(R.string.no_restaurant_error_message), Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(getContext(), getResources().getString(R.string.no_restaurant_error_message), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void makerMapPlacesInfo(MapPlacesInfo result) {
+        Log.e(TAG, "updateUI: " + result .getResults().size());
+        if (result.getResults().size() > 0){
+            for (int i = 0; i < result.getResults().size(); i++) {
+                int CurrentObject = i;
+                RestaurantsHelper.getTodayBooking(result.getResults().get(CurrentObject).getPlaceId(), getTodayDate()).addOnCompleteListener(restaurantTask -> {
+                    if (restaurantTask.isSuccessful()) {
+                        Double lat = result.getResults().get(CurrentObject).getGeometry().getLocation().getLat();
+                        Double lng = result.getResults().get(CurrentObject).getGeometry().getLocation().getLng();
+                        String title = result.getResults().get(CurrentObject).getName();
+
+                        MarkerOptions markerOptions = new MarkerOptions();
+                        markerOptions.position(new LatLng(lat, lng));
+                        markerOptions.title(title);
+                        if (restaurantTask.getResult().isEmpty()) { // If there is no booking for today
+                            Bitmap bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(),
+                                    R.drawable.baseline_place_unbook),
+                                    128,128,true);// If there is no booking for today
+                            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
+                        } else { // If there is booking for today
+                            Bitmap bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(),
+                                    R.drawable.baseline_place_booked),
+                                    128,128,true);// If there is no booking for today
+                            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
+                        }
+                        Marker marker = googleMap.addMarker(markerOptions);
+                        marker.setTag(result.getResults().get(CurrentObject).getPlaceId());
+                    }
+                });
             }
+        }else{ Toast.makeText(getContext(), getResources().getString(R.string.no_restaurant_error_message), Toast.LENGTH_SHORT).show();
+        }
     }
 
     // -----------------
