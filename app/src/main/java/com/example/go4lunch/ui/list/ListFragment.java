@@ -70,8 +70,7 @@ public class ListFragment extends BaseFragment implements EasyPermissions.Permis
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         mRecyclerView = view.findViewById(R.id.list_recycler_view);
@@ -84,7 +83,9 @@ public class ListFragment extends BaseFragment implements EasyPermissions.Permis
         return view;
     }
 
-
+    // -------------------
+    // HTTP (RxJAVA)
+    // -------------------
 
     private <T> DisposableObserver<T> createObserver(){
         return new DisposableObserver<T>() {

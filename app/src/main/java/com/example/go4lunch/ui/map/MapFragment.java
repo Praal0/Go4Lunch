@@ -28,6 +28,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.go4lunch.BuildConfig;
 import com.example.go4lunch.R;
 import com.example.go4lunch.api.PlacesStreams;
+import com.example.go4lunch.models.PlacesInfo.PlacesDetails.PlaceDetailsResults;
 import com.example.go4lunch.viewModels.MapViewModel;
 import com.example.go4lunch.api.RestaurantsHelper;
 import com.example.go4lunch.base.BaseFragment;
@@ -46,6 +47,7 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.observers.DisposableObserver;
@@ -223,16 +225,20 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
                         if (restaurantTask.isSuccessful()) {
                             Double lat = result.getResults().get(CurrentObject).getGeometry().getLocation().getLat();
                             Double lng = result.getResults().get(CurrentObject).getGeometry().getLocation().getLng();
+                            String title = result.getResults().get(CurrentObject).getName();
+
                             MarkerOptions markerOptions = new MarkerOptions();
                             markerOptions.position(new LatLng(lat, lng));
+                            markerOptions.title(title);
                             if (restaurantTask.getResult().isEmpty()) { // If there is no booking for today
-                                Bitmap bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.baseline_place_unbook),
-                                        128,128,true);
-
+                                Bitmap bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(),
+                                        R.drawable.baseline_place_unbook),
+                                        128,128,true);// If there is no booking for today
                                 markerOptions.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
                             } else { // If there is booking for today
-                                Bitmap bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.baseline_place_booked),
-                                        128,128,true);
+                                Bitmap bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(),
+                                        R.drawable.baseline_place_booked),
+                                        128,128,true);// If there is no booking for today
                                 markerOptions.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
                             }
                             Marker marker = googleMap.addMarker(markerOptions);
@@ -240,10 +246,42 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
                         }
                     });
                 }
+            }else{ Toast.makeText(getContext(), getResources().getString(R.string.no_restaurant_error_message), Toast.LENGTH_SHORT).show();
             }
+        }else if(results instanceof ArrayList){
+            Log.e(TAG, "updateUI: SEARCH_NUMBER : " + ((ArrayList)results).size() );
+            if (((ArrayList)results).size() > 0){
+                for(Object result : ((ArrayList)results)){
+                    PlaceDetailsResults detail = ((PlaceDetailsResults) result);
+                    RestaurantsHelper.getTodayBooking(detail.getPlaceId(), getTodayDate()).addOnCompleteListener(restaurantTask -> {
+                        if (restaurantTask.isSuccessful()) {
+                            Double lat = detail.getGeometry().getLocation().getLat();
+                            Double lng = detail.getGeometry().getLocation().getLng();
+                            String title = detail.getName();
+
+                            MarkerOptions markerOptions = new MarkerOptions();
+                            markerOptions.position(new LatLng(lat, lng));
+                            markerOptions.title(title);
+                            if (restaurantTask.getResult().isEmpty()) {
+                                Bitmap bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(),
+                                        R.drawable.baseline_place_unbook),
+                                        128,128,true);// If there is no booking for today
+                                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
+                            } else { // If there is booking for today
+                                Bitmap bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(),
+                                        R.drawable.baseline_place_booked),
+                                        128,128,true);// If there is no booking for today
+                                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
+                            }
+                            Marker marker = googleMap.addMarker(markerOptions);
+                            marker.setTag(detail.getPlaceId());
+                        }
+                    });
+                }
             }else{
-                Toast.makeText(getContext(), getResources().getString(R.string.no_restaurant_error_message), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getResources().getString(R.string.no_restaurant_error_message), Toast.LENGTH_LONG).show();
             }
+        }
     }
 
     // -----------------

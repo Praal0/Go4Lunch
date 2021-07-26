@@ -9,7 +9,6 @@ public class Message {
     private Date dateCreated;
     private String idUserSender;
     private String urlImageUserSender;
-    private String idUserReceiver;
     private String urlImage;
 
     public Message() {}
