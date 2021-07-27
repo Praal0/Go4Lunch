@@ -4,14 +4,12 @@ import android.Manifest;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -151,6 +149,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
                     PlacesStreams.streamFetchAutoCompleteInfo(query,mViewModel.getCurrentUserPositionFormatted(),1000,API_KEY).subscribeWith(createObserver());
                 }else{
                     Toast.makeText(getContext(), getResources().getString(R.string.search_too_short), Toast.LENGTH_LONG).show();
+                    mViewModel.executeHttpRequestWithRetrofitPlaceStream(createObserver());
                 }
                 return true;
 
@@ -158,7 +157,9 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
             @Override
             public boolean onQueryTextChange(String query) {
                 if (query.length() > 3){
-                   PlacesStreams.streamFetchAutoCompleteInfo(query,mViewModel.getCurrentUserPositionFormatted(),1000,API_KEY).subscribeWith(createObserver());
+                   PlacesStreams.streamFetchAutoCompleteInfo(query,mViewModel.getCurrentUserPositionFormatted(),10000,API_KEY).subscribeWith(createObserver());
+                }else{
+                    mViewModel.executeHttpRequestWithRetrofitPlaceStream(createObserver());
                 }
                 return false;
             }
@@ -313,24 +314,6 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
         }else{
             EasyPermissions.requestPermissions(this,"Need permission for use MapView",
                     RC_LOCATION_CONTACTS_PERM, perms);
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (checkLocationPermission()){
-                        mViewModel.startLocationRequest(getContext());
-                        mViewModel.getLocation().observe(getViewLifecycleOwner(),(location -> {
-                            if (location !=null){
-                                LatLng latLng = new LatLng(location.getLat(),location.getLng());
-                                mViewModel.updateCurrentUserPosition(latLng);
-                                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
-                                googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
-                                mViewModel.executeHttpRequestWithRetrofitPlaceStream(createObserver());
-                            }
-                        }));
-                    }
-
-                }
-            }, 3000);
         }
     }
 
@@ -355,8 +338,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
 
     @Override
     public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
-        EasyPermissions.requestPermissions(this,"Need permission for use MapView and ListView",
-                RC_LOCATION_CONTACTS_PERM, String.valueOf(perms));
+
     }
 
 

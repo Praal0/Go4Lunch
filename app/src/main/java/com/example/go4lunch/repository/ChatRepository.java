@@ -16,6 +16,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static android.content.ContentValues.TAG;
@@ -29,8 +30,10 @@ public class ChatRepository {
         return FirebaseFirestore.getInstance().collection(CHAT_COLLECTION);
     }
 
-    public Query getAllMessageForChat(){
+    public Query getAllMessageForChat(String userSender, String userReceiver){
         return getChatCollection()
+                .whereIn("idUserSender", Arrays.asList(userSender,userReceiver))
+                .whereArrayContainsAny("idUserReceiver",Arrays.asList(userSender,userReceiver))
                 .orderBy("dateCreated")
                 .limit(50);
     }
