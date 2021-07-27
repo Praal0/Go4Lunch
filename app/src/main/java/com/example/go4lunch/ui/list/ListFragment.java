@@ -193,7 +193,7 @@ public class ListFragment extends BaseFragment implements EasyPermissions.Permis
                 }
             }));
         }else{
-            EasyPermissions.requestPermissions(this,"Need permission for use MapView",
+            EasyPermissions.requestPermissions(this,"Need permission for use MapView and ListView",
                     RC_LOCATION_CONTACTS_PERM, perms);
         }
     }

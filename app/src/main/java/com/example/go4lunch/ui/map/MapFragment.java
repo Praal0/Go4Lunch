@@ -157,7 +157,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
             @Override
             public boolean onQueryTextChange(String query) {
                 if (query.length() > 3){
-                   PlacesStreams.streamFetchAutoCompleteInfo(query,mViewModel.getCurrentUserPositionFormatted(),1000,API_KEY).subscribeWith(createObserver());
+                   PlacesStreams.streamFetchAutoCompleteInfo(query,mViewModel.getCurrentUserPositionFormatted(),10000,API_KEY).subscribeWith(createObserver());
                 }else{
                     mViewModel.executeHttpRequestWithRetrofitPlaceStream(createObserver());
                 }
@@ -312,7 +312,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
                 }
             }));
         }else{
-            EasyPermissions.requestPermissions(this,"Need permission for use MapView",
+            EasyPermissions.requestPermissions(this,"Need permission for use MapView and ListView",
                     RC_LOCATION_CONTACTS_PERM, perms);
         }
     }
@@ -338,7 +338,8 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
 
     @Override
     public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
-
+        EasyPermissions.requestPermissions(this,"Need permission for use MapView and ListView",
+                RC_LOCATION_CONTACTS_PERM, String.valueOf(perms));
     }
 
 
