@@ -157,7 +157,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
             @Override
             public boolean onQueryTextChange(String query) {
                 if (query.length() > 3){
-                   PlacesStreams.streamFetchAutoCompleteInfo(query,mViewModel.getCurrentUserPositionFormatted(),10000,API_KEY).subscribeWith(createObserver());
+                   PlacesStreams.streamFetchAutoCompleteInfo(query,mViewModel.getCurrentUserPositionFormatted(),1000,API_KEY).subscribeWith(createObserver());
                 }else{
                     mViewModel.executeHttpRequestWithRetrofitPlaceStream(createObserver());
                 }

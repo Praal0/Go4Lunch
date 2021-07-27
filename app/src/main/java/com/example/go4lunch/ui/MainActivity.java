@@ -23,17 +23,17 @@
  import com.bumptech.glide.Glide;
  import com.bumptech.glide.request.RequestOptions;
  import com.example.go4lunch.R;
- import com.example.go4lunch.viewModels.MatesViewModel;
  import com.example.go4lunch.api.RestaurantsHelper;
  import com.example.go4lunch.api.UserHelper;
  import com.example.go4lunch.base.BaseActivity;
+ import com.example.go4lunch.ui.chat.MessageActivity;
  import com.example.go4lunch.ui.detail.PlaceDetailActivity;
- import com.example.go4lunch.ui.setting.SettingActivity;
  import com.example.go4lunch.ui.list.ListFragment;
+ import com.example.go4lunch.ui.login.LoginActivity;
  import com.example.go4lunch.ui.map.MapFragment;
  import com.example.go4lunch.ui.mates.MatesFragment;
- import com.example.go4lunch.ui.user.UsersFragment;
- import com.example.go4lunch.ui.login.LoginActivity;
+ import com.example.go4lunch.ui.setting.SettingActivity;
+ import com.example.go4lunch.viewModels.MatesViewModel;
  import com.firebase.ui.auth.AuthUI;
  import com.google.android.gms.tasks.OnSuccessListener;
  import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -48,7 +48,7 @@
 
  import jp.wasabeef.glide.transformations.BlurTransformation;
 
-public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener{
+ public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     // For design
     private Toolbar toolbar;
@@ -86,13 +86,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         drawer = findViewById(R.id.drawer_layout);
         mNavigationView = findViewById(R.id.activity_main_nav_view);
         bottomNav = findViewById(R.id.bottom_navigation);
-
     }
 
     // --------------------
     // UI
     // --------------------
-
     private OnSuccessListener<Void> updateUIAfterRESTRequestsCompleted(final int origin){
         return new OnSuccessListener<Void>() {
             @Override
@@ -109,6 +107,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         };
     }
 
+    // Void Launch activity
     private void launchActivity(Class mClass, Map<String,Object> info){
         Intent intent = new Intent(this, mClass);
         if (info != null){
@@ -167,8 +166,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     break;
 
                 case R.id.nav_tchat:
-                    toolbar.setTitle(R.string.chatTitle);
-                    newFragment = new UsersFragment();
+                    launchActivity(MessageActivity.class,null);
                     break;
             }
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -235,6 +233,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         .load(this.getCurrentUser().getPhotoUrl())
                         .apply(RequestOptions.circleCropTransform())
                         .into(mImageView);
+            }else{
+                Glide.with(this)
+                        .load(R.drawable.ic_anon_user_48dp)
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(mImageView);
             }
 
             //Get email from Firebase
@@ -267,7 +270,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                             }
                             launchActivity(PlaceDetailActivity.class,extra);
                         }
-
                     }
                 });
                 break;

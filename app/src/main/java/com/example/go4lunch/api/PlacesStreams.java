@@ -1,8 +1,6 @@
 package com.example.go4lunch.api;
 
 
-
-import com.example.go4lunch.api.PlacesService;
 import com.example.go4lunch.models.AutoComplete.AutoCompleteResult;
 import com.example.go4lunch.models.PlacesInfo.MapPlacesInfo;
 import com.example.go4lunch.models.PlacesInfo.PlacesDetails.PlaceDetailsInfo;

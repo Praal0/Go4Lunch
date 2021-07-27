@@ -12,13 +12,12 @@ import static org.junit.Assert.assertEquals;
 
 public class MessageTest {
     private Message messageTest;
-    private Message messagePicture;
+
 
 
     @Before
     public void setUp() throws Exception {
         messageTest = new Message("test","user1","picture1","user2", Calendar.getInstance().getTime());
-        messagePicture = new Message("test","restaurantPicture","user1","picture1","user2", Calendar.getInstance().getTime());
     }
 
     @Test
@@ -26,7 +25,6 @@ public class MessageTest {
         assertEquals("test", messageTest.getMessage());
         assertEquals("user1", messageTest.getIdUserSender());
         assertEquals("picture1", messageTest.getUrlImageUserSender());
-        assertEquals("user2", messageTest.getIdUserReceiver());
     }
 
     @Test
