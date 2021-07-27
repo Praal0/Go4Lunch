@@ -38,6 +38,7 @@
     <string name="settings_notification_title" translatable="false">Notifications</string>
     <string name="settings_save_text">Save</string>
     <string name="settings_save_ok">Settings saved!</string>
+    <string name="selected_language">Selected Language</string>
 
 
     <!-- NAVIGATION DRAWER -->

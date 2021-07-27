@@ -1,6 +1,7 @@
 package com.example.go4lunch.ui.login;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -86,6 +87,7 @@ public class LoginActivity extends BaseActivity {
                         .createSignInIntentBuilder()
                         .setTheme(R.style.LoginTheme)
                         .setAvailableProviders(providers)
+                        .setLockOrientation(true)
                         .setIsSmartLockEnabled(false, true)
                         .setLogo(R.drawable.meal_logo_login)
                         .build(),

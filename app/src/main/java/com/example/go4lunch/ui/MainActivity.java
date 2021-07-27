@@ -60,7 +60,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
         loadLocale();
         setContentView(R.layout.activity_main);
