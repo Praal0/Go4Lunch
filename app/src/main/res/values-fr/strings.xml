@@ -55,7 +55,5 @@
     <string name="exception_error_message">Une erreur s\'est produite, veuillez vérifier votre connexion Internet</string>
     <string name="generic_error_message">Aucun restaurant trouvé</string>
     <string name="settings_language_text">Changer de langue</string>
-    <string name="workmates">Collaborateurs disponibles</string>
-    <string name="hungry" translatable="false">J\'ai faim!</string>
     <string name="selected_language">Selection de la langue</string>
 </resources>

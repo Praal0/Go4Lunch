@@ -91,39 +91,43 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
 
     @Override
     public void onMapReady(@NonNull GoogleMap mMap) {
-        googleMap = mMap;
         if (checkLocationPermission()) {
+            googleMap = mMap;
             //Request location updates:
             googleMap.setMyLocationEnabled(true);
-        }
-        googleMap.getUiSettings().setCompassEnabled(true);
-        googleMap.getUiSettings().setMyLocationButtonEnabled(true);
-        View locationButton = ((View) mMapView.findViewById(Integer.parseInt("1")).
-                getParent()).findViewById(Integer.parseInt("2"));
+            googleMap.getUiSettings().setCompassEnabled(true);
+            googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+            View locationButton = ((View) mMapView.findViewById(Integer.parseInt("1")).
+                    getParent()).findViewById(Integer.parseInt("2"));
 
-        // and next place it, for example, on bottom right (as Google Maps app)
-        RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
-        // position on right bottom
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-        rlp.setMargins(0, 0, 30, 30);
-        try {
-            // Customise the styling of the base map using a JSON object defined
-            // in a raw resource file.
-            boolean success = googleMap.setMapStyle(
-                    MapStyleOptions.loadRawResourceStyle(
-                            getContext(), R.raw.mapstyle));
+            // and next place it, for example, on bottom right (as Google Maps app)
+            RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
+            // position on right bottom
+            rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
+            rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+            rlp.setMargins(0, 0, 30, 30);
+            try {
+                // Customise the styling of the base map using a JSON object defined
+                // in a raw resource file.
+                boolean success = googleMap.setMapStyle(
+                        MapStyleOptions.loadRawResourceStyle(
+                                getContext(), R.raw.mapstyle));
 
-            if (!success) {
-                Log.e(TAG, "Style parsing failed.");
+                if (!success) {
+                    Log.e(TAG, "Style parsing failed.");
+                }
+
+            }catch (Resources.NotFoundException e){
+                Log.e(TAG, "Can't find style. Error: ", e);
             }
 
-        }catch (Resources.NotFoundException e){
-            Log.e(TAG, "Can't find style. Error: ", e);
+            googleMap.getUiSettings().setRotateGesturesEnabled(true);
+            googleMap.setOnMarkerClickListener(MapFragment.this::onClickMarker);
+        }else{
+            EasyPermissions.requestPermissions(this,"Need permission for use MapView and ListView",
+                    RC_LOCATION_CONTACTS_PERM, String.valueOf(perms));
         }
 
-        googleMap.getUiSettings().setRotateGesturesEnabled(true);
-        googleMap.setOnMarkerClickListener(MapFragment.this::onClickMarker);
     }
 
     @Override

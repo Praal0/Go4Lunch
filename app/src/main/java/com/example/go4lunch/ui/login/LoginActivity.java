@@ -81,6 +81,7 @@ public class LoginActivity extends BaseActivity {
                   new AuthUI.IdpConfig.FacebookBuilder().build(),
                   new AuthUI.IdpConfig.TwitterBuilder().build());
 
+
         // Launch the activity
         startActivityForResult(
                 AuthUI.getInstance()
