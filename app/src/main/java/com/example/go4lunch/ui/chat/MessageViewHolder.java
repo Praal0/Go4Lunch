@@ -1,6 +1,5 @@
 package com.example.go4lunch.ui.chat;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.view.View;
@@ -9,7 +8,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,9 +17,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.go4lunch.R;
 import com.example.go4lunch.models.Message;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -74,7 +70,8 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
     public void updateWithMessage(Message message, String currentUserId, RequestManager glide){
 
         // Check if current user is the sender
-        Boolean isCurrentUser = message.getIdUserSender().equals(currentUserId);
+        String idSender = message.getIdUserSenderIdReceiver().substring(0,28);
+        Boolean isCurrentUser = idSender.equals(currentUserId);
 
         // Update message TextView
         this.textViewMessage.setText(message.getMessage());

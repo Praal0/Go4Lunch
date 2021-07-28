@@ -31,9 +31,11 @@ public class ChatRepository {
     }
 
     public Query getAllMessageForChat(String userSender, String userReceiver){
+        String firstCanon = userSender + "/" + userReceiver;
+        String secondCanon = userReceiver + "/" + userSender;
+
         return getChatCollection()
-                .whereIn("idUserSender", Arrays.asList(userSender,userReceiver))
-                .whereArrayContainsAny("idUserReceiver",Arrays.asList(userSender,userReceiver))
+                .whereIn("idUserSenderIdReceiver", Arrays.asList(firstCanon,secondCanon))
                 .orderBy("dateCreated")
                 .limit(50);
     }

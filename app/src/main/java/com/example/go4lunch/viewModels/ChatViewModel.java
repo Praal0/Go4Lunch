@@ -30,7 +30,7 @@ public class ChatViewModel extends ViewModel {
 
     public static Task<DocumentReference> createMessageForChat(String textMessage, User userSender,User userReceiver){
         // Create the Message object
-        Message message = new Message(textMessage,userSender.getUid(),userSender.getUrlPicture(),userReceiver.getUid(), Calendar.getInstance().getTime());
+        Message message = new Message(textMessage,userSender.getUid()+"/"+userReceiver.getUid(),userSender.getUrlPicture(), Calendar.getInstance().getTime());
 
         // Store Message to Firestore
         return ChatRepository.getChatCollection()
@@ -40,7 +40,7 @@ public class ChatViewModel extends ViewModel {
     public static Task<DocumentReference> createMessageWithImageForChat(String urlImage, String textMessage, User userSender,User userReceiver){
 
         // Creating Message with the URL image
-        Message message = new Message(textMessage, urlImage, userSender.getUid(),userSender.getUrlPicture(),userReceiver.getUid(), Calendar.getInstance().getTime());
+        Message message = new Message(textMessage, urlImage, userSender.getUid()+"/"+userReceiver.getUid(),userSender.getUrlPicture(), Calendar.getInstance().getTime());
 
         // Storing Message on Firestore
         return ChatRepository.getChatCollection()
