@@ -1,54 +1,60 @@
- package com.example.go4lunch.ui;
+package com.example.go4lunch.ui;
 
- import android.content.Intent;
- import android.content.pm.ActivityInfo;
- import android.os.Bundle;
- import android.text.TextUtils;
- import android.util.Log;
- import android.view.Menu;
- import android.view.MenuItem;
- import android.view.View;
- import android.widget.ImageView;
- import android.widget.TextView;
- import android.widget.Toast;
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
- import androidx.appcompat.app.ActionBarDrawerToggle;
- import androidx.appcompat.widget.Toolbar;
- import androidx.core.view.GravityCompat;
- import androidx.drawerlayout.widget.DrawerLayout;
- import androidx.fragment.app.Fragment;
- import androidx.fragment.app.FragmentTransaction;
- import androidx.lifecycle.ViewModelProvider;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
- import com.bumptech.glide.Glide;
- import com.bumptech.glide.request.RequestOptions;
- import com.example.go4lunch.R;
- import com.example.go4lunch.viewModels.MatesViewModel;
- import com.example.go4lunch.api.RestaurantsHelper;
- import com.example.go4lunch.api.UserHelper;
- import com.example.go4lunch.base.BaseActivity;
- import com.example.go4lunch.ui.detail.PlaceDetailActivity;
- import com.example.go4lunch.ui.setting.SettingActivity;
- import com.example.go4lunch.ui.list.ListFragment;
- import com.example.go4lunch.ui.map.MapFragment;
- import com.example.go4lunch.ui.mates.MatesFragment;
- import com.example.go4lunch.ui.user.UsersFragment;
- import com.example.go4lunch.ui.login.LoginActivity;
- import com.firebase.ui.auth.AuthUI;
- import com.google.android.gms.tasks.OnSuccessListener;
- import com.google.android.material.bottomnavigation.BottomNavigationView;
- import com.google.android.material.navigation.NavigationView;
- import com.google.firebase.firestore.DocumentSnapshot;
- import com.google.firebase.firestore.EventListener;
- import com.google.firebase.firestore.FirebaseFirestoreException;
- import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.example.go4lunch.R;
+import com.example.go4lunch.api.RestaurantsHelper;
+import com.example.go4lunch.api.UserHelper;
+import com.example.go4lunch.base.BaseActivity;
+import com.example.go4lunch.ui.chat.MessageActivity;
+import com.example.go4lunch.ui.detail.PlaceDetailActivity;
+import com.example.go4lunch.ui.list.ListFragment;
+import com.example.go4lunch.ui.login.LoginActivity;
+import com.example.go4lunch.ui.map.MapFragment;
+import com.example.go4lunch.ui.mates.MatesFragment;
+import com.example.go4lunch.ui.setting.SettingActivity;
+import com.example.go4lunch.viewModels.MatesViewModel;
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
- import java.util.HashMap;
- import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
- import jp.wasabeef.glide.transformations.BlurTransformation;
+import jp.wasabeef.glide.transformations.BlurTransformation;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.AppSettingsDialog;
+import pub.devrel.easypermissions.EasyPermissions;
 
-public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, EasyPermissions.PermissionCallbacks{
 
     // For design
     private Toolbar toolbar;
@@ -57,24 +63,36 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private BottomNavigationView bottomNav;
     private static final int SIGN_OUT_TASK = 10;
     protected MatesViewModel mViewModel;
+    private static final String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
 
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
-        loadLocale();
-        setContentView(R.layout.activity_main);
-        setSupportActionBar(toolbar);
-        init();
-        configureToolBar();
-        initNavigationdrawer();
-        configureBottomNav();
-        configureNavigationView();
-        updateUIWhenCreating();
-        retrieveCurrentUser();
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_view,new MapFragment()).commit();
+        initialize();
+
     }
 
+    @AfterPermissionGranted(124)
+    private void initialize() {
+        if (!EasyPermissions.hasPermissions(this,perms)){
+            EasyPermissions.requestPermissions(this,"Need permission for use MapView and ListView",
+                    124, perms);
+        }else{
+            loadLocale();
+            setContentView(R.layout.activity_main);
+            setSupportActionBar(toolbar);
+            init();
+            configureToolBar();
+            initNavigationdrawer();
+            configureBottomNav();
+            configureNavigationView();
+            updateUIWhenCreating();
+            retrieveCurrentUser();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_view,new MapFragment()).commit();
+        }
+    }
 
 
     // --------------------
@@ -86,13 +104,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         drawer = findViewById(R.id.drawer_layout);
         mNavigationView = findViewById(R.id.activity_main_nav_view);
         bottomNav = findViewById(R.id.bottom_navigation);
-
     }
 
     // --------------------
     // UI
     // --------------------
-
     private OnSuccessListener<Void> updateUIAfterRESTRequestsCompleted(final int origin){
         return new OnSuccessListener<Void>() {
             @Override
@@ -109,6 +125,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         };
     }
 
+    // Void Launch activity
     private void launchActivity(Class mClass, Map<String,Object> info){
         Intent intent = new Intent(this, mClass);
         if (info != null){
@@ -167,8 +184,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     break;
 
                 case R.id.nav_tchat:
-                    toolbar.setTitle(R.string.chatTitle);
-                    newFragment = new UsersFragment();
+                    launchActivity(MessageActivity.class,null);
                     break;
             }
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -235,6 +251,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         .load(this.getCurrentUser().getPhotoUrl())
                         .apply(RequestOptions.circleCropTransform())
                         .into(mImageView);
+            }else{
+                Glide.with(this)
+                        .load(R.drawable.ic_anon_user_48dp)
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(mImageView);
             }
 
             //Get email from Firebase
@@ -267,7 +288,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                             }
                             launchActivity(PlaceDetailActivity.class,extra);
                         }
-
                     }
                 });
                 break;
@@ -295,5 +315,23 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         AuthUI.getInstance()
                 .signOut(this)
                 .addOnSuccessListener(this, this.updateUIAfterRESTRequestsCompleted(SIGN_OUT_TASK));
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
+        initialize();
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+            new AppSettingsDialog.Builder(this).build().show();
+        }
     }
 }

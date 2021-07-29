@@ -54,7 +54,7 @@ import io.reactivex.observers.DisposableObserver;
 import pub.devrel.easypermissions.EasyPermissions;
 
 
-public class MapFragment extends BaseFragment implements OnMapReadyCallback, EasyPermissions.PermissionCallbacks, LocationListener {
+public class MapFragment extends BaseFragment implements OnMapReadyCallback, LocationListener {
 
     public static final String API_KEY = BuildConfig.API_KEY;
     private static final String TAG = MapFragment.class.getSimpleName();
@@ -91,39 +91,43 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
 
     @Override
     public void onMapReady(@NonNull GoogleMap mMap) {
-        googleMap = mMap;
         if (checkLocationPermission()) {
+            googleMap = mMap;
             //Request location updates:
             googleMap.setMyLocationEnabled(true);
-        }
-        googleMap.getUiSettings().setCompassEnabled(true);
-        googleMap.getUiSettings().setMyLocationButtonEnabled(true);
-        View locationButton = ((View) mMapView.findViewById(Integer.parseInt("1")).
-                getParent()).findViewById(Integer.parseInt("2"));
+            googleMap.getUiSettings().setCompassEnabled(true);
+            googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+            View locationButton = ((View) mMapView.findViewById(Integer.parseInt("1")).
+                    getParent()).findViewById(Integer.parseInt("2"));
 
-        // and next place it, for example, on bottom right (as Google Maps app)
-        RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
-        // position on right bottom
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-        rlp.setMargins(0, 0, 30, 30);
-        try {
-            // Customise the styling of the base map using a JSON object defined
-            // in a raw resource file.
-            boolean success = googleMap.setMapStyle(
-                    MapStyleOptions.loadRawResourceStyle(
-                            getContext(), R.raw.mapstyle));
+            // and next place it, for example, on bottom right (as Google Maps app)
+            RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
+            // position on right bottom
+            rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
+            rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+            rlp.setMargins(0, 0, 30, 30);
+            try {
+                // Customise the styling of the base map using a JSON object defined
+                // in a raw resource file.
+                boolean success = googleMap.setMapStyle(
+                        MapStyleOptions.loadRawResourceStyle(
+                                getContext(), R.raw.mapstyle));
 
-            if (!success) {
-                Log.e(TAG, "Style parsing failed.");
+                if (!success) {
+                    Log.e(TAG, "Style parsing failed.");
+                }
+
+            }catch (Resources.NotFoundException e){
+                Log.e(TAG, "Can't find style. Error: ", e);
             }
 
-        }catch (Resources.NotFoundException e){
-            Log.e(TAG, "Can't find style. Error: ", e);
+            googleMap.getUiSettings().setRotateGesturesEnabled(true);
+            googleMap.setOnMarkerClickListener(MapFragment.this::onClickMarker);
+        }else{
+            EasyPermissions.requestPermissions(this,"Need permission for use MapView and ListView",
+                    RC_LOCATION_CONTACTS_PERM, String.valueOf(perms));
         }
 
-        googleMap.getUiSettings().setRotateGesturesEnabled(true);
-        googleMap.setOnMarkerClickListener(MapFragment.this::onClickMarker);
     }
 
     @Override
@@ -157,7 +161,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
             @Override
             public boolean onQueryTextChange(String query) {
                 if (query.length() > 3){
-                   PlacesStreams.streamFetchAutoCompleteInfo(query,mViewModel.getCurrentUserPositionFormatted(),10000,API_KEY).subscribeWith(createObserver());
+                    PlacesStreams.streamFetchAutoCompleteInfo(query,mViewModel.getCurrentUserPositionFormatted(),1000,API_KEY).subscribeWith(createObserver());
                 }else{
                     mViewModel.executeHttpRequestWithRetrofitPlaceStream(createObserver());
                 }
@@ -312,8 +316,9 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
                 }
             }));
         }else{
-            EasyPermissions.requestPermissions(this,"Need permission for use MapView",
+            EasyPermissions.requestPermissions(this,"Need permission for use MapView and ListView",
                     RC_LOCATION_CONTACTS_PERM, perms);
+            refresh();
         }
     }
 
@@ -330,17 +335,6 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Eas
             return false;
         }
     }
-
-    @Override
-    public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
-        refresh();
-    }
-
-    @Override
-    public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
-
-    }
-
 
     private boolean checkLocationPermission() {
         if (EasyPermissions.hasPermissions(getContext(), perms)) {
