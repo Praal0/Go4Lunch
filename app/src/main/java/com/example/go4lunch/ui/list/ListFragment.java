@@ -5,14 +5,6 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,18 +14,25 @@ import android.view.ViewGroup;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.example.go4lunch.BuildConfig;
 import com.example.go4lunch.R;
-import com.example.go4lunch.utils.ItemClickSupport;
 import com.example.go4lunch.api.PlacesStreams;
-import com.example.go4lunch.viewModels.MapViewModel;
 import com.example.go4lunch.base.BaseFragment;
-import com.example.go4lunch.ui.map.MapFragment;
-import com.example.go4lunch.ui.MainActivity;
-import com.example.go4lunch.ui.detail.PlaceDetailActivity;
 import com.example.go4lunch.injection.Injection;
 import com.example.go4lunch.injection.MapViewModelFactory;
 import com.example.go4lunch.models.PlacesInfo.PlacesDetails.PlaceDetailsResults;
+import com.example.go4lunch.ui.MainActivity;
+import com.example.go4lunch.ui.detail.PlaceDetailActivity;
+import com.example.go4lunch.ui.map.MapFragment;
+import com.example.go4lunch.utils.ItemClickSupport;
+import com.example.go4lunch.viewModels.MapViewModel;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
@@ -112,6 +111,7 @@ public class ListFragment extends BaseFragment implements EasyPermissions.Permis
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
+
         inflater.inflate(R.menu.toolbar_menu, menu);
 
         SearchManager searchManager = (SearchManager) getContext().getSystemService(Context.SEARCH_SERVICE);
@@ -127,10 +127,11 @@ public class ListFragment extends BaseFragment implements EasyPermissions.Permis
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if (query.length() > 3){
+                if (query.length() > 3 ){
                     PlacesStreams.streamFetchAutoCompleteInfo(query,mViewModel.getCurrentUserPositionFormatted(),1000,API_KEY).subscribeWith(createObserver());
                 }else{
                     Toast.makeText(getContext(), getResources().getString(R.string.search_too_short), Toast.LENGTH_LONG).show();
+                    executeHttpRequestWithRetrofit();
                 }
                 return true;
 
@@ -139,10 +140,13 @@ public class ListFragment extends BaseFragment implements EasyPermissions.Permis
             public boolean onQueryTextChange(String query) {
                 if (query.length() > 3){
                     PlacesStreams.streamFetchAutoCompleteInfo(query,mViewModel.getCurrentUserPositionFormatted(),1000,API_KEY).subscribeWith(createObserver());
+                }else{
+                    executeHttpRequestWithRetrofit();
                 }
                 return false;
             }
         });
+
     }
 
     // Configure item click on RecyclerView

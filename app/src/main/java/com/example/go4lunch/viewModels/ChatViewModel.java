@@ -40,7 +40,7 @@ public class ChatViewModel extends ViewModel {
     public static Task<DocumentReference> createMessageWithImageForChat(String urlImage, String textMessage, User userSender,User userReceiver){
 
         // Creating Message with the URL image
-        Message message = new Message(textMessage, urlImage, userSender.getUid()+"/"+userReceiver.getUid(),userSender.getUrlPicture(), Calendar.getInstance().getTime());
+        Message message = new Message(textMessage, urlImage,userSender.getUid(), userSender.getUid()+"/"+userReceiver.getUid(),userSender.getUrlPicture(), Calendar.getInstance().getTime());
 
         // Storing Message on Firestore
         return ChatRepository.getChatCollection()
