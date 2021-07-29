@@ -12,11 +12,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,10 +30,12 @@ import com.example.go4lunch.api.UserHelper;
 import com.example.go4lunch.base.BaseActivity;
 import com.example.go4lunch.injection.ChatViewModelFactory;
 import com.example.go4lunch.injection.Injection;
+import com.example.go4lunch.injection.MapViewModelFactory;
 import com.example.go4lunch.models.Message;
 import com.example.go4lunch.models.User;
-import com.example.go4lunch.ui.MainActivity;
 import com.example.go4lunch.viewModels.ChatViewModel;
+import com.example.go4lunch.viewModels.MapViewModel;
+import com.example.go4lunch.viewModels.MatesViewModel;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -44,13 +48,17 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.List;
 import java.util.UUID;
 
 import pub.devrel.easypermissions.EasyPermissions;
 
+import static com.example.go4lunch.ui.user.UsersFragment.USER_DATA;
 
 public class MessageActivity extends BaseActivity implements  MessageAdapter.Listener {
     private Toolbar mToolbar;
+    private ImageView profileImageView;
+    private TextView profileTextView;
     private RecyclerView recyclerView;
     private ImageView imageViewPreview;
     private Uri uriImageSelected;
@@ -64,6 +72,7 @@ public class MessageActivity extends BaseActivity implements  MessageAdapter.Lis
     private static final int RC_IMAGE_PERMS = 100;
     private static final int RC_CHOOSE_PHOTO = 200;
     private User modelCurrentUser;
+    private User modelUserReceiver;
     private MessageAdapter mMessageAdapter;
 
 
@@ -76,6 +85,7 @@ public class MessageActivity extends BaseActivity implements  MessageAdapter.Lis
         ChatViewModelFactory chatViewModelFactory = Injection.provideChatViewModelFactory(this.getApplication());
         chatViewModel = new ViewModelProvider(this, chatViewModelFactory).get(ChatViewModel.class);
         configureToolbar();
+        updateUIWhenCreating();
         getCurrentUserFromFirestore();
         clickSendMessage();
         clickAddFile();
@@ -93,13 +103,17 @@ public class MessageActivity extends BaseActivity implements  MessageAdapter.Lis
         editTextMessage = findViewById(R.id.activity_chat_message_edit_text);
         activity_chat_send_button = findViewById(R.id.activity_chat_send_button);
         activity_chat_file_button = findViewById(R.id.activity_chat_add_file_button);
+        profileImageView = findViewById(R.id.profil_image);
+        profileTextView = findViewById(R.id.profil_textView);
         mToolbar = findViewById(R.id.toolbar);
+        Intent intent = getIntent();
+        modelUserReceiver = intent.getParcelableExtra(USER_DATA);
     }
 
     private void configureToolbar(){
         setSupportActionBar(mToolbar);
         ActionBar ab = getSupportActionBar();
-        ab.setTitle(R.string.chatTitle);
+        ab.setTitle("");
         ab.setHomeButtonEnabled(true);
         ab.setDisplayHomeAsUpEnabled(true);
     }
@@ -108,8 +122,6 @@ public class MessageActivity extends BaseActivity implements  MessageAdapter.Lis
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case android.R.id.home:
-                Intent homeIntent = new Intent(this, MainActivity.class);
-                startActivity(homeIntent);
                 finish();
         }
         return (super.onOptionsItemSelected(menuItem));
@@ -137,7 +149,7 @@ public class MessageActivity extends BaseActivity implements  MessageAdapter.Lis
                     // Check if the ImageView is set
                     if (imageViewPreview.getDrawable() == null) {
                         // SEND A TEXT MESSAGE
-                        ChatViewModel.createMessageForChat(editTextMessage.getText().toString(), modelCurrentUser).addOnFailureListener(onFailureListener());
+                        ChatViewModel.createMessageForChat(editTextMessage.getText().toString(), modelCurrentUser, modelUserReceiver).addOnFailureListener(onFailureListener());
                         editTextMessage.setText("");
                     } else {
                         // SEND A IMAGE + TEXT IMAGE
@@ -180,7 +192,7 @@ public class MessageActivity extends BaseActivity implements  MessageAdapter.Lis
             public void onComplete(@NonNull Task<Uri> task) {
                 if (task.isSuccessful()) {
                     Uri downloadUri = task.getResult();
-                    ChatViewModel.createMessageWithImageForChat(downloadUri.toString(), message, modelCurrentUser).addOnFailureListener(onFailureListener());
+                    ChatViewModel.createMessageWithImageForChat(downloadUri.toString(), message, modelCurrentUser,modelUserReceiver).addOnFailureListener(onFailureListener());
                 } else {
                     Log.e("CHAT_ACTIVITY_TAG", "Error ON_COMPLETE : " + task.getException() );
                 }
@@ -192,10 +204,15 @@ public class MessageActivity extends BaseActivity implements  MessageAdapter.Lis
     // UI
     // --------------------
 
-
+    // Update UI when activity is creating
+    private void updateUIWhenCreating(){
+        profileTextView.setText(modelUserReceiver.getUsername().toString());
+        Glide.with(MessageActivity.this).load(modelUserReceiver.getUrlPicture())
+                .apply(RequestOptions.circleCropTransform()).into(profileImageView);
+    }
 
     private void configureRecyclerView(){
-        mMessageAdapter = new MessageAdapter(generateOptionsForAdapter(chatViewModel.getAllMessageForChat()), Glide.with(this), this, modelCurrentUser.getUid());
+        mMessageAdapter = new MessageAdapter(generateOptionsForAdapter(chatViewModel.getAllMessageForChat(modelCurrentUser.getUid(),modelUserReceiver.getUid())), Glide.with(this), this, modelCurrentUser.getUid());
         mMessageAdapter.startListening();
         mMessageAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
