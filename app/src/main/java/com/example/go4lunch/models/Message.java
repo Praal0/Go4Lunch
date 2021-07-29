@@ -1,29 +1,31 @@
 package com.example.go4lunch.models;
 
-import org.joda.time.DateTime;
-
 import java.util.Date;
 
 public class Message {
     private String message;
     private Date dateCreated;
     private String idUserSender;
+    private String idUserSenderIdReceiver;
     private String urlImageUserSender;
+
     private String urlImage;
 
     public Message() {}
 
-    public Message(String message, String idUserSender,String urlImageUserSender, Date dateCreated) {
+    public Message(String message,String idUserSender, String idUserSenderIdUserReceiver,String urlImageUserSender, Date dateCreated) {
         this.message = message;
         this.idUserSender = idUserSender;
+        this.idUserSenderIdReceiver = idUserSenderIdUserReceiver;
         this.urlImageUserSender = urlImageUserSender;
         this.dateCreated = dateCreated;
     }
 
-    public Message(String message, String urlImage, String idUserSender,String urlImageUserSender, Date dateCreated) {
+    public Message(String message, String urlImage, String idUserSender,String idUserSenderIdUserReceiver,String urlImageUserSender, Date dateCreated) {
         this.message = message;
         this.urlImage = urlImage;
         this.idUserSender = idUserSender;
+        this.idUserSenderIdReceiver = idUserSenderIdUserReceiver;
         this.urlImageUserSender = urlImageUserSender;
         this.dateCreated = dateCreated;
     }
@@ -33,6 +35,7 @@ public class Message {
     public Date getDateCreated() { return dateCreated; }
     public String getUrlImage() { return urlImage; }
     public String getIdUserSender(){return idUserSender;}
+    public String getIdUserSenderIdReceiver(){return idUserSenderIdReceiver;}
     public String getUrlImageUserSender(){return urlImageUserSender;}
 
 

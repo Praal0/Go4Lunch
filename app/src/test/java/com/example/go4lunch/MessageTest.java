@@ -17,13 +17,14 @@ public class MessageTest {
 
     @Before
     public void setUp() throws Exception {
-        messageTest = new Message("test","user1","picture1","user2", Calendar.getInstance().getTime());
+        messageTest = new Message("test","fdf","user1/user2","picture1", Calendar.getInstance().getTime());
     }
 
     @Test
     public void getMessageInfo(){
         assertEquals("test", messageTest.getMessage());
-        assertEquals("user1", messageTest.getIdUserSender());
+        assertEquals("fdf",messageTest.getIdUserSender());
+        assertEquals("user1/user2", messageTest.getIdUserSenderIdReceiver());
         assertEquals("picture1", messageTest.getUrlImageUserSender());
     }
 

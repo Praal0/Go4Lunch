@@ -53,15 +53,15 @@ import java.util.List;
 import io.reactivex.observers.DisposableObserver;
 import pub.devrel.easypermissions.EasyPermissions;
 
-import static com.example.go4lunch.ui.MainActivity.RC_LOCATION_CONTACTS_PERM;
-import static com.example.go4lunch.ui.MainActivity.perms;
-
 
 public class MapFragment extends BaseFragment implements OnMapReadyCallback, LocationListener {
 
     public static final String API_KEY = BuildConfig.API_KEY;
     private static final String TAG = MapFragment.class.getSimpleName();
+    private static final String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+
     public static final String SEARCH_TYPE = "restaurant";
+    private static final int RC_LOCATION_CONTACTS_PERM = 124;
 
     private GoogleMap googleMap;
     private MapView mMapView;
@@ -161,7 +161,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Loc
             @Override
             public boolean onQueryTextChange(String query) {
                 if (query.length() > 3){
-                   PlacesStreams.streamFetchAutoCompleteInfo(query,mViewModel.getCurrentUserPositionFormatted(),1000,API_KEY).subscribeWith(createObserver());
+                    PlacesStreams.streamFetchAutoCompleteInfo(query,mViewModel.getCurrentUserPositionFormatted(),1000,API_KEY).subscribeWith(createObserver());
                 }else{
                     mViewModel.executeHttpRequestWithRetrofitPlaceStream(createObserver());
                 }
