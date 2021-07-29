@@ -35,6 +35,7 @@ import com.example.go4lunch.ui.login.LoginActivity;
 import com.example.go4lunch.ui.map.MapFragment;
 import com.example.go4lunch.ui.mates.MatesFragment;
 import com.example.go4lunch.ui.setting.SettingActivity;
+import com.example.go4lunch.ui.user.UsersFragment;
 import com.example.go4lunch.viewModels.MatesViewModel;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -184,7 +185,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     break;
 
                 case R.id.nav_tchat:
-                    launchActivity(MessageActivity.class,null);
+                    toolbar.setTitle(R.string.chatTitle);
+                    newFragment = new UsersFragment();
                     break;
             }
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
