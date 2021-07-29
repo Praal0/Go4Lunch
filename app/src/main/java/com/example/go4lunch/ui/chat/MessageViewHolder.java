@@ -70,8 +70,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
     public void updateWithMessage(Message message, String currentUserId, RequestManager glide){
 
         // Check if current user is the sender
-        String idSender = message.getIdUserSenderIdReceiver().substring(0,28);
-        Boolean isCurrentUser = idSender.equals(currentUserId);
+        Boolean isCurrentUser = message.getIdUserSender().equals(currentUserId);
 
         // Update message TextView
         this.textViewMessage.setText(message.getMessage());

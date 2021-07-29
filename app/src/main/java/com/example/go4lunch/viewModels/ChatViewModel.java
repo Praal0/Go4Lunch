@@ -30,7 +30,7 @@ public class ChatViewModel extends ViewModel {
 
     public static Task<DocumentReference> createMessageForChat(String textMessage, User userSender,User userReceiver){
         // Create the Message object
-        Message message = new Message(textMessage,userSender.getUid()+"/"+userReceiver.getUid(),userSender.getUrlPicture(), Calendar.getInstance().getTime());
+        Message message = new Message(textMessage,userSender.getUid(),userSender.getUid()+"/"+userReceiver.getUid(),userSender.getUrlPicture(), Calendar.getInstance().getTime());
 
         // Store Message to Firestore
         return ChatRepository.getChatCollection()
