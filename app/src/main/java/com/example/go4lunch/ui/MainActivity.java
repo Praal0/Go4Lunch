@@ -63,7 +63,8 @@
     private BottomNavigationView bottomNav;
     private static final int SIGN_OUT_TASK = 10;
     protected MatesViewModel mViewModel;
-     private static final String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+    public static final String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+    public static final int RC_LOCATION_CONTACTS_PERM = 124;
 
     @Override
 
@@ -74,7 +75,7 @@
 
     }
 
-    @AfterPermissionGranted(124)
+    @AfterPermissionGranted(RC_LOCATION_CONTACTS_PERM)
      private void initialize() {
         if (!EasyPermissions.hasPermissions(this,perms)){
             EasyPermissions.requestPermissions(this,"Need permission for use MapView and ListView",
