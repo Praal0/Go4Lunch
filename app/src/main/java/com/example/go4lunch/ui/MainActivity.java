@@ -1,5 +1,6 @@
  package com.example.go4lunch.ui;
 
+ import android.Manifest;
  import android.content.Intent;
  import android.content.pm.ActivityInfo;
  import android.os.Bundle;
@@ -12,6 +13,7 @@
  import android.widget.TextView;
  import android.widget.Toast;
 
+ import androidx.annotation.NonNull;
  import androidx.appcompat.app.ActionBarDrawerToggle;
  import androidx.appcompat.widget.Toolbar;
  import androidx.core.view.GravityCompat;
@@ -44,11 +46,15 @@
  import com.google.firebase.firestore.QueryDocumentSnapshot;
 
  import java.util.HashMap;
+ import java.util.List;
  import java.util.Map;
 
  import jp.wasabeef.glide.transformations.BlurTransformation;
+ import pub.devrel.easypermissions.AfterPermissionGranted;
+ import pub.devrel.easypermissions.AppSettingsDialog;
+ import pub.devrel.easypermissions.EasyPermissions;
 
- public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener{
+ public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, EasyPermissions.PermissionCallbacks{
 
     // For design
     private Toolbar toolbar;
@@ -57,27 +63,39 @@
     private BottomNavigationView bottomNav;
     private static final int SIGN_OUT_TASK = 10;
     protected MatesViewModel mViewModel;
+     private static final String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
 
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
-        loadLocale();
-        setContentView(R.layout.activity_main);
-        setSupportActionBar(toolbar);
-        init();
-        configureToolBar();
-        initNavigationdrawer();
-        configureBottomNav();
-        configureNavigationView();
-        updateUIWhenCreating();
-        retrieveCurrentUser();
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_view,new MapFragment()).commit();
+        initialize();
+
     }
 
+    @AfterPermissionGranted(124)
+     private void initialize() {
+        if (!EasyPermissions.hasPermissions(this,perms)){
+            EasyPermissions.requestPermissions(this,"Need permission for use MapView and ListView",
+                    124, perms);
+        }else{
+            loadLocale();
+            setContentView(R.layout.activity_main);
+            setSupportActionBar(toolbar);
+            init();
+            configureToolBar();
+            initNavigationdrawer();
+            configureBottomNav();
+            configureNavigationView();
+            updateUIWhenCreating();
+            retrieveCurrentUser();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_view,new MapFragment()).commit();
+        }
+     }
 
 
-    // --------------------
+     // --------------------
     // ACTIONS
     // --------------------
 
@@ -298,4 +316,22 @@
                 .signOut(this)
                 .addOnSuccessListener(this, this.updateUIAfterRESTRequestsCompleted(SIGN_OUT_TASK));
     }
-}
+
+     @Override
+     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+     }
+
+     @Override
+     public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
+        initialize();
+     }
+
+     @Override
+     public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
+         if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+             new AppSettingsDialog.Builder(this).build().show();
+         }
+     }
+ }
