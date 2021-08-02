@@ -329,6 +329,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Loc
             String tag = marker.getTag().toString();
             intent.putExtra("PlaceDetailResult", tag);
             startActivity(intent);
+            getActivity().finish();
             return true;
         }else{
             Log.e(TAG, "onClickMarker: ERROR NO TAG" );

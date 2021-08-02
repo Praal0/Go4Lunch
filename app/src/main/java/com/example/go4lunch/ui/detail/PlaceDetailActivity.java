@@ -297,9 +297,7 @@ public class PlaceDetailActivity extends BaseActivity implements View.OnClickLis
 
         for (int i = 0; i < listUrl.size();i++){
             DefaultSliderView defaultSliderView = new DefaultSliderView(this);
-            defaultSliderView
-                    .image(listUrl.get(i))
-                    .setProgressBarVisible(true);
+            defaultSliderView.image(listUrl.get(i)).setProgressBarVisible(true);
             mDemoSlider.addSlider(defaultSliderView);
         }
     }

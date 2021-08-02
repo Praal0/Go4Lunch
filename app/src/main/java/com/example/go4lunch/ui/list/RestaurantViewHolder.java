@@ -2,6 +2,7 @@ package com.example.go4lunch.ui.list;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.location.Location;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -196,7 +197,7 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
         String[] separatedStart = startLocation.split(",");
         double startLatitude = Double.parseDouble(separatedStart[0]);
         double startLongitude = Double.parseDouble(separatedStart[1]);
-        android.location.Location.distanceBetween(startLatitude, startLongitude, endLatitude, endLongitude,distanceResults);
+       Location.distanceBetween(startLatitude, startLongitude, endLatitude, endLongitude,distanceResults);
     }
 
 

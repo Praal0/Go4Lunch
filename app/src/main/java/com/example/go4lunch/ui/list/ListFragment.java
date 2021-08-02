@@ -157,6 +157,7 @@ public class ListFragment extends BaseFragment{
                     Intent intent = new Intent(getActivity(), PlaceDetailActivity.class);
                     intent.putExtra("PlaceDetailResult", result.getPlaceId());
                     startActivity(intent);
+                    getActivity().finish();
                 });
     }
 

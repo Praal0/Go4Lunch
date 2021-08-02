@@ -56,6 +56,8 @@
         android:background="@color/colorOrange"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header"
+        app:itemIconTint="@color/white"
+        app:itemTextColor="#FFFFFF"
         app:menu="@menu/drawer_menu">
 
         <androidx.constraintlayout.widget.ConstraintLayout

@@ -289,6 +289,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                                 extra.put("PlaceDetailResult",booking.getData().get("restaurantId"));
                             }
                             launchActivity(PlaceDetailActivity.class,extra);
+
+
                         }
                     }
                 });

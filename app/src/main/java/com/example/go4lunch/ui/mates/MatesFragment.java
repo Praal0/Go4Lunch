@@ -116,6 +116,7 @@ public class MatesFragment extends BaseFragment {
         Intent intent = new Intent(getActivity(), PlaceDetailActivity.class);
         intent.putExtra("PlaceDetailResult", placeId);
         startActivity(intent);
+        getActivity().finish();
     }
 
     // --------------------

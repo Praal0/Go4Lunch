@@ -22,20 +22,16 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity
-            android:name=".ui.chat.MessageActivity"
-            android:theme="@style/Theme.Design.NoActionBar" />
+            android:name=".ui.chat.MessageActivity" />
 
         <activity
-            android:name=".ui.web.WebActivity"
-            android:theme="@style/Theme.Design.NoActionBar" />
+            android:name=".ui.web.WebActivity" />
 
         <activity
-            android:name=".ui.setting.SettingActivity"
-            android:theme="@style/Theme.Design.NoActionBar" />
+            android:name=".ui.setting.SettingActivity" />
 
         <activity
-            android:name=".ui.detail.PlaceDetailActivity"
-            android:theme="@style/Theme.Design.NoActionBar" />
+            android:name=".ui.detail.PlaceDetailActivity" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -69,12 +65,10 @@
         </activity>
         <activity
             android:name=".ui.MainActivity"
-            android:label="@string/hungry"
-            android:theme="@style/Theme.Design.NoActionBar" />
+            android:label="@string/hungry" />
         <activity
             android:name=".ui.login.LoginActivity"
-            android:parentActivityName=".ui.MainActivity"
-            android:theme="@style/Theme.Design.NoActionBar">
+            android:parentActivityName=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
