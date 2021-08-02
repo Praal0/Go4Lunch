@@ -41,7 +41,7 @@ import java.util.List;
 import io.reactivex.observers.DisposableObserver;
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class ListFragment extends BaseFragment implements EasyPermissions.PermissionCallbacks{
+public class ListFragment extends BaseFragment{
 
     private String API_KEY = BuildConfig.API_KEY;
     private RecyclerView mRecyclerView;
@@ -160,6 +160,7 @@ public class ListFragment extends BaseFragment implements EasyPermissions.Permis
                 });
     }
 
+    // Configure when we use SwipeRefresh (Swipe down)
     private void configureOnSwipeRefresh() {
         mSwipeRefreshLayout.setOnRefreshListener(this::executeHttpRequestWithRetrofit);
     }
@@ -200,17 +201,5 @@ public class ListFragment extends BaseFragment implements EasyPermissions.Permis
             EasyPermissions.requestPermissions(this,"Need permission for use MapView and ListView",
                     RC_LOCATION_CONTACTS_PERM, perms);
         }
-    }
-
-
-
-    @Override
-    public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
-        refresh();
-    }
-
-    @Override
-    public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
-        refresh();
     }
 }

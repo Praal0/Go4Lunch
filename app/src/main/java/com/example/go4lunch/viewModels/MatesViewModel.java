@@ -10,7 +10,4 @@ public class MatesViewModel extends ViewModel {
         currentUserUID.setValue(uid);
     }
 
-    public MutableLiveData<String> getCurrentUserUID() {
-        return currentUserUID;
-    }
 }

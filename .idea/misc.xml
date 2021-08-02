@@ -3,7 +3,20 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.21197916666666666" />
+        <entry key="app/src/main/res/layout/activity_message_item.xml" value="0.21197916666666666" />
+        <entry key="app/src/main/res/layout/activity_place_detail.xml" value="0.21197916666666666" />
         <entry key="app/src/main/res/layout/activity_setting.xml" value="0.271286231884058" />
+        <entry key="app/src/main/res/layout/fragment_chat.xml" value="0.21197916666666666" />
+        <entry key="app/src/main/res/layout/fragment_chat_item.xml" value="0.21197916666666666" />
+        <entry key="app/src/main/res/layout/fragment_list.xml" value="0.21197916666666666" />
+        <entry key="app/src/main/res/layout/fragment_mates.xml" value="0.21197916666666666" />
+        <entry key="app/src/main/res/layout/fragment_mates_item.xml" value="0.21197916666666666" />
+        <entry key="app/src/main/res/layout/fragment_users.xml" value="0.21197916666666666" />
+        <entry key="app/src/main/res/layout/nav_header.xml" value="0.21197916666666666" />
+        <entry key="app/src/main/res/menu/bottom_navigation.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/menu/drawer_menu.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/menu/toolbar_menu.xml" value="0.21197916666666666" />
       </map>
     </option>
   </component>

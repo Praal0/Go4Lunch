@@ -110,6 +110,7 @@ public class MessageActivity extends BaseActivity implements  MessageAdapter.Lis
         modelUserReceiver = intent.getParcelableExtra(USER_DATA);
     }
 
+    //Init Toolbar
     private void configureToolbar(){
         setSupportActionBar(mToolbar);
         ActionBar ab = getSupportActionBar();
@@ -141,6 +142,7 @@ public class MessageActivity extends BaseActivity implements  MessageAdapter.Lis
     // ACTIONS
     // --------------------
 
+    // Click on send Button
     private void clickSendMessage() {
         activity_chat_send_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,6 +164,7 @@ public class MessageActivity extends BaseActivity implements  MessageAdapter.Lis
         });
     }
 
+    // Click on add picture Button
     private void clickAddFile() {
         activity_chat_file_button.setOnClickListener(new View.OnClickListener() {
             @Override

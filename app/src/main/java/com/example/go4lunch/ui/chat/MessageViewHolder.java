@@ -119,8 +119,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
         this.cardViewImageSent.setLayoutParams(paramsImageView);
     }
 
-    // ---
-
+    //Convert Date and Hour by Contry
     private String convertDateToHour(Date date, Context context){
         if (android.text.format.DateFormat.is24HourFormat(context)) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy HH:mm", Locale.getDefault());

@@ -26,7 +26,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="45dp"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/white"
         android:textStyle="bold"
         />
 
@@ -47,7 +47,7 @@
         app:layout_constraintTop_toTopOf="@id/drawer_image"
         android:layout_marginTop="10dp"
         android:layout_marginStart="15dp"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/white"
         android:textStyle="bold"
         android:layout_marginLeft="15dp" />
 
@@ -59,7 +59,7 @@
         app:layout_constraintBottom_toBottomOf="@id/drawer_image"
         android:layout_marginBottom="10dp"
         android:layout_marginStart="15dp"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/white"
         android:layout_marginLeft="15dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
