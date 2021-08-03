@@ -91,7 +91,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
                     .into(imageViewSent);
             this.imageViewSent.setVisibility(View.VISIBLE);
         } else {
-            this.imageViewSent.setVisibility(View.GONE);
+            this.cardViewImageSent.setVisibility(View.GONE);
         }
 
         //Update Message Bubble Color Background

@@ -57,4 +57,5 @@
     <string name="settings_language_text">Changer de langue</string>
     <string name="workmates">Collaborateurs disponibles</string>
     <string name="selected_language">Selection de la langue</string>
+    <string name="image_delete">l\'image est maintenant supprimée</string>
 </resources>

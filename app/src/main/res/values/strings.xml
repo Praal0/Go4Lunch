@@ -40,6 +40,8 @@
     <string name="settings_save_ok">Settings saved!</string>
     <string name="selected_language">Selected Language</string>
 
+    <!-- MESSAGE ACTIVITY -->
+    <string name="image_delete">picture is now delete</string>
 
     <!-- NAVIGATION DRAWER -->
     <string name="lunch">YOUR LUNCH</string>

@@ -18,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -60,8 +61,9 @@ public class MessageActivity extends BaseActivity implements  MessageAdapter.Lis
     private ImageView profileImageView;
     private TextView profileTextView;
     private RecyclerView recyclerView;
-    private ImageView imageViewPreview;
+    private ImageView imageViewPreview,imageViewDelete;
     private Uri uriImageSelected;
+    private CardView cardViewDeletePicture;
     private TextInputEditText editTextMessage;
     private ImageButton activity_chat_send_button, activity_chat_file_button;
     private ChatViewModel chatViewModel;
@@ -89,7 +91,10 @@ public class MessageActivity extends BaseActivity implements  MessageAdapter.Lis
         getCurrentUserFromFirestore();
         clickSendMessage();
         clickAddFile();
+        clickDeleteFile();
     }
+
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -99,6 +104,9 @@ public class MessageActivity extends BaseActivity implements  MessageAdapter.Lis
 
     private void initView() {
         imageViewPreview = findViewById(R.id.activity_chat_image_chosen_preview);
+        imageViewDelete = findViewById(R.id.activity_chat_image_delete);
+        cardViewDeletePicture = findViewById(R.id.cardViewDeletePicture);
+        cardViewDeletePicture.setVisibility(View.GONE);
         recyclerView = findViewById(R.id.activity_chat_recycler_view);
         editTextMessage = findViewById(R.id.activity_chat_message_edit_text);
         activity_chat_send_button = findViewById(R.id.activity_chat_send_button);
@@ -158,6 +166,7 @@ public class MessageActivity extends BaseActivity implements  MessageAdapter.Lis
                         uploadPhotoInFirebaseAndSendMessage(editTextMessage.getText().toString());
                         editTextMessage.setText("");
                         imageViewPreview.setImageDrawable(null);
+
                     }
                 }
             }
@@ -172,6 +181,21 @@ public class MessageActivity extends BaseActivity implements  MessageAdapter.Lis
                 chooseImageFromPhone();
             }
         });
+    }
+
+    private void clickDeleteFile() {
+        imageViewDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DeletePicture();
+            }
+        });
+    }
+
+    private void DeletePicture() {
+        imageViewPreview.setImageDrawable(null);
+        Toast.makeText(this, getString(R.string.image_delete), Toast.LENGTH_SHORT).show();
+        cardViewDeletePicture.setVisibility(View.GONE);
     }
 
     private void uploadPhotoInFirebaseAndSendMessage(String message) {
@@ -196,6 +220,7 @@ public class MessageActivity extends BaseActivity implements  MessageAdapter.Lis
                 if (task.isSuccessful()) {
                     Uri downloadUri = task.getResult();
                     ChatViewModel.createMessageWithImageForChat(downloadUri.toString(), message, modelCurrentUser,modelUserReceiver).addOnFailureListener(onFailureListener());
+                    cardViewDeletePicture.setVisibility(View.GONE);
                 } else {
                     Log.e("CHAT_ACTIVITY_TAG", "Error ON_COMPLETE : " + task.getException() );
                 }
@@ -212,6 +237,7 @@ public class MessageActivity extends BaseActivity implements  MessageAdapter.Lis
         profileTextView.setText(modelUserReceiver.getUsername().toString());
         Glide.with(MessageActivity.this).load(modelUserReceiver.getUrlPicture())
                 .apply(RequestOptions.circleCropTransform()).into(profileImageView);
+
     }
 
     private void configureRecyclerView(){
@@ -264,6 +290,8 @@ public class MessageActivity extends BaseActivity implements  MessageAdapter.Lis
                         .load(this.uriImageSelected)
                         .apply(RequestOptions.circleCropTransform())
                         .into(this.imageViewPreview);
+                cardViewDeletePicture.setVisibility(View.VISIBLE);
+
             } else {
                 Toast.makeText(this, getString(R.string.chat_no_image_chosen), Toast.LENGTH_SHORT).show();
             }
