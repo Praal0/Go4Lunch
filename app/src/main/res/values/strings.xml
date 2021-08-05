@@ -99,7 +99,8 @@
     <string name="notification_message_no_workmates">None</string>
     <string name="drawer_no_restaurant_booked">No restaurant booked</string>
     <string name="settings_language_text">"Change Language "</string>
-
+    <string name="french">French</string>
+    <string name="english">English</string>
 
 
 </resources>

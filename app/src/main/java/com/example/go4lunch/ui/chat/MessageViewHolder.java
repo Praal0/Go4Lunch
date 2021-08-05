@@ -89,7 +89,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
         if (message.getUrlImage() != null){
             glide.load(message.getUrlImage())
                     .into(imageViewSent);
-            this.imageViewSent.setVisibility(View.VISIBLE);
+            this.cardViewImageSent.setVisibility(View.VISIBLE);
         } else {
             this.cardViewImageSent.setVisibility(View.GONE);
         }

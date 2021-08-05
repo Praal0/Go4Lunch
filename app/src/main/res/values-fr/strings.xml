@@ -58,4 +58,6 @@
     <string name="workmates">Collaborateurs disponibles</string>
     <string name="selected_language">Selection de la langue</string>
     <string name="image_delete">l\'image est maintenant supprimée</string>
+    <string name="french">Français</string>
+    <string name="english">Anglais</string>
 </resources>

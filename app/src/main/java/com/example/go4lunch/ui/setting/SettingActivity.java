@@ -132,14 +132,15 @@ public class SettingActivity extends BaseActivity {
         btnLanguage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(SettingActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(SettingActivity.this,R.style.AlertDialog);
 
                 // Set Title.
                 builder.setTitle(R.string.selected_language);
 
+
                 // Add a list
-                final String[] Langue = {"French","English"};
-                builder.setItems(Langue, new DialogInterface.OnClickListener() {
+                final CharSequence[] items = {getString(R.string.french), getString(R.string.english)};
+                builder.setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which){
