@@ -11,9 +11,7 @@
         android:id="@+id/slider"
         android:layout_width="match_parent"
         android:layout_height="250dp"
-        tools:ignore="MissingConstraints">
-
-    </com.glide.slider.library.SliderLayout>
+        tools:ignore="MissingConstraints"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/restaurant_info"
@@ -64,11 +62,12 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:clickable="true"
-        app:backgroundTint="@color/white"
+        android:contentDescription="Booking"
+        android:focusable="true"
+        app:backgroundTint="#EAEAEA"
         app:layout_constraintBottom_toBottomOf="@id/slider"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/slider"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintTop_toBottomOf="@id/slider" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/restaurant_actions"
