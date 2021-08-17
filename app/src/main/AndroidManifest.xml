@@ -30,7 +30,8 @@
             android:name=".ui.setting.SettingActivity" />
 
         <activity
-            android:name=".ui.detail.PlaceDetailActivity" />
+            android:name=".ui.detail.PlaceDetailActivity"
+            android:theme="@style/Theme.Design.NoActionBar" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
