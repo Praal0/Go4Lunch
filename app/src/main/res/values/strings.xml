@@ -31,8 +31,8 @@
 
 
     <!-- FACEBOOK PURPOSE -->
-    <string name="facebook_application_id" translatable="false">323231805859099</string>
-    <string name="fb_login_protocol_scheme" translatable="false">fb323231805859099</string>
+    <string name="facebook_application_id" translatable="false">573040053860034</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb573040053860034</string>
 
     <!-- SETTINGS ACTIVITY -->
     <string name="settings_notification_title" translatable="false">Notifications</string>

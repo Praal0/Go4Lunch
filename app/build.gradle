@@ -59,7 +59,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:19.0.0'
 
     //FirebaseUI
-    implementation 'com.firebaseui:firebase-ui-auth:7.2.0'
+    implementation 'com.firebaseui:firebase-ui-auth:6.4.0'
     implementation 'com.google.firebase:firebase-database:20.0.0'
     implementation 'com.google.firebase:firebase-auth:21.0.1' // Authentication
     implementation 'com.google.firebase:firebase-firestore:23.0.1' // Firestore
@@ -95,7 +95,7 @@ dependencies {
     implementation 'jp.wasabeef:glide-transformations:3.3.0'
 
     // FACEBOOK LOGIN SUPPORT
-    implementation 'com.facebook.android:facebook-android-sdk:11.0.0'
+    implementation 'com.facebook.android:facebook-android-sdk:5.13.0'
 
     //EASY PERMISSIONS
     implementation 'pub.devrel:easypermissions:3.0.0'
